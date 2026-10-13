@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import MainLayout from "./layout/main-layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,17 +14,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LA VIET - Hệ thống Quản trị",
-  description: "Dự án quản lý và điều hành LA VIET",
+  title: "LÀ VIỆT - Sơn Mài Hội Hoạ Liên Ngành",
+  description:
+    "Kế thừa tinh hoa thủ công truyền thống Việt Nam kết hợp tư duy thiết kế đương đại",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
-      lang="en"
+      lang="vi"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* MainLayout bọc cố định Header và Footer chung cho mọi màn hình */}
+        <MainLayout>{children}</MainLayout>
+      </body>
     </html>
   );
 }

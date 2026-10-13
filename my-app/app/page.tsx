@@ -1,9 +1,5 @@
-import Link from "next/link";
+import HomePage from "@/pages/homePages";
 
-export default function RootHomePage() {
-  return (
-    <div className="bg-red-500 p-10 text-white">
-      TEST TAILWIND
-    </div>
-  );
+export default function Page() {
+  return <HomePage />;
 }
