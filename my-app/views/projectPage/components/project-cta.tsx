@@ -17,7 +17,7 @@ export function ProjectCta() {
               <span>TƯ VẤN KIẾN TRÚC SƯ & GIÁM ĐỐC DỰ ÁN</span>
             </div>
 
-            <h2 className="font-serif font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase leading-snug">
+            <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase leading-snug">
               BẠN CẦN GIẢI PHÁP SƠN MÀI CHO CÔNG TRÌNH ĐẲNG CẤP?
             </h2>
 

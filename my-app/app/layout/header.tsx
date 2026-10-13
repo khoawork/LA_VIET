@@ -11,8 +11,8 @@ export default function Header() {
     { label: "VỀ CHÚNG TÔI", href: "/about" },
     { label: "SẢN PHẨM", href: "#san-pham" },
     { label: "DỰ ÁN", href: "/project" },
-    { label: "TIN TỨC", href: "#tin-tuc" },
-    { label: "LIÊN HỆ", href: "#lien-he" },
+    { label: "TIN TỨC", href: "/news" },
+    { label: "LIÊN HỆ", href: "/contact" },
   ];
 
   return (
@@ -20,7 +20,7 @@ export default function Header() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
         {/* Brand / Logo */}
         <Link href="/" className="flex flex-col group select-none">
-          <span className="font-serif font-bold text-xl sm:text-2xl text-[#1E1917] tracking-wider uppercase leading-tight group-hover:text-[#9A1C1F] transition-colors">
+          <span className="font-bold text-xl sm:text-2xl text-[#1E1917] tracking-wider uppercase leading-tight group-hover:text-[#9A1C1F] transition-colors">
             LÀ VIỆT
           </span>
           <span className="text-[9px] sm:text-[10px] tracking-[0.25em] text-[#695D56] font-medium uppercase mt-0.5">
@@ -28,7 +28,6 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
         <nav className="hidden xl:flex items-center gap-7 2xl:gap-9 text-[13px] font-medium tracking-wider text-[#4A423D]">
           {navLinks.map((link) => (
             <Link
@@ -44,8 +43,8 @@ export default function Header() {
         {/* Action Group */}
         <div className="hidden sm:flex items-center gap-3">
           <Link
-            href="#tu-van"
-            className="px-5 py-2.5 rounded-md bg-[#9A1C1F] hover:bg-[#831618] active:scale-[0.98] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
+            href="/contact"
+            className="px-5 py-2.5 rounded-md bg-[#a21f1f] hover:bg-[#831618] active:scale-[0.98] text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
           >
             YÊU CẦU TƯ VẤN
           </Link>
@@ -53,7 +52,7 @@ export default function Header() {
           <button
             type="button"
             aria-label="Tài khoản cá nhân"
-            className="w-9 h-9 rounded-full bg-[#9A1C1F] hover:bg-[#831618] text-white flex items-center justify-center transition-all shadow-sm cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[#a21f1f] hover:bg-[#831618] text-white flex items-center justify-center transition-all shadow-sm cursor-pointer"
           >
             {/* User SVG Icon */}
             <svg
@@ -71,7 +70,7 @@ export default function Header() {
           <button
             type="button"
             aria-label="Tài khoản cá nhân"
-            className="sm:hidden w-8 h-8 rounded-full bg-[#9A1C1F] text-white flex items-center justify-center"
+            className="sm:hidden w-8 h-8 rounded-full bg-[#a21f1f] text-white flex items-center justify-center"
           >
             <svg
               className="w-3.5 h-3.5 fill-current"
@@ -129,9 +128,9 @@ export default function Header() {
 
           <div className="pt-2">
             <Link
-              href="#tu-van"
+              href="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full inline-block text-center py-2.5 rounded-md bg-[#9A1C1F] text-white text-xs font-semibold uppercase tracking-wider"
+              className="w-full inline-block text-center py-2.5 rounded-md bg-[#a21f1f] text-white text-xs font-semibold uppercase tracking-wider"
             >
               YÊU CẦU TƯ VẤN
             </Link>

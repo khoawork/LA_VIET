@@ -9,7 +9,7 @@ export function HomeCta() {
             <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
               Giải pháp độc bản
             </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-[#231F20] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#231F20] tracking-tight">
               KHỞI TẠO DỰ ÁN SƠN MÀI CHO KHÔNG GIAN CỦA BẠN
             </h2>
             <p className="text-sm sm:text-base text-[#68625B] leading-relaxed max-w-3xl">

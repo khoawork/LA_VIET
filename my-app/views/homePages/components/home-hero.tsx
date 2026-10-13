@@ -37,7 +37,7 @@ export function HomeHero() {
               Khát vọng sơn mài Việt
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-serif font-black tracking-tight text-[#231F20] leading-[1.12]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight text-[#231F20] leading-[1.12]">
               NÂNG TẦM NGHỆ THUẬT{" "}
               <span className="text-[#9A221A] underline decoration-[#9A221A]/30 underline-offset-8">
                 SƠN MÀI TRUYỀN THỐNG
@@ -80,7 +80,7 @@ export function HomeHero() {
                 <span className="text-[10px] uppercase tracking-widest text-[#E6C687] font-semibold">
                   Không gian trưng bày
                 </span>
-                <p className="text-sm sm:text-base font-serif font-bold mt-1">
+                <p className="text-sm sm:text-base font-bold mt-1">
                   Đại sảnh Nhà Hát Đương Đại &amp; Bích Họa Sơn Mài
                 </p>
               </div>
@@ -100,7 +100,7 @@ export function HomeHero() {
               <span className="text-[10px] font-mono font-bold tracking-wider text-[#9A221A] block">
                 {col.idx}
               </span>
-              <h4 className="text-sm sm:text-base font-serif font-bold text-[#231F20] mt-1 group-hover:text-[#9A221A] transition-colors">
+              <h4 className="text-sm sm:text-base font-bold text-[#231F20] mt-1 group-hover:text-[#9A221A] transition-colors">
                 {col.title}
               </h4>
               <p className="text-xs text-[#78716C] mt-1">{col.desc}</p>

@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Column 1: Thương hiệu, giới thiệu & Mạng xã hội */}
           <div className="md:col-span-12 lg:col-span-4 space-y-4">
             <Link href="/" className="inline-flex flex-col group select-none">
-              <span className="font-serif font-bold text-xl sm:text-2xl text-[#1E1917] tracking-wider uppercase leading-tight group-hover:text-[#9A1C1F] transition-colors">
+              <span className="font-bold text-xl sm:text-2xl text-[#1E1917] tracking-wider uppercase leading-tight group-hover:text-[#9A1C1F] transition-colors">
                 LÀ VIỆT
               </span>
               <span className="text-[9px] sm:text-[10px] tracking-[0.25em] text-[#695D56] font-medium uppercase mt-0.5">

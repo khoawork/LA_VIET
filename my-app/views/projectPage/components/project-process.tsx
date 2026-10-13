@@ -51,7 +51,7 @@ export function ProjectProcess() {
         <span className="text-xs font-bold tracking-[0.25em] text-[#9A1C1F] uppercase block mb-3">
           QUY TRÌNH HỢP TÁC CHUẨN MỰC
         </span>
-        <h2 className="font-serif font-bold text-2xl sm:text-3xl md:text-4xl text-[#1E1917] tracking-tight uppercase leading-snug">
+        <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-[#1E1917] tracking-tight uppercase leading-snug">
           ĐỒNG HÀNH TỪ Ý TƯỞNG TỚI HIỆN THỰC KIẾN TRÚC
         </h2>
         <p className="text-xs sm:text-sm text-[#5C544E] leading-relaxed mt-3 max-w-xl mx-auto">
@@ -69,7 +69,7 @@ export function ProjectProcess() {
             <div>
               {/* Step number & Icon header */}
               <div className="flex items-center justify-between mb-4">
-                <span className="font-serif font-black text-4xl sm:text-5xl text-[#F2C2BB] select-none leading-none">
+                <span className="font-black text-4xl sm:text-5xl text-[#F2C2BB] select-none leading-none">
                   {step.step}
                 </span>
                 <span className="w-9 h-9 rounded-full bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center shadow-xs">

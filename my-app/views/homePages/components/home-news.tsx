@@ -39,7 +39,7 @@ export function HomeNews() {
           <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             Góc nhìn di sản
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-[#231F20] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl  font-black text-[#231F20] tracking-tight">
             TIN TỨC MỚI NHẤT
           </h2>
         </div>
@@ -77,7 +77,7 @@ export function HomeNews() {
                 <span className="text-[11px] font-mono text-[#78716C]">
                   {art.date}
                 </span>
-                <h3 className="text-base sm:text-lg font-serif font-bold text-[#231F20] group-hover:text-[#9A221A] transition-colors leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-[#231F20] group-hover:text-[#9A221A] transition-colors leading-snug">
                   {art.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#68625B] leading-relaxed line-clamp-3">

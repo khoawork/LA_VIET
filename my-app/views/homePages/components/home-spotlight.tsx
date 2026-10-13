@@ -17,7 +17,7 @@ export function HomeSpotlight() {
               />
               {/* Red Brand Seal Stamp */}
               <div className="absolute bottom-5 left-5 bg-[#9A221A] text-white p-3.5 rounded-xl shadow-md flex items-center gap-3">
-                <div className="w-7 h-7 border border-white/60 flex items-center justify-center font-serif text-xs font-bold">
+                <div className="w-7 h-7 border border-white/60 flex items-center justify-center  text-xs font-bold">
                   LV
                 </div>
                 <div className="text-[10px] leading-tight font-medium uppercase tracking-wider">
@@ -35,7 +35,7 @@ export function HomeSpotlight() {
               Tiêu điểm dự án
             </span>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black text-[#231F20] leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#231F20] leading-tight">
               LIÊN NGÀNH NGHỆ THUẬT: TỪ SƠN HÒM ĐẾN KIẾN TRÚC KHÔNG GIAN
             </h2>
 
@@ -49,7 +49,7 @@ export function HomeSpotlight() {
                 <span className="text-[10px] font-bold text-[#9A221A] uppercase tracking-wider block">
                   Nghệ nhân chính
                 </span>
-                <p className="text-sm font-serif font-bold text-[#231F20] mt-1">
+                <p className="text-sm  font-bold text-[#231F20] mt-1">
                   NSƯT - Họa sĩ Đỗ Quyên
                 </p>
               </div>
@@ -57,7 +57,7 @@ export function HomeSpotlight() {
                 <span className="text-[10px] font-bold text-[#9A221A] uppercase tracking-wider block">
                   Chất liệu chính
                 </span>
-                <p className="text-sm font-serif font-bold text-[#231F20] mt-1">
+                <p className="text-sm  font-bold text-[#231F20] mt-1">
                   Sơn Ta Phú Thọ, Vàng Quỳ
                 </p>
               </div>
@@ -65,7 +65,7 @@ export function HomeSpotlight() {
                 <span className="text-[10px] font-bold text-[#9A221A] uppercase tracking-wider block">
                   Không gian áp dụng
                 </span>
-                <p className="text-sm font-serif font-bold text-[#231F20] mt-1">
+                <p className="text-sm  font-bold text-[#231F20] mt-1">
                   Nhà Hát Ca Tầng Đương Đại
                 </p>
               </div>
@@ -73,7 +73,7 @@ export function HomeSpotlight() {
                 <span className="text-[10px] font-bold text-[#9A221A] uppercase tracking-wider block">
                   Quy mô công trình
                 </span>
-                <p className="text-sm font-serif font-bold text-[#231F20] mt-1">
+                <p className="text-sm  font-bold text-[#231F20] mt-1">
                   Quảng Đại &amp; Bích Họa 180m²
                 </p>
               </div>
