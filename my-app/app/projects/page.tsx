@@ -2,6 +2,18 @@
 
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  X,
+  ArrowLeft,
+  Search,
+  RotateCw,
+  Inbox,
+  Edit3,
+  Trash2,
+  Plus,
+} from "lucide-react";
 
 interface Project {
   id: number;
@@ -210,13 +222,17 @@ export default function ProjectsCrudPage() {
               : "bg-rose-950/90 border-rose-500 text-rose-200"
           }`}
         >
-          <span>{notification.type === "success" ? "✓" : "⚠"}</span>
+          {notification.type === "success" ? (
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+          ) : (
+            <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+          )}
           <p className="font-medium">{notification.text}</p>
           <button
             onClick={() => setNotification(null)}
-            className="ml-2 text-xs opacity-70 hover:opacity-100"
+            className="ml-2 text-xs opacity-70 hover:opacity-100 p-1"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -227,9 +243,10 @@ export default function ProjectsCrudPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-neutral-400 hover:text-white transition-colors text-sm"
+              className="text-neutral-400 hover:text-white transition-colors text-sm flex items-center gap-1.5"
             >
-              ← Trang chủ
+              <ArrowLeft className="w-4 h-4" />
+              <span>Trang chủ</span>
             </Link>
             <span className="text-neutral-600">/</span>
             <h1 className="font-bold text-white text-base">Quản lý Dự án (CRUD Demo)</h1>
@@ -293,9 +310,10 @@ export default function ProjectsCrudPage() {
               <button
                 type="submit"
                 disabled={isPending || !createName.trim()}
-                className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-neutral-950 font-semibold text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-neutral-950 font-semibold text-sm transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2"
               >
-                {isPending ? "Đang xử lý..." : "+ Thêm Dự Án"}
+                <Plus className="w-4 h-4" />
+                <span>{isPending ? "Đang xử lý..." : "Thêm Dự Án"}</span>
               </button>
             </form>
           </div>
@@ -315,9 +333,7 @@ export default function ProjectsCrudPage() {
                   }}
                   className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-700 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-emerald-500 transition-colors"
                 />
-                <span className="absolute left-3 top-2.5 text-neutral-500 text-sm">
-                  🔍
-                </span>
+                <Search className="w-4 h-4 text-neutral-500 absolute left-3 top-2.5" />
               </div>
 
               <div className="flex gap-2 w-full sm:w-auto">
@@ -334,10 +350,11 @@ export default function ProjectsCrudPage() {
                     setSearchName("");
                     loadProjects();
                   }}
-                  className="px-3 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-neutral-400 text-xs border border-neutral-800 transition-colors"
+                  className="px-3 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-neutral-400 text-xs border border-neutral-800 transition-colors flex items-center gap-1.5"
                   title="Tải lại tất cả"
                 >
-                  ↺ Làm mới
+                  <RotateCw className="w-3.5 h-3.5" />
+                  <span>Làm mới</span>
                 </button>
               </div>
             </div>
@@ -358,7 +375,7 @@ export default function ProjectsCrudPage() {
                 </div>
               ) : projects.length === 0 ? (
                 <div className="py-12 text-center text-sm text-neutral-500 space-y-2">
-                  <p className="text-3xl">📭</p>
+                  <Inbox className="w-10 h-10 text-neutral-600 mx-auto" />
                   <p>Chưa có dự án nào hoặc không tìm thấy kết quả phù hợp.</p>
                   <button
                     onClick={() => {
@@ -413,16 +430,18 @@ export default function ProjectsCrudPage() {
                             setEditNewName(proj.name);
                             setEditDesc(proj.description || "");
                           }}
-                          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium border border-neutral-700 transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-xs font-medium border border-neutral-700 transition-colors flex items-center gap-1.5"
                         >
-                          ✎ Sửa (PUT)
+                          <Edit3 className="w-3.5 h-3.5" />
+                          <span>Sửa (PUT)</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDelete(proj.name)}
-                          className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-medium border border-rose-500/30 transition-colors"
+                          className="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-medium border border-rose-500/30 transition-colors flex items-center gap-1.5"
                         >
-                          ✕ Xóa (DELETE)
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Xóa (DELETE)</span>
                         </button>
                       </div>
                     </article>
@@ -509,4 +528,3 @@ export default function ProjectsCrudPage() {
     </div>
   );
 }
-

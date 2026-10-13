@@ -1,27 +1,12 @@
-import {
-  HomeHeader,
-  HomeHero,
-  HomeStatistics,
-  HomeSpotlight,
-  HomeNews,
-  HomePartners,
-  HomeCta,
-  HomeFooter,
-} from "@/modules/home";
+import { HomeView } from "@/views/home";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "LÃ VIỆT | Sơn Mài Hội Họa Liên Ngành",
+  description:
+    "Nâng tầm nghệ thuật sơn mài truyền thống trong không gian đương đại. Bích họa sơn mài khổ lớn, vách trang trí kiến trúc và nội thất cao cấp.",
+};
 
 export default function HomePage() {
-  return (
-    <div className="w-full min-h-screen bg-[#FAF7F2] text-[#231F20] font-sans selection:bg-[#9A221A] selection:text-white flex flex-col">
-      <HomeHeader />
-      <main className="w-full flex-1">
-        <HomeHero />
-        <HomeStatistics />
-        <HomeSpotlight />
-        <HomeNews />
-        <HomePartners />
-        <HomeCta />
-      </main>
-      <HomeFooter />
-    </div>
-  );
+  return <HomeView />;
 }

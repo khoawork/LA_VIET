@@ -1,9 +1,12 @@
-import Link from "next/link";
+import { HomeView } from "@/views/home";
+import type { Metadata } from "next";
 
-export default function RootHomePage() {
-  return (
-    <div className="bg-red-500 p-10 text-white">
-      TEST TAILWIND
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "LÃ VIỆT | Sơn Mài Hội Họa Liên Ngành",
+  description:
+    "Nâng tầm nghệ thuật sơn mài truyền thống trong không gian đương đại. Bích họa sơn mài khổ lớn, vách trang trí kiến trúc và nội thất cao cấp.",
+};
+
+export default function RootPage() {
+  return <HomeView />;
 }
