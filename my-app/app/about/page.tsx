@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AboutView } from "@/views/about";
+import { AboutView } from "@/views/aboutPage";
 
 export const metadata: Metadata = {
   title: "Về Chúng Tôi | LÀ VIỆT - Sơn Mài Hội Hoạ Liên Ngành",

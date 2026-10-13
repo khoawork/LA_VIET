@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { HomeView } from "@/views/homePage";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "LÃ VIỆT | Sơn Mài Hội Họa Liên Ngành",
@@ -6,6 +7,6 @@ export const metadata: Metadata = {
     "Nâng tầm nghệ thuật sơn mài truyền thống trong không gian đương đại. Bích họa sơn mài khổ lớn, vách trang trí kiến trúc và nội thất cao cấp.",
 };
 
-export default function RootPage() {
+export default function HomePage() {
   return <HomeView />;
 }

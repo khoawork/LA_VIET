@@ -9,7 +9,7 @@ export default function Header() {
   const navLinks = [
     { label: "TRANG CHỦ", href: "/" },
     { label: "VỀ CHÚNG TÔI", href: "/about" },
-    { label: "SẢN PHẨM", href: "#san-pham" },
+    { label: "SẢN PHẨM", href: "/products" },
     { label: "DỰ ÁN", href: "/project" },
     { label: "TIN TỨC", href: "/news" },
     { label: "LIÊN HỆ", href: "/contact" },

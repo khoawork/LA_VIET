@@ -1,4 +1,4 @@
-import { ProductsView } from "@/views/products";
+import { ProductsView } from "@/views/productPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

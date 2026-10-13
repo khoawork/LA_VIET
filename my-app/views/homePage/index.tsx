@@ -21,6 +21,6 @@ export default function HomePage() {
   );
 }
 
-export { HomePage };
+export { HomePage, HomePage as HomeView };
 export * from "./components";
 
