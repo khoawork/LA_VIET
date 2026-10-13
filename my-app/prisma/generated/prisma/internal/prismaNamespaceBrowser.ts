@@ -51,7 +51,14 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  NewsCategory: 'NewsCategory',
+  News: 'News',
+  Page: 'Page',
+  ProductCategory: 'ProductCategory',
+  Product: 'Product',
+  ProjectCategory: 'ProjectCategory',
   Project: 'Project',
+  SiteSetting: 'SiteSetting',
   User: 'User'
 } as const
 
@@ -71,21 +78,113 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const NewsCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type NewsCategoryScalarFieldEnum = (typeof NewsCategoryScalarFieldEnum)[keyof typeof NewsCategoryScalarFieldEnum]
+
+
+export const NewsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  image: 'image',
+  preside: 'preside',
+  presideIcon: 'presideIcon',
+  date: 'date',
+  description: 'description',
+  button: 'button',
+  slug: 'slug',
+  reading: 'reading',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
+} as const
+
+export type NewsScalarFieldEnum = (typeof NewsScalarFieldEnum)[keyof typeof NewsScalarFieldEnum]
+
+
+export const PageScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  props: 'props'
+} as const
+
+export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
+
+
+export const ProductCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ProductCategoryScalarFieldEnum = (typeof ProductCategoryScalarFieldEnum)[keyof typeof ProductCategoryScalarFieldEnum]
+
+
+export const ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  image: 'image',
+  title: 'title',
+  props: 'props',
+  slug: 'slug',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
+} as const
+
+export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+export const ProjectCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+} as const
+
+export type ProjectCategoryScalarFieldEnum = (typeof ProjectCategoryScalarFieldEnum)[keyof typeof ProjectCategoryScalarFieldEnum]
+
+
 export const ProjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  image: 'image',
+  location: 'location',
+  caption: 'caption',
+  material: 'material',
+  scale: 'scale',
+  button: 'button',
+  slug: 'slug',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  categoryId: 'categoryId'
 } as const
 
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+export const SiteSettingScalarFieldEnum = {
+  id: 'id',
+  logo: 'logo',
+  company: 'company',
+  tagline: 'tagline',
+  footer: 'footer'
+} as const
+
+export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[keyof typeof SiteSettingScalarFieldEnum]
+
+
 export const UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
+  fullname: 'fullname',
   email: 'email',
+  username: 'username',
+  password: 'password',
+  avatar: 'avatar',
+  role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -101,6 +200,108 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NewsCategoryOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type NewsCategoryOrderByRelevanceFieldEnum = (typeof NewsCategoryOrderByRelevanceFieldEnum)[keyof typeof NewsCategoryOrderByRelevanceFieldEnum]
+
+
+export const NewsOrderByRelevanceFieldEnum = {
+  name: 'name',
+  image: 'image',
+  preside: 'preside',
+  presideIcon: 'presideIcon',
+  description: 'description',
+  button: 'button',
+  slug: 'slug',
+  reading: 'reading'
+} as const
+
+export type NewsOrderByRelevanceFieldEnum = (typeof NewsOrderByRelevanceFieldEnum)[keyof typeof NewsOrderByRelevanceFieldEnum]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const PageOrderByRelevanceFieldEnum = {
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type PageOrderByRelevanceFieldEnum = (typeof PageOrderByRelevanceFieldEnum)[keyof typeof PageOrderByRelevanceFieldEnum]
+
+
+export const ProductCategoryOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type ProductCategoryOrderByRelevanceFieldEnum = (typeof ProductCategoryOrderByRelevanceFieldEnum)[keyof typeof ProductCategoryOrderByRelevanceFieldEnum]
+
+
+export const ProductOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description',
+  image: 'image',
+  title: 'title',
+  slug: 'slug'
+} as const
+
+export type ProductOrderByRelevanceFieldEnum = (typeof ProductOrderByRelevanceFieldEnum)[keyof typeof ProductOrderByRelevanceFieldEnum]
+
+
+export const ProjectCategoryOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type ProjectCategoryOrderByRelevanceFieldEnum = (typeof ProjectCategoryOrderByRelevanceFieldEnum)[keyof typeof ProjectCategoryOrderByRelevanceFieldEnum]
+
+
+export const ProjectOrderByRelevanceFieldEnum = {
+  name: 'name',
+  description: 'description',
+  image: 'image',
+  location: 'location',
+  caption: 'caption',
+  material: 'material',
+  scale: 'scale',
+  button: 'button',
+  slug: 'slug'
+} as const
+
+export type ProjectOrderByRelevanceFieldEnum = (typeof ProjectOrderByRelevanceFieldEnum)[keyof typeof ProjectOrderByRelevanceFieldEnum]
+
+
+export const SiteSettingOrderByRelevanceFieldEnum = {
+  logo: 'logo',
+  company: 'company',
+  tagline: 'tagline'
+} as const
+
+export type SiteSettingOrderByRelevanceFieldEnum = (typeof SiteSettingOrderByRelevanceFieldEnum)[keyof typeof SiteSettingOrderByRelevanceFieldEnum]
+
+
 export const NullsOrder = {
   first: 'first',
   last: 'last'
@@ -109,17 +310,12 @@ export const NullsOrder = {
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-export const ProjectOrderByRelevanceFieldEnum = {
-  name: 'name',
-  description: 'description'
-} as const
-
-export type ProjectOrderByRelevanceFieldEnum = (typeof ProjectOrderByRelevanceFieldEnum)[keyof typeof ProjectOrderByRelevanceFieldEnum]
-
-
 export const UserOrderByRelevanceFieldEnum = {
-  name: 'name',
-  email: 'email'
+  fullname: 'fullname',
+  email: 'email',
+  username: 'username',
+  password: 'password',
+  avatar: 'avatar'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]

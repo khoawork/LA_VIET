@@ -8,6 +8,13 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/NewsCategory'
+export type * from './models/News'
+export type * from './models/Page'
+export type * from './models/ProductCategory'
+export type * from './models/Product'
+export type * from './models/ProjectCategory'
 export type * from './models/Project'
+export type * from './models/SiteSetting'
 export type * from './models/User'
 export type * from './commonInputTypes'

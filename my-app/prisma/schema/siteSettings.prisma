@@ -1,0 +1,8 @@
+model SiteSetting {
+    id      Int    @id @default(autoincrement())
+    logo    String
+    company String
+    tagline String
+    footer  Json
+    @@map("site_settings")
+}

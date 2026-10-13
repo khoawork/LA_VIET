@@ -1,0 +1,7 @@
+model Page {
+    id    Int    @id @default(autoincrement())
+    name  String
+    slug  String @unique
+    props Json
+    @@map("pages")
+}

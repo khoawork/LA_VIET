@@ -1,3 +1,3 @@
 export * from "./pagination.schema";
-export * from "./project.schema";
+export * from "./projects.schema";
 

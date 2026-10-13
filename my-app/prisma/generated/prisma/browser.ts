@@ -18,10 +18,45 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
+ * Model NewsCategory
+ * 
+ */
+export type NewsCategory = Prisma.NewsCategoryModel
+/**
+ * Model News
+ * 
+ */
+export type News = Prisma.NewsModel
+/**
+ * Model Page
+ * 
+ */
+export type Page = Prisma.PageModel
+/**
+ * Model ProductCategory
+ * 
+ */
+export type ProductCategory = Prisma.ProductCategoryModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model ProjectCategory
+ * 
+ */
+export type ProjectCategory = Prisma.ProjectCategoryModel
+/**
  * Model Project
  * 
  */
 export type Project = Prisma.ProjectModel
+/**
+ * Model SiteSetting
+ * 
+ */
+export type SiteSetting = Prisma.SiteSettingModel
 /**
  * Model User
  * 
