@@ -33,7 +33,7 @@ export function HomeStatistics() {
           <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             Thành tựu phát triển
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-[#231F20] tracking-tight">
             NHỮNG CON SỐ ẤN TƯỢNG
           </h2>
         </div>
@@ -52,14 +52,14 @@ export function HomeStatistics() {
             className="p-8 rounded-2xl bg-white border border-[#E8E2D5] shadow-sm hover:border-[#9A221A]/40 hover:shadow-md transition-all group"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-4xl sm:text-5xl font-black text-[#9A221A] tracking-tight">
+              <span className="text-4xl sm:text-5xl font-serif font-black text-[#9A221A] tracking-tight">
                 {stat.num}
               </span>
               <span className="text-[10px] font-semibold text-[#9A221A] bg-[#9A221A]/10 px-2 py-0.5 rounded-full">
                 {stat.tag}
               </span>
             </div>
-            <h3 className="text-base font-bold text-[#231F20] mb-2 group-hover:text-[#9A221A] transition-colors">
+            <h3 className="text-base font-serif font-bold text-[#231F20] mb-2 group-hover:text-[#9A221A] transition-colors">
               {stat.label}
             </h3>
             <p className="text-xs text-[#78716C] leading-relaxed">
