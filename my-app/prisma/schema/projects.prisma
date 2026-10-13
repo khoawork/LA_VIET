@@ -1,7 +1,24 @@
+model ProjectCategory {
+  id       Int       @id @default(autoincrement())
+  name     String
+  projects Project[]
+  @@map("proj_cates")
+}
+
 model Project {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String
+  image       String
+  location    String
+  caption     String
+  material    String
+  scale       String
+  button      String
+  slug        String     @unique
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  categoryId  Int
+  category    ProjectCategory @relation(fields: [categoryId], references: [id])
+  @@map("projects")
 }

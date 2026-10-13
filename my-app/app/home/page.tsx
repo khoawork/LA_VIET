@@ -7,7 +7,7 @@ import {
   HomePartners,
   HomeCta,
   HomeFooter,
-} from "@/modules/home";
+} from "@/modules/pages/home";
 
 export default function HomePage() {
   return (

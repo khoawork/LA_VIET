@@ -1,0 +1,24 @@
+model NewsCategory {
+    id   Int    @id @default(autoincrement())
+    name String
+    news News[]
+    @@map("news_cates")
+}
+
+model News {
+    id          Int       @id @default(autoincrement())
+    name        String
+    image       String
+    preside     String
+    presideIcon String
+    date        DateTime
+    description String
+    button      String
+    slug        String    @unique
+    reading     String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    categoryId  Int
+    category    NewsCategory @relation(fields: [categoryId], references: [id])
+    @@map("news")
+}
