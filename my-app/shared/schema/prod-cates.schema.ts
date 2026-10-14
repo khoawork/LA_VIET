@@ -1,13 +1,16 @@
 import z from "zod";
 
-export class ProdCatesRequestSchema {
-  name = z
+export const ProdCatesRequestSchema = z.object({
+  name: z
     .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be less than 100 characters");
-}
+    .min(1, { message: "Tên danh mục là bắt buộc" })
+    .max(100, { message: "Tên danh mục tối đa 100 ký tự" }),
+});
 
-export class ProdCatesResponseSchema {
-  id = z.number();
-  name = z.string();
-}
+export const ProdCatesResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type ProdCatesRequestType = z.infer<typeof ProdCatesRequestSchema>;
+export type ProdCatesResponseType = z.infer<typeof ProdCatesResponseSchema>;
