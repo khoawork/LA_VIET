@@ -16,3 +16,5 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     status: HttpStatus.CREATED,
   });
 });
+
+
