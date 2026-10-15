@@ -28,8 +28,9 @@ export default function RootLayout({
     <html
       lang="vi"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {/* MainLayout bọc cố định Header và Footer chung cho mọi màn hình */}
         <MainLayout>{children}</MainLayout>
       </body>
