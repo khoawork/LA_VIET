@@ -1,20 +1,45 @@
-import Link from "next/link";
-import { FEATURED_NEWS } from "../services/news.services";
+"use client";
 
-export function NewsFeatured() {
-  const item = FEATURED_NEWS;
+import { useState } from "react";
+import Link from "next/link";
+import { ShieldCheck, Building2, Calendar, ArrowRight, Clock, Maximize2 } from "lucide-react";
+import { FEATURED_NEWS } from "../services/news.services";
+import { NewsFeaturedModal } from "./news-featured-modal";
+
+interface NewsFeaturedProps {
+  data?: typeof FEATURED_NEWS;
+}
+
+export function NewsFeatured({ data }: NewsFeaturedProps) {
+  const item = data || FEATURED_NEWS;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="mb-14 sm:mb-16">
       <article className="bg-white rounded-2xl overflow-hidden border border-[#EAE2D5]/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] grid grid-cols-1 lg:grid-cols-12 transition-all hover:shadow-lg group">
-        {/* Left Column: Image Area */}
-        <div className="lg:col-span-7 relative aspect-[16/11] lg:aspect-auto min-h-[300px] sm:min-h-[380px] overflow-hidden bg-[#EAE2D5]">
+        {/* Left Column: Image Area với tính năng Click xem Modal (Loading 3s + Jumpscare Jolt) */}
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={() => setIsModalOpen(true)}
+          onKeyDown={(e) => e.key === "Enter" && setIsModalOpen(true)}
+          className="lg:col-span-7 relative aspect-[16/11] lg:aspect-auto min-h-[300px] sm:min-h-[380px] overflow-hidden bg-[#EAE2D5] cursor-pointer group/img"
+          title="Nhấp để xem ảnh toàn màn hình (Hiệu ứng giựt 3s)"
+        >
           <img
             src={item.imageUrl}
             alt={item.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            className="w-full h-full object-cover group-hover/img:scale-105 transition-transform duration-700"
             loading="lazy"
           />
+
+          {/* Lớp Overlay gợi ý mở ảnh khi hover */}
+          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 text-white text-xs font-bold backdrop-blur-md border border-white/20 shadow-xl transform translate-y-2 group-hover/img:translate-y-0 transition-transform">
+              <Maximize2 className="w-4 h-4 text-[#ff6b6e]" />
+              <span>Xem ảnh toàn màn hình (Modal 3s)</span>
+            </span>
+          </div>
 
           {/* Top-Left Badges */}
           <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
@@ -30,12 +55,7 @@ export function NewsFeatured() {
           {item.verifiedBadge && (
             <div className="absolute bottom-4 right-4 z-10">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#9A1C1F] bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-md border border-[#EAE2D5]/60">
-                <svg
-                  className="w-3.5 h-3.5 fill-current"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                </svg>
+                <ShieldCheck className="w-4 h-4 text-[#9A1C1F]" />
                 <span>{item.verifiedBadge}</span>
               </span>
             </div>
@@ -48,25 +68,12 @@ export function NewsFeatured() {
             {/* Author and Date Meta */}
             <div className="flex flex-wrap items-center gap-2 text-xs mb-3">
               <span className="inline-flex items-center gap-1.5 font-bold text-[#9A1C1F]">
-                <svg
-                  className="w-3.5 h-3.5 fill-current"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
-                </svg>
+                <Building2 className="w-3.5 h-3.5" />
                 <span>{item.author}</span>
               </span>
               <span className="text-[#A89F95]">•</span>
               <span className="inline-flex items-center gap-1 text-[#695D56] font-medium">
-                <svg
-                  className="w-3.5 h-3.5 fill-none stroke-current stroke-2"
-                  viewBox="0 0 24 24"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
+                <Calendar className="w-3.5 h-3.5 text-[#695D56]" />
                 <span>{item.publishedDate}</span>
               </span>
             </div>
@@ -110,18 +117,24 @@ export function NewsFeatured() {
               className="font-bold text-[#9A1C1F] hover:underline uppercase tracking-wider inline-flex items-center gap-1.5 transition-transform group/link"
             >
               <span>ĐỌC TOÀN VĂN NGHIÊN CỨU</span>
-              <span className="group-hover/link:translate-x-1 transition-transform">
-                →
-              </span>
+              <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
             </Link>
 
-            <span className="text-xs text-[#695D56] font-medium">
-              Thời gian đọc: {item.readTime}
+            <span className="inline-flex items-center gap-1 text-xs text-[#695D56] font-medium">
+              <Clock className="w-3.5 h-3.5 text-[#695D56]" />
+              <span>{item.readTime}</span>
             </span>
           </div>
         </div>
       </article>
+
+      {/* Modal Loading 3s + Giựt hù user toàn màn hình */}
+      <NewsFeaturedModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        imageUrl={item.imageUrl}
+        title={item.title}
+      />
     </section>
   );
 }
-

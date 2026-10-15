@@ -58,8 +58,8 @@ LA_VIET/
     │   │   └── index.ts            # Barrel export shared/utils
     │   └── index.ts                # Barrel export toàn bộ tầng shared (@/shared)
     │
-    ├── modules/                    # [Tầng Nghiệp vụ] Modular Domain-driven Modules
-    │   ├── home/                   # Module tính năng Home (Sơn Mài Lã Việt)
+    ├── views/                      # [Tầng Trình bày & UI Views theo Feature]
+    │   ├── home/                   # Feature Home (Sơn Mài Lã Việt)
     │   │   ├── components/         # Các khối UI con full-width cho Home
     │   │   │   ├── home-header.tsx     # Header & Navigation
     │   │   │   ├── home-hero.tsx       # Hero Section & Dải 4 Bộ sưu tập
@@ -70,11 +70,30 @@ LA_VIET/
     │   │   │   ├── home-cta.tsx        # CTA Khởi tạo dự án
     │   │   │   ├── home-footer.tsx     # Chân trang & Thông tin liên hệ
     │   │   │   └── index.ts            # Barrel export components
-    │   │   ├── hooks/              # Custom hooks cho module
-    │   │   ├── repositories/       # Data access cho module
-    │   │   ├── services/           # Business logic cho module
-    │   │   ├── types/              # Định nghĩa kiểu dữ liệu riêng
     │   │   └── index.ts            # Barrel export module home
+    │   ├── products/               # Feature Products (Danh mục tác phẩm & Sơn mài)
+    │   │   ├── components/         # Các khối UI con cho Products
+    │   │   │   ├── products-header.tsx # Header & Nav menu
+    │   │   │   ├── products-hero.tsx   # Breadcrumb, Title, 4 metrics & Filter tabs
+    │   │   │   ├── products-grid.tsx   # Lưới 8 tác phẩm/sản phẩm chi tiết
+    │   │   │   ├── products-footer.tsx # Chân trang Lã Việt & VPĐD
+    │   │   │   └── index.ts            # Barrel export components
+    │   │   ├── types.ts            # Type definitions (ProductItem, Category...)
+    │   │   └── index.ts            # Barrel export module products
+    │   └── about/                  # Feature About (Về chúng tôi & Di sản Sơn mài)
+    │       ├── components/         # Các khối UI con cho About
+    │       │   ├── about-header.tsx    # Header & Nav menu (active Về chúng tôi)
+    │       │   ├── about-hero.tsx      # Title & Dấu ấn bản quyền di sản Lã Việt
+    │       │   ├── about-technology.tsx# Nhựa sơn Phú Thọ & 4 chỉ số thống kê
+    │       │   ├── about-values.tsx    # 3 Trụ cột cốt lõi & Tiêu chuẩn vận hành
+    │       │   ├── about-organization.tsx # Sơ đồ bộ máy quản trị & sáng tác
+    │       │   ├── about-partners.tsx  # Đối tác chiến lược & Lời chứng thực
+    │       │   ├── about-cta.tsx       # Banner CTA Đỏ son Lã Việt
+    │       │   ├── about-footer.tsx    # Chân trang, Văn phòng TP.HCM & Bình Dương
+    │       │   └── index.ts            # Barrel export components
+    │       └── index.ts            # AboutView & barrel export module about
+    │
+    ├── modules/                    # [Tầng Nghiệp vụ] Modular Domain-driven Modules
     │   └── project/                # Module chuẩn mẫu Project
     │       ├── project.dto.ts      # DTOs kế thừa (inferred) từ Zod Schemas (@/shared)
     │       ├── project.repository.ts # Data Access Layer CRUD DB theo name qua Prisma
