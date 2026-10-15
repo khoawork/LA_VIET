@@ -497,26 +497,6 @@ export function AdminProductsView() {
               />
             </div>
 
-            <div className="md:col-span-2 space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Ảnh nền Hero / Banner (Tùy chọn)
-              </label>
-              <input
-                type="text"
-                value={pageProps.herosection.image || ""}
-                onChange={(e) =>
-                  setPageProps({
-                    ...pageProps,
-                    herosection: {
-                      ...pageProps.herosection,
-                      image: e.target.value,
-                    },
-                  })
-                }
-                placeholder="Nhập đường dẫn URL ảnh banner (để trống nếu sử dụng màu nền ấm mặc định)"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
-              />
-            </div>
           </div>
 
           {/* 3 Metrics Configuration */}
