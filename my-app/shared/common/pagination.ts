@@ -22,4 +22,3 @@ export function createPaginationMeta(
     hasPrevPage: page > 1,
   };
 }
-

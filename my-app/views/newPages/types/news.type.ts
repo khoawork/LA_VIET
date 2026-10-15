@@ -38,3 +38,4 @@ export interface NewsStat {
   color: string;
 }
 
+export * from "./pagenew.type";

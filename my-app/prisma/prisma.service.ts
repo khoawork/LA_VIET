@@ -16,6 +16,7 @@ function createPrismaClient() {
     connectionLimit: 10,
     acquireTimeout: 10_000,
     idleTimeout: 300,
+    allowPublicKeyRetrieval: true,
   });
 
   return new PrismaClient({ adapter });

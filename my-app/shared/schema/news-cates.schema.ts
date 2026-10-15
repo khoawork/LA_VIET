@@ -1,13 +1,35 @@
-import z from "zod";
+import { z } from "zod";
 
-export class NewsCatesRequestSchema {
-  name = z
+export const NewsCatesRequestSchema = z.object({
+  name: z
     .string()
-    .min(1, "Name is required")
-    .max(100, "Name must be less than 100 characters");
-}
+    .trim()
+    .min(1, { message: "Tên danh mục không được để trống" })
+    .max(100, { message: "Tên danh mục không được vượt quá 100 ký tự" }),
+});
 
-export class NewsCatesResponseSchema {
-  id = z.number();
-  name = z.string();
-}
+export const NewsCatesUpdateRequestSchema = NewsCatesRequestSchema;
+
+export const NewsCatesPatchRequestSchema = NewsCatesRequestSchema.partial().refine(
+  (data) => Object.keys(data).length > 0,
+  {
+    message: "Phải có ít nhất một trường để cập nhật",
+  },
+);
+
+export const NewsCatesIdSchema = z.object({
+  id: z.coerce
+    .number()
+    .int({ message: "ID danh mục phải là số nguyên" })
+    .positive({ message: "ID danh mục phải là số nguyên dương" }),
+});
+
+export const NewsCatesResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  _count: z
+    .object({
+      news: z.number(),
+    })
+    .optional(),
+});

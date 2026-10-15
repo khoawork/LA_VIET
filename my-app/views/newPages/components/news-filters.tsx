@@ -1,19 +1,28 @@
-import { NewsCategory } from "../types/news.type";
-import { NEWS_CATEGORIES } from "../services/news.services";
+export interface FilterCategoryItem {
+  id: string | number;
+  label: string;
+}
 
 interface NewsFiltersProps {
-  selectedCategory: NewsCategory;
-  onSelectCategory: (category: NewsCategory) => void;
+  categories?: FilterCategoryItem[];
+  selectedCategory: string | number;
+  onSelectCategory: (category: string | number) => void;
 }
 
 export function NewsFilters({
+  categories,
   selectedCategory,
   onSelectCategory,
 }: NewsFiltersProps) {
+  const items =
+    categories && categories.length > 0
+      ? categories
+      : [{ id: "all", label: "TẤT CẢ BẢN TIN" }];
+
   return (
     <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-3 mb-8 no-scrollbar scroll-smooth">
-      {NEWS_CATEGORIES.map((cat) => {
-        const isActive = selectedCategory === cat.id;
+      {items.map((cat) => {
+        const isActive = String(selectedCategory) === String(cat.id);
         return (
           <button
             key={cat.id}
