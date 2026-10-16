@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminNewsCategoryView } from "@/views/adminPage";
+import { AdminNewsCategoryView } from "@/views/adminPage/components/modules/admin-news-category-view";
 
 export const metadata: Metadata = {
   title: "Quản Lý Bài Viết & Chuyên Mục | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminNewsCategoryPage() {
   return <AdminNewsCategoryView />;
 }
-

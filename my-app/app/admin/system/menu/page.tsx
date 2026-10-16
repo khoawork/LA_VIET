@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminMenuView } from "@/views/adminPage";
+import { AdminMenuView } from "@/views/adminPage/components/modules/admin-menu-view";
 
 export const metadata: Metadata = {
   title: "Hệ Thống: Menu & Điều Hướng | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminMenuPage() {
   return <AdminMenuView />;
 }
-

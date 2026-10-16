@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminDashboardView } from "@/views/adminPage";
+import { AdminDashboard } from "@/views/adminPage/components/admin-dashboard";
 
 export const metadata: Metadata = {
   title: "Bảng Điều Khiển Quản Trị | LÀ VIỆT",
@@ -7,6 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminDashboardPage() {
-  return <AdminDashboardView />;
+  return <AdminDashboard />;
 }
-

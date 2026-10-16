@@ -4,9 +4,7 @@ import {
   PagesResponseSchema,
 } from "../pages.schema";
 
-/**
- * Định nghĩa chi tiết cấu trúc JSON `props` của Trang Sản Phẩm
- */
+
 export const ProductsPagePropsSchema = z.object({
   title: z
     .string()

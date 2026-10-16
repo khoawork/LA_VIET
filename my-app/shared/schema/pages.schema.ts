@@ -34,7 +34,7 @@ export const PagesResponseSchema = z.object({
 
 export type PagesRequestType = z.infer<typeof PagesRequestSchema>;
 export type PagesResponseType = z.infer<typeof PagesResponseSchema>;
-export const PagesResponseSchema = PagesRequestSchema.extend({
+export const PagesResponseSchemaExtended = PagesRequestSchema.extend({
   id: z.number(),
 });
 

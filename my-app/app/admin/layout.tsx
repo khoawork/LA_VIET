@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { AdminLayout } from "@/views/adminPage";
+import { AdminLayout } from "@/views/adminPage/components/admin-layout";
 
 export default function AdminRootLayout({
   children,
@@ -18,4 +18,3 @@ export default function AdminRootLayout({
   // Khung layout cố định sidebar bên trái, chỉ hoán đổi nội dung bên phải khi chọn nav con
   return <AdminLayout>{children}</AdminLayout>;
 }
-

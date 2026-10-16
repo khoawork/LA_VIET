@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminNewsView } from "@/views/adminPage";
+import { AdminNewsView } from "@/views/adminPage/components/modules/admin-news-view";
 
 export const metadata: Metadata = {
   title: "Quản Lý Tin Tức | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminNewsPage() {
   return <AdminNewsView />;
 }
-
