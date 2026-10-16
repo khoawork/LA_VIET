@@ -1,35 +1,29 @@
-import { ProjectCategory } from "../types/project.type";
-import { PROJECT_CATEGORIES } from "../services/project.services";
+import type { ProjectFilterItem } from "../types/project.type";
 
-interface ProjectFiltersProps {
-  selectedCategory: ProjectCategory;
-  onSelectCategory: (category: ProjectCategory) => void;
+interface Props {
+  groups: ProjectFilterItem[];
+  selectedIndex: number;
+  onSelect: (index: number) => void;
 }
 
-export function ProjectFilters({
-  selectedCategory,
-  onSelectCategory,
-}: ProjectFiltersProps) {
+export function ProjectFilters({ groups, selectedIndex, onSelect }: Props) {
   return (
-    <div className="flex items-center gap-2.5 sm:gap-3 overflow-x-auto pb-3 sm:pb-4 mb-8 no-scrollbar scroll-smooth">
-      {PROJECT_CATEGORIES.map((cat) => {
-        const isActive = selectedCategory === cat.id;
-        return (
-          <button
-            key={cat.id}
-            type="button"
-            onClick={() => onSelectCategory(cat.id)}
-            className={`whitespace-nowrap px-4 sm:px-5 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-              isActive
-                ? "bg-[#9A1C1F] text-white shadow-sm"
-                : "bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF] hover:text-[#1E1917]"
-            }`}
-          >
-            {cat.label}
-          </button>
-        );
-      })}
+    <div className="mb-8 flex items-center gap-2.5 overflow-x-auto pb-3 sm:mb-10 sm:gap-3 sm:pb-4">
+      {groups.map((group, index) => (
+        <button
+          key={index}
+          type="button"
+          aria-pressed={selectedIndex === index}
+          onClick={() => onSelect(index)}
+          className={`cursor-pointer whitespace-nowrap rounded-lg px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all sm:px-5 ${
+            selectedIndex === index
+              ? "bg-[#9A1C1F] text-white shadow-sm"
+              : "bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF]"
+          }`}
+        >
+          {group.name}
+        </button>
+      ))}
     </div>
   );
 }
-

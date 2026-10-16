@@ -1,9 +1,39 @@
 import "dotenv/config";
 import { prisma } from "./prisma.service";
 import { DEFAULT_PAGE_NEW_PROPS } from "../views/newPages/types/pagenew.type";
+import pageProjectSample from "../../page-project.sample.json";
+import pageContactSample from "../../page-contact.sample.json";
+import { PageContactRequestSchema } from "../shared/schema/pages/page-contact.schema";
+import {
+  PageProjectPropsSchema,
+  PageProjectRequestSchema,
+} from "../shared/schema/pages/page-project.schema";
+
+async function seedContactPage() {
+  const contactData = PageContactRequestSchema.parse(pageContactSample);
+  console.log("🌐 Đang khởi tạo trang CMS Liên hệ (Page: 'contact')...");
+  const existingContactPage = await prisma.page.findUnique({
+    where: { slug: "contact" },
+  });
+
+  if (existingContactPage) {
+    console.log(`  ✓ Trang 'contact' đã có (ID: ${existingContactPage.id}), giữ nguyên nội dung đã chỉnh sửa.`);
+    return;
+  }
+
+  const contactPage = await prisma.page.create({
+    data: { name: contactData.name, slug: "contact", props: contactData.props },
+  });
+  console.log(`  + Đã tạo trang 'contact' (ID: ${contactPage.id})`);
+}
 import { DEFAULT_PAGE_HOME_PROPS } from "../views/homePage/types/pagehome.type";
 
 async function main() {
+  if (process.argv.includes("--contact")) {
+    await seedContactPage();
+    return;
+  }
+
   console.log("🌱 Bắt đầu khởi tạo dữ liệu mẫu (Seeding data)...");
 
   // 1. Seed News Categories
@@ -198,21 +228,45 @@ async function main() {
   });
   console.log("  ✓ Đã upsert thành công trang 'news' vào bảng `pages`");
 
-  // 4. Seed Page Structure (Trang Home CMS)
-  console.log("🏠 Đang khởi tạo cấu trúc trang CMS Trang chủ (Page: 'home')...");
-  await prisma.page.upsert({
-    where: { slug: "home" },
-    create: {
-      name: "Trang Chủ Là Việt",
-      slug: "home",
-      props: DEFAULT_PAGE_HOME_PROPS as any,
-    },
-    update: {
-      name: "Trang Chủ Là Việt",
-      props: DEFAULT_PAGE_HOME_PROPS as any,
-    },
+  // 4. Seed Page Structure (Trang Project CMS)
+  console.log("🌐 Đang khởi tạo trang CMS Dự án (Page: 'projects')...");
+  const existingProjectPage = await prisma.page.findUnique({
+    where: { slug: "projects" },
   });
-  console.log("  ✓ Đã upsert thành công trang 'home' vào bảng `pages`");
+
+  if (existingProjectPage) {
+    console.log(`  ✓ Trang 'projects' đã có (ID: ${existingProjectPage.id}), giữ nguyên nội dung đã chỉnh sửa.`);
+  } else {
+    const projectData = PageProjectRequestSchema.parse(pageProjectSample);
+    const projectCategories = await prisma.projectCategory.findMany({
+      select: { id: true, name: true },
+      orderBy: { id: "asc" },
+    });
+    const projectProps = PageProjectPropsSchema.parse({
+      ...projectData.props,
+      filter: {
+        key: [
+          { name: "Tất cả", categories: [] },
+          ...projectCategories.map((category) => ({
+            name: category.name,
+            categories: [category.id],
+          })),
+        ],
+      },
+    });
+
+    const projectPage = await prisma.page.create({
+      data: {
+        name: projectData.name,
+        slug: "projects",
+        props: projectProps,
+      },
+    });
+    console.log(`  + Đã tạo trang 'projects' (ID: ${projectPage.id})`);
+  }
+
+  // 5. Seed Contact page once; admin edits are preserved on later runs.
+  await seedContactPage();
 
   console.log("🎉 Hoàn tất gieo dữ liệu hạt giống (Seed completed successfully)!");
 }

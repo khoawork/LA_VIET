@@ -1,5 +1,16 @@
 import z from "zod";
 
+export const PageSlugSchema = z
+  .string()
+  .trim()
+  .min(1, "Slug is required")
+  .max(100, "Slug must be less than 100 characters")
+  .regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    "Slug must be in kebab-case (lowercase letters, numbers, and hyphens only)",
+  );
+
+
 // Base Schema cho Request tạo / cập nhật trang
 export const PagesRequestSchema = z.object({
   name: z
@@ -23,3 +34,10 @@ export const PagesResponseSchema = z.object({
 
 export type PagesRequestType = z.infer<typeof PagesRequestSchema>;
 export type PagesResponseType = z.infer<typeof PagesResponseSchema>;
+export const PagesResponseSchema = PagesRequestSchema.extend({
+  id: z.number(),
+});
+
+export const PageSlugParamSchema = z.object({
+  slug: PageSlugSchema,
+});

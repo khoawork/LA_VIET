@@ -1,37 +1,10 @@
-export type ProjectCategory =
-  | "all"
-  | "hotel-resort"
-  | "grand-hall"
-  | "mansion-villa"
-  | "heritage-culture";
+import type { z } from "zod";
+import type { PageProjectResponseSchema } from "@/shared/schema/pages/page-project.schema";
+import type { ProjectsListResponseSchema } from "@/shared/schema/projects.schema";
 
-export interface ProjectItem {
-  id: string;
-  title: string;
-  location: string;
-  yearLocation: string;
-  category: ProjectCategory;
-  categoryLabel: string;
-  description: string;
-  materials: string;
-  scale: string;
-  imageUrl: string;
-}
-
-export interface ProjectStat {
-  id: string;
-  label: string;
-  value: string;
-  unit?: string;
-  description: string;
-  accentColor?: string;
-}
-
-export interface ProcessStep {
-  step: string;
-  title: string;
-  description: string;
-  timeOrWarranty: string;
-  isWarranty?: boolean;
-}
-
+export type ProjectPageData = z.infer<typeof PageProjectResponseSchema>;
+export type ProjectRecord = z.infer<typeof ProjectsListResponseSchema>[number];
+export type ProjectFilterItem = NonNullable<ProjectPageData["props"]["filter"]>["key"][number];
+export type ProjectHeaderData = ProjectPageData["props"]["header"];
+export type ProjectProcedureData = NonNullable<ProjectPageData["props"]["procedure"]>;
+export type ProjectCtaData = NonNullable<ProjectPageData["props"]["cta"]>;

@@ -1,41 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { ProjectCategory } from "../types/project.type";
-import { FEATURED_PROJECTS } from "../services/project.services";
+import type { ProjectPageData, ProjectRecord } from "../types/project.type";
 import { ProjectFilters } from "./project-filters";
 import { ProjectCard } from "./project-card";
 
-export function ProjectList() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ProjectCategory>("all");
+interface Props {
+  projects: ProjectRecord[];
+  filter?: ProjectPageData["props"]["filter"];
+}
 
-  const filteredProjects =
-    selectedCategory === "all"
-      ? FEATURED_PROJECTS
-      : FEATURED_PROJECTS.filter((p) => p.category === selectedCategory);
+export function ProjectList({ projects, filter }: Props) {
+  const [selectedFilter, setSelectedFilter] = useState(0);
+  const groups = filter?.key.length
+    ? filter.key
+    : [{ name: "Tất cả", categories: [] }];
+  const selected = groups[selectedFilter] ?? groups[0];
+  const visibleProjects = selected.categories.length
+    ? projects.filter((project) =>
+        selected.categories.includes(project.categoryId),
+      )
+    : projects;
 
   return (
     <section className="mb-20 sm:mb-24">
-      {/* Category Filter Tabs */}
       <ProjectFilters
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
+        groups={groups}
+        selectedIndex={selectedFilter}
+        onSelect={setSelectedFilter}
       />
 
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {filteredProjects.map((project) => (
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {visibleProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
 
-      {filteredProjects.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-2xl border border-[#EAE2D5] text-[#695D56]">
+      {visibleProjects.length === 0 && (
+        <div className="rounded-2xl border border-[#EAE2D5] bg-white py-16 text-center text-[#695D56]">
           <p className="text-sm">Hiện chưa có dự án nào trong danh mục này.</p>
         </div>
       )}
     </section>
   );
 }
-
