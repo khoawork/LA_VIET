@@ -1,174 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { ConsultationFormData } from "../types/contact.type";
+import { IonIcon } from "@/shared/icons/ion-icon";
+import type { PageContactProps, ConsultationFormData } from "../types/contact.type";
 
-export function ContactForm() {
-  const [formData, setFormData] = useState<ConsultationFormData>({
-    fullName: "",
-    phone: "",
-    email: "",
-    projectType: "",
-    message: "",
-  });
+export function ContactForm({ data }: { data: PageContactProps["cta"] }) {
+  const [formData, setFormData] = useState<ConsultationFormData>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setIsSubmitting(true);
+    // Form delivery is handled separately from the page-content CMS.
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
-      setFormData({
-        fullName: "",
-        phone: "",
-        email: "",
-        projectType: "",
-        message: "",
-      });
+      setFormData({});
     }, 1000);
-  };
+  }
 
   return (
-    <article className="bg-white rounded-2xl p-6 sm:p-8 border border-[#EAE2D5]/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col justify-between space-y-6">
-      {/* Form Header */}
+    <article className="flex flex-col justify-between space-y-6 rounded-2xl border border-[#EAE2D5]/80 bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.03)] sm:p-8">
       <div className="flex items-center justify-between border-b border-[#EAE2D5]/60 pb-3">
-        <h2 className="font-bold text-xs sm:text-sm tracking-wider uppercase text-[#9A1C1F]">
-          KHỞI TẠO HỢP TÁC
-        </h2>
-        {/* Checklist icon with tick badge */}
-        <span className="w-8 h-8 rounded-lg bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center">
-          <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
-            <path d="M9 11l3 3L22 4" />
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-          </svg>
-        </span>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-[#9A1C1F] sm:text-sm">{data.eyebrow}</h2>
+        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FAF1EC] text-[#9A1C1F]"><IonIcon name={data.icon} /></span>
       </div>
-
       {submitted ? (
-        <div className="bg-[#FAF3E8] p-8 rounded-2xl border border-[#EFE2D0] text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-[#9A1C1F] text-white flex items-center justify-center mx-auto text-xl font-bold">
-            ✓
-          </div>
-          <h3 className="font-bold text-lg text-[#1E1917]">
-            Cảm ơn bạn đã gửi yêu cầu hợp tác!
-          </h3>
-          <p className="text-xs text-[#5C544E] max-w-md mx-auto leading-relaxed">
-            Đội ngũ chuyên gia kỹ thuật và giám sát dự án của Là Việt sẽ liên hệ lại với bạn trong vòng 24 giờ làm việc.
-          </p>
-          <button
-            type="button"
-            onClick={() => setSubmitted(false)}
-            className="mt-2 text-xs font-bold text-[#9A1C1F] hover:underline"
-          >
-            Gửi yêu cầu khác
-          </button>
+        <div className="space-y-3 rounded-2xl border border-[#EFE2D0] bg-[#FAF3E8] p-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#9A1C1F] text-xl font-bold text-white">✓</div>
+          <h3 className="text-lg font-bold text-[#1E1917]">Cảm ơn bạn đã gửi yêu cầu hợp tác!</h3>
+          <p className="mx-auto max-w-md text-xs leading-relaxed text-[#5C544E]">Đội ngũ chuyên gia kỹ thuật và giám sát dự án của Là Việt sẽ liên hệ lại với bạn trong vòng 24 giờ làm việc.</p>
+          <button type="button" onClick={() => setSubmitted(false)} className="mt-2 text-xs font-bold text-[#9A1C1F] hover:underline">Gửi yêu cầu khác</button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Row 1: FullName & Phone */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-[#1E1917] mb-1.5">
-                Họ và tên <span className="text-[#9A1C1F]">*</span>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {data.fields.map((field, index) => (
+              <label key={index} className={`block text-xs font-semibold text-[#1E1917] ${field.type === "textarea" ? "sm:col-span-2" : ""}`}>
+                <span className="mb-1.5 block">{field.label}{field.required && <span className="text-[#9A1C1F]"> *</span>}</span>
+                {field.type === "textarea"
+                  ? <textarea name={field.name} rows={3} required={field.required} placeholder={field.placeholder} value={formData[field.name] ?? ""} onChange={(event) => setFormData({ ...formData, [field.name]: event.target.value })} className="w-full resize-none rounded-xl border border-[#EAE2D5] bg-[#FAF6F0] px-4 py-3 text-xs font-normal text-[#1E1917] placeholder-[#A89F95] focus:border-[#9A1C1F] focus:bg-white focus:outline-none" />
+                  : <input name={field.name} type={field.type} required={field.required} placeholder={field.placeholder} value={formData[field.name] ?? ""} onChange={(event) => setFormData({ ...formData, [field.name]: event.target.value })} className="w-full rounded-xl border border-[#EAE2D5] bg-[#FAF6F0] px-4 py-3 text-xs font-normal text-[#1E1917] placeholder-[#A89F95] focus:border-[#9A1C1F] focus:bg-white focus:outline-none" />}
               </label>
-              <input
-                type="text"
-                required
-                placeholder="Nguyễn Văn A"
-                value={formData.fullName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] border border-[#EAE2D5] text-xs text-[#1E1917] placeholder-[#A89F95] focus:outline-none focus:border-[#9A1C1F] focus:bg-white transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-[#1E1917] mb-1.5">
-                Số điện thoại <span className="text-[#9A1C1F]">*</span>
-              </label>
-              <input
-                type="tel"
-                required
-                placeholder="0903 000 000"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] border border-[#EAE2D5] text-xs text-[#1E1917] placeholder-[#A89F95] focus:outline-none focus:border-[#9A1C1F] focus:bg-white transition-colors"
-              />
-            </div>
+            ))}
           </div>
-
-          {/* Row 2: Email & Project Type */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-[#1E1917] mb-1.5">
-                Email liên hệ <span className="text-[#9A1C1F]">*</span>
-              </label>
-              <input
-                type="email"
-                required
-                placeholder="kien-truc-su@domain.vn"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] border border-[#EAE2D5] text-xs text-[#1E1917] placeholder-[#A89F95] focus:outline-none focus:border-[#9A1C1F] focus:bg-white transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-[#1E1917] mb-1.5">
-                Loại hình công trình <span className="text-[#9A1C1F]">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                placeholder="Chọn quy mô / mô hình dự án"
-                value={formData.projectType}
-                onChange={(e) =>
-                  setFormData({ ...formData, projectType: e.target.value })
-                }
-                className="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] border border-[#EAE2D5] text-xs text-[#1E1917] placeholder-[#A89F95] focus:outline-none focus:border-[#9A1C1F] focus:bg-white transition-colors"
-              />
-            </div>
-          </div>
-
-          {/* Row 3: Message Textarea */}
-          <div>
-            <label className="block text-xs font-semibold text-[#1E1917] mb-1.5">
-              Lời nhắn / Yêu cầu khảo sát vật liệu thực tế
-            </label>
-            <textarea
-              rows={3}
-              placeholder="Mô tả sơ bộ về ý niệm thiết kế, diện tích bề mặt sơn mài, hoặc yêu cầu thẩm mỹ chi tiết..."
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
-              className="w-full px-4 py-3 rounded-xl bg-[#FAF6F0] border border-[#EAE2D5] text-xs text-[#1E1917] placeholder-[#A89F95] focus:outline-none focus:border-[#9A1C1F] focus:bg-white transition-colors resize-none leading-relaxed"
-            />
-          </div>
-
-          {/* Row 4: NDA Security note & Submit Button */}
-          <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-2 text-[11px] text-[#695D56]">
-              <svg className="w-3.5 h-3.5 fill-current text-[#96671E] shrink-0" viewBox="0 0 24 24">
-                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
-              </svg>
-              <span>Bảo mật thông tin dự án theo chuẩn NDA</span>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#9A1C1F] hover:bg-[#851619] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
-            >
-              <span>{isSubmitting ? "Đang gửi..." : "KẾT NỐI"}</span>
-              <span>→</span>
+          <div className="flex flex-col items-start justify-between gap-4 pt-2 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-2 text-[11px] text-[#695D56]"><IonIcon name={data.iconPrivacy} className="h-3.5 w-3.5 text-[#96671E]" /><span>{data.privacyNote}</span></div>
+            <button type="submit" disabled={isSubmitting} className="flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-[#9A1C1F] px-7 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#851619] disabled:opacity-50 sm:w-auto">
+              <span>{isSubmitting ? "Đang gửi..." : data.submitLabel}</span><span>→</span>
             </button>
           </div>
         </form>
@@ -176,4 +56,3 @@ export function ContactForm() {
     </article>
   );
 }
-

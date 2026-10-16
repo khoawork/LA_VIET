@@ -17,6 +17,7 @@ import {
   AlertCircle,
   ExternalLink,
 } from "lucide-react";
+import { ProjectDataTab } from "./projects";
 
 interface NewsItemData {
   id: number;
@@ -45,7 +46,7 @@ interface NewsCategoryData {
 }
 
 export function AdminCategoriesView() {
-  const [activeMainTab, setActiveMainTab] = useState<"categories" | "news">("news");
+  const [activeMainTab, setActiveMainTab] = useState<"categories" | "news" | "projects">("news");
   
   // State danh mục
   const [newsCategories, setNewsCategories] = useState<NewsCategoryData[]>([]);
@@ -339,7 +340,7 @@ export function AdminCategoriesView() {
           <div>
             <h1 className="text-xl font-bold text-[#1E1917]">Hệ thống: Danh mục &amp; Dữ liệu</h1>
             <p className="text-xs text-stone-600 mt-0.5">
-              Quản lý danh mục phân loại và tạo mới các bài viết tin tức, báo cáo chuyên môn
+              Quản lý danh mục, bài viết Tin tức và dữ liệu Dự án
             </p>
           </div>
         </div>
@@ -353,7 +354,7 @@ export function AdminCategoriesView() {
             <Plus className="w-4 h-4" />
             <span>Tạo bài viết mới</span>
           </button>
-        ) : (
+        ) : activeMainTab === "categories" ? (
           <button
             type="button"
             onClick={() => {
@@ -366,7 +367,7 @@ export function AdminCategoriesView() {
             <Plus className="w-4 h-4" />
             <span>Tạo chuyên mục mới</span>
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Tabs chuyển đổi giữa Bài viết Tin Tức và Danh mục Dữ liệu */}
@@ -396,7 +397,22 @@ export function AdminCategoriesView() {
           <Database className="w-4 h-4" />
           <span>Danh mục Tin tức ({newsCategories.length})</span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveMainTab("projects")}
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            activeMainTab === "projects"
+              ? "bg-[#a21f1f] text-white shadow-sm"
+              : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
+          }`}
+        >
+          <Database className="w-4 h-4" />
+          <span>Quản lý &amp; Tạo mới Dự án</span>
+        </button>
       </div>
+
+      {activeMainTab === "projects" && <ProjectDataTab />}
 
       {/* TAB BÀI VIẾT TIN TỨC */}
       {activeMainTab === "news" && (

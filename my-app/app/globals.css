@@ -23,3 +23,19 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
+
+.ion-inline-icon > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.ion-inline-icon .ionicon-fill-none {
+  fill: none;
+}
+
+.ion-inline-icon .ionicon-stroke-width {
+  stroke: currentColor;
+  stroke-width: 32px;
+}

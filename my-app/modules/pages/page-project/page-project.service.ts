@@ -12,14 +12,16 @@ import {
 export class PageProjectService {
   constructor(private readonly pageProjectRepository: PageProjectRepository) {}
 
-  private async getPageProject() {
-    const page = await this.pageProjectRepository.getPageProject();
+  async getPageProject(slug: string = "projects") {
+    const page = await this.pageProjectRepository.getPageProject(slug);
     if (!page) {
       throw new NotFoundException("Page project not found");
     }
 
     return {
       id: page.id,
+      name: page.name,
+      slug: page.slug,
       props: PageProjectPropsSchema.parse(page.props),
     };
   }

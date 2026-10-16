@@ -37,6 +37,7 @@ export const ProjectsResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   image: z.url(),
+  categoryId: z.number(),
   category: z.object({
     name: z.string(),
   }),
@@ -58,17 +59,7 @@ export const ProjectParamSchema = z.object({
 
 export const ProjectsListDetailResponseSchema = z.array(ProjectsResponseSchema);
 
-export const ProjectsListResponseSchema = z.array(
-  z.object({
-    id: z.number(),
-    name: z.string(),
-    image: z.url(),
-    category: z.object({
-      name: z.string(),
-    }),
-    description: z.string(),
-  }),
-);
+export const ProjectsListResponseSchema = z.array(ProjectsResponseSchema);
 
 export const ProjectPatchSchema = ProjectRequestSchema.partial();
 

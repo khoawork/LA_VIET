@@ -1,35 +1,6 @@
-export interface OfficeLocation {
-  id: string;
-  name: string;
-  tabLabel: string;
-  address: string;
-  hours?: string;
-  tag?: string;
-  note?: string;
-  mapEmbedUrl?: string;
-  mapDistanceNote?: string;
-}
+import type z from "zod";
+import type { PageContactResponseSchema } from "@/shared/schema/pages/page-contact.schema";
 
-export interface ContactChannel {
-  title: string;
-  primaryText: string;
-  secondaryText: string;
-  isRed?: boolean;
-}
-
-export interface ExperienceSpace {
-  id: string;
-  tag: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-}
-
-export interface ConsultationFormData {
-  fullName: string;
-  phone: string;
-  email: string;
-  projectType: string;
-  message: string;
-}
-
+export type PageContactData = z.infer<typeof PageContactResponseSchema>;
+export type PageContactProps = PageContactData["props"];
+export type ConsultationFormData = Record<string, string>;

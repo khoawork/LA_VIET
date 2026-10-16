@@ -1,8 +1,16 @@
-import { FooterPatchSchema, FooterSchema, SiteSettingsPatchSchema, SiteSettingsRequestSchema, SiteSettingsResponseSchema } from "@/shared/schema/site-settings.schema";
-import z from "zod";
+import type z from "zod";
+import type {
+  FooterSchema,
+  SiteSettingsBrandPatchSchema,
+  SiteSettingsDetailsPatchSchema,
+  SiteSettingsFooterContentPatchSchema,
+  SiteSettingsPoliciesPatchSchema,
+  SiteSettingsRequestSchema,
+} from "@/shared/schema/site-settings.schema";
 
-export type SiteSettingsRequestSchemaType = z.infer<typeof SiteSettingsRequestSchema>;
-export type SiteSettingsResponseSchemaType = z.infer<typeof SiteSettingsResponseSchema>;
-export type SiteSettingsPatchSchemaType = z.infer<typeof SiteSettingsPatchSchema>;
-export type FooterSchemaType = z.infer<typeof FooterSchema>;
-export type FooterPatchSchemaType = z.infer<typeof FooterPatchSchema>;
+export type SiteSettingsRequestType = z.infer<typeof SiteSettingsRequestSchema>;
+export type FooterType = z.infer<typeof FooterSchema>;
+export type SiteSettingsBrandType = z.infer<typeof SiteSettingsBrandPatchSchema>;
+export type SiteSettingsFooterContentType = z.infer<typeof SiteSettingsFooterContentPatchSchema>;
+export type SiteSettingsDetailsType = z.infer<typeof SiteSettingsDetailsPatchSchema>;
+export type SiteSettingsPoliciesType = z.infer<typeof SiteSettingsPoliciesPatchSchema>;

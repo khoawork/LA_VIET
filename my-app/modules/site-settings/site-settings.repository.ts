@@ -1,36 +1,19 @@
 import { prisma } from "@/prisma/prisma.service";
-import { SiteSettingsPatchSchemaType, SiteSettingsRequestSchemaType } from "./site-settings.type";
+import type { SiteSettingsRequestType } from "./site-settings.type";
 
 export class SiteSettingsRepository {
-    async createSiteSettings(data: SiteSettingsRequestSchemaType) {
-        return prisma.siteSetting.create({
-            data,
-        });
-    }
+  // The database ID stays internal. New installations always create row 1.
+  async createSiteSettings(data: SiteSettingsRequestType) {
+    return prisma.siteSetting.create({ data: { id: 1, ...data } });
+  }
 
-    async updateSiteSettings(id: number, data: SiteSettingsPatchSchemaType) {
-        await prisma.siteSetting.update({
-            where: { id },
-            data,
-        });
-    }
+  async getSiteSettings() {
+    return prisma.siteSetting.findFirst({ orderBy: { id: "asc" } });
+  }
 
-    async getSiteSettingsById(id: number) {
-        return prisma.siteSetting.findUnique({
-            where: { id },
-        });
-    }
-
-    async getAllSiteSettings() {
-        return prisma.siteSetting.findMany();
-    }
-
-    async deleteSiteSettings(id: number) {
-        await prisma.siteSetting.delete({
-            where: { id },
-        });
-    }
-
+  async updateSiteSettings(id: number, data: Partial<SiteSettingsRequestType>) {
+    return prisma.siteSetting.update({ where: { id }, data });
+  }
 }
 
 export const siteSettingsRepository = new SiteSettingsRepository();

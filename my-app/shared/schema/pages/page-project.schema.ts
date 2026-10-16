@@ -12,6 +12,15 @@ export const PageProjectHeaderSchema = z.object({
         title: z.string().min(1, "Title is required"),
         icon: z.string().min(1, "Icon is required"),
         quantity: z.string().min(1, "Quantity is required"),
+        quantityColor: z
+          .string()
+          .regex(/^#[0-9a-fA-F]{6}$/, "Quantity color must be a hex color")
+          .optional(),
+        suffix: z.string().optional(),
+        suffixColor: z
+          .string()
+          .regex(/^#[0-9a-fA-F]{6}$/, "Suffix color must be a hex color")
+          .optional(),
         description: z.string().min(1, "Description is required"),
       }),
     )

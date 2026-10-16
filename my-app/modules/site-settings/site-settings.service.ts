@@ -1,92 +1,96 @@
-import { FooterSchema } from "@/shared/schema/site-settings.schema";
+import { ConflictException, NotFoundException } from "@/shared/common/app-error";
 import {
-  siteSettingsRepository,
-  SiteSettingsRepository,
-} from "./site-settings.repository";
-import {
-  FooterPatchSchemaType,
-  FooterSchemaType,
-  SiteSettingsPatchSchemaType,
-  SiteSettingsRequestSchemaType,
-  SiteSettingsResponseSchemaType,
+  FooterSchema,
+  SiteSettingsBrandPatchSchema,
+  SiteSettingsDetailsPatchSchema,
+  SiteSettingsFooterContentPatchSchema,
+  SiteSettingsPoliciesPatchSchema,
+} from "@/shared/schema/site-settings.schema";
+import { siteSettingsRepository, SiteSettingsRepository } from "./site-settings.repository";
+import type {
+  FooterType,
+  SiteSettingsBrandType,
+  SiteSettingsDetailsType,
+  SiteSettingsFooterContentType,
+  SiteSettingsPoliciesType,
+  SiteSettingsRequestType,
 } from "./site-settings.type";
-import { NotFoundException } from "@/shared";
 
 export class SiteSettingsService {
-  constructor(
-    private readonly siteSettingsRepository: SiteSettingsRepository,
-  ) {}
+  constructor(private readonly repository: SiteSettingsRepository) {}
 
-  private mergeFooter(
-    current: FooterSchemaType,
-    patch: FooterPatchSchemaType,
-  ): FooterSchemaType {
-    return FooterSchema.parse({
-      ...current,
-      ...patch,
+  async findSiteSettings() {
+    return this.repository.getSiteSettings();
+  }
 
-      office: patch.office
-        ? {
-            ...current.office,
-            ...patch.office,
-          }
-        : current.office,
+  async getSiteSettings() {
+    const setting = await this.findSiteSettings();
+    if (!setting) throw new NotFoundException("Site settings not found");
+    return setting;
+  }
 
-      contact: patch.contact
-        ? {
-            ...current.contact,
-            ...patch.contact,
-          }
-        : current.contact,
+  async createSiteSettings(data: SiteSettingsRequestType) {
+    if (await this.findSiteSettings()) {
+      throw new ConflictException("Site settings already exists");
+    }
+    return this.repository.createSiteSettings(data);
+  }
 
-      social: patch.social
-        ? {
-            ...current.social,
-            ...patch.social,
-          }
-        : current.social,
+  async getBrand() {
+    const { logo, company, tagline } = await this.getSiteSettings();
+    return SiteSettingsBrandPatchSchema.parse({ logo, company, tagline });
+  }
+
+  async updateBrand(data: SiteSettingsBrandType) {
+    const setting = await this.getSiteSettings();
+    await this.repository.updateSiteSettings(setting.id, data);
+  }
+
+  private async getFooter() {
+    const setting = await this.getSiteSettings();
+    return { id: setting.id, footer: FooterSchema.parse(setting.footer) };
+  }
+
+  private async updateFooter(patch: Partial<FooterType>) {
+    const { id, footer } = await this.getFooter();
+    await this.repository.updateSiteSettings(id, {
+      footer: FooterSchema.parse({ ...footer, ...patch }),
     });
   }
 
-  async createSiteSettings(data: SiteSettingsRequestSchemaType) {
-    return this.siteSettingsRepository.createSiteSettings(data);
+  async getFooterContent() {
+    const { footer } = await this.getFooter();
+    return SiteSettingsFooterContentPatchSchema.parse({
+      description: footer.description,
+      copyright: footer.copyright,
+    });
   }
 
-  async updateSiteSettings(id: number, data: SiteSettingsPatchSchemaType) {
-    const currentSetting =
-      await this.siteSettingsRepository.getSiteSettingsById(id);
-    const { footer: footerPatch, ...otherFields } = data;
-
-    if (!currentSetting) {
-      throw new NotFoundException(`Site settings with id ${id} not found`);
-    }
-
-    if (footerPatch) {
-      const currentFooter = FooterSchema.parse(currentSetting.footer);
-
-      const mergedFooter = this.mergeFooter(currentFooter, footerPatch);
-      await this.siteSettingsRepository.updateSiteSettings(id, {
-        ...otherFields,
-        footer: mergedFooter,
-      });
-    } else {
-      await this.siteSettingsRepository.updateSiteSettings(id, otherFields);
-    }
+  async updateFooterContent(data: SiteSettingsFooterContentType) {
+    await this.updateFooter(data);
   }
 
-  async getSiteSettingsById(id: number) {
-    return this.siteSettingsRepository.getSiteSettingsById(id);
+  async getDetails() {
+    const { footer } = await this.getFooter();
+    return SiteSettingsDetailsPatchSchema.parse({
+      office: footer.office,
+      contact: footer.contact,
+      social: footer.social,
+    });
   }
 
-  async getAllSiteSettings() {
-    return this.siteSettingsRepository.getAllSiteSettings();
+  async updateDetails(data: SiteSettingsDetailsType) {
+    await this.updateFooter(data);
   }
 
-  async deleteSiteSettings(id: number) {
-    await this.siteSettingsRepository.deleteSiteSettings(id);
+  async getPolicies() {
+    const { footer } = await this.getFooter();
+    return SiteSettingsPoliciesPatchSchema.parse({ policies: footer.policies });
+  }
+
+  async updatePolicies(data: SiteSettingsPoliciesType) {
+    await this.updateFooter(data);
   }
 }
 
-export const siteSettingsService = new SiteSettingsService(
-  siteSettingsRepository,
-);
+export const siteSettingsService = new SiteSettingsService(siteSettingsRepository);

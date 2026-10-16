@@ -12,9 +12,9 @@ export class PageProjectRepository {
     });
   }
 
-  async getPageProject() {
+  async getPageProject(slug: string = "projects") {
     return prisma.page.findUnique({
-      where: { slug: "projects" },
+      where: { slug },
     });
   }
 

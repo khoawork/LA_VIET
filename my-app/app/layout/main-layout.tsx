@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "./header";
 import Footer from "./footer";
 
@@ -20,7 +20,9 @@ export default function MainLayout({
     >
       <Header />
       <main className="w-full flex-1 flex flex-col">{children}</main>
-      <Footer />
+      <Suspense fallback={<div className="min-h-72 bg-[#fcf2e3]" aria-hidden="true" />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 }

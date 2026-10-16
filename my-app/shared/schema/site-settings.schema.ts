@@ -59,26 +59,26 @@ export const SiteSettingsRequestSchema = z.object({
   footer: FooterSchema,
 });
 
-export const SiteSettingsResponseSchema = z.object({
-  id: z.number(),
-  logo: z.url(),
-  company: z.string(),
-  tagline: z.string(),
-  footer: FooterSchema,
+export const SiteSettingsResponseSchema = SiteSettingsRequestSchema;
+
+// Each Branding tab sends only the fields it owns when editing an existing record.
+export const SiteSettingsBrandPatchSchema = z.strictObject({
+  logo: SiteSettingsRequestSchema.shape.logo,
+  company: SiteSettingsRequestSchema.shape.company,
+  tagline: SiteSettingsRequestSchema.shape.tagline,
 });
 
-export const SiteSettingsParamSchema = z.object({
-  id: z.coerce.number().int().positive(),
+export const SiteSettingsFooterContentPatchSchema = z.strictObject({
+  description: FooterSchema.shape.description,
+  copyright: FooterSchema.shape.copyright,
 });
 
-export const FooterPatchSchema = FooterSchema.partial().extend({
-  office: FooterSchema.shape.office.partial().optional(),
-  contact: FooterSchema.shape.contact.partial().optional(),
-  social: FooterSchema.shape.social.partial().optional(),
-  policies: z.array(FooterSchema.shape.policies.element.partial()).optional(),
+export const SiteSettingsDetailsPatchSchema = z.strictObject({
+  office: FooterSchema.shape.office,
+  contact: FooterSchema.shape.contact,
+  social: FooterSchema.shape.social,
 });
 
-export const SiteSettingsPatchSchema =
-  SiteSettingsRequestSchema.partial().extend({
-    footer: FooterPatchSchema.optional(),
-  });
+export const SiteSettingsPoliciesPatchSchema = z.strictObject({
+  policies: FooterSchema.shape.policies,
+});

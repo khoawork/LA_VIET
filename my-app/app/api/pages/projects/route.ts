@@ -13,3 +13,10 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     status: HttpStatus.CREATED,
   });
 });
+
+export const GET = withErrorHandler(async () => {
+  const page = await pageProjectService.getPageProject();
+  return NextResponse.json(PageProjectResponseSchema.parse(page), {
+    status: HttpStatus.OK,
+  });
+});

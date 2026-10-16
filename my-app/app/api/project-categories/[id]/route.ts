@@ -12,7 +12,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 
 export const DELETE = withErrorHandler(
-  async (_request: NextRequest, { params }: { params: { id: string } }) => {
+  async (_request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     const { id } = await validateParams(ProjCatesParamsSchema, params);
     await projCatesService.deleteProjectCategory(id);
     return new NextResponse(null, {
@@ -22,7 +22,7 @@ export const DELETE = withErrorHandler(
 );
 
 export const PUT = withErrorHandler(
-  async (request: NextRequest, { params }: { params: { id: string } }) => {
+  async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     const { id } = await validateParams(ProjCatesParamsSchema, params);
     const body = await validateBody(ProjCatesRequestSchema, request);
     await projCatesService.updateProjectCategory(id, body);
