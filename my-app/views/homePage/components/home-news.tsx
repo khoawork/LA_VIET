@@ -1,59 +1,39 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { HomeNewsSectionType } from "../types/pagehome.type";
+import { DEFAULT_PAGE_HOME_PROPS } from "../types/pagehome.type";
 
-const articles = [
-  {
-    id: 1,
-    tag: "Triển lãm & Sự kiện",
-    tagColor: "bg-[#9A221A] text-white",
-    img: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=800&q=80",
-    date: "12 Tháng 10, 2026",
-    title: "Không gian triển lãm ứng dụng sơn mài trong kiến trúc hiện đại",
-    desc: "Triển lãm chuyên đề quy tụ hơn 50 tác phẩm cỡ lớn, mở ra góc nhìn đa chiều về khả năng thích ứng của chất liệu truyền thống.",
-  },
-  {
-    id: 2,
-    tag: "Kỹ thuật nghệ thuật",
-    tagColor: "bg-[#C49B3E] text-white",
-    img: "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=800&q=80",
-    date: "05 Tháng 10, 2026",
-    title: "Kỹ thuật mài đa tầng và chất liệu vàng bạc trong sơn mài",
-    desc: "Tìm hiểu bí quyết làm nên độ sâu hun hút của từng thớ sơn khi kết hợp lá vàng quỳ kiên nhẫn qua từng công đoạn mài nước.",
-  },
-  {
-    id: 3,
-    tag: "Dự án tiêu biểu",
-    tagColor: "bg-[#9A221A] text-white",
-    img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
-    date: "28 Tháng 09, 2026",
-    title: "Bàn giao tác phẩm sơn mài lớn ngành tài chính tập đoàn đa quốc gia",
-    desc: "Công trình bích họa sơn mài trải rộng 3 tầng sảnh chính, khẳng định bản sắc văn hóa doanh nghiệp giao hòa cùng tinh thần hiện đại.",
-  },
-];
+interface HomeNewsProps {
+  data?: HomeNewsSectionType;
+}
 
-export function HomeNews() {
+export function HomeNews({ data = DEFAULT_PAGE_HOME_PROPS.newsSection }: HomeNewsProps) {
+  const articlesList = data.articles && data.articles.length > 0
+    ? data.articles
+    : DEFAULT_PAGE_HOME_PROPS.newsSection.articles;
+
   return (
     <section id="tin-tuc" className="w-full py-20 lg:py-28 bg-white border-y border-[#E8E2D5] px-6 sm:px-10 lg:px-16 xl:px-24">
       <div className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
         <div className="space-y-2">
           <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
-            Góc nhìn di sản
+            {data.tagline}
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-[#231F20] tracking-tight">
-            TIN TỨC MỚI NHẤT
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
+            {data.title}
           </h2>
         </div>
         <Link
-          href="/projects"
+          href={data.link?.href || "/news"}
           className="text-xs font-bold uppercase tracking-[0.16em] text-[#9A221A] hover:underline flex items-center gap-1.5"
         >
-          Xem tất cả tin tức <span>→</span>
+          {data.link?.text || "Xem tất cả tin tức"} <span>→</span>
         </Link>
       </div>
 
       {/* 3 Articles Grid */}
       <div className="w-full grid md:grid-cols-3 gap-8">
-        {articles.map((art) => (
+        {articlesList.map((art) => (
           <article
             key={art.id}
             className="group flex flex-col bg-[#FAF7F2] rounded-2xl overflow-hidden border border-[#E8E2D5] hover:border-[#9A221A]/40 transition-all shadow-sm hover:shadow-md"
@@ -77,7 +57,7 @@ export function HomeNews() {
                 <span className="text-[11px] font-mono text-[#78716C]">
                   {art.date}
                 </span>
-                <h3 className="text-base sm:text-lg font-serif font-bold text-[#231F20] group-hover:text-[#9A221A] transition-colors leading-snug">
+                <h3 className="text-base sm:text-lg font-bold text-[#231F20] group-hover:text-[#9A221A] transition-colors leading-snug">
                   {art.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[#68625B] leading-relaxed line-clamp-3">
@@ -86,8 +66,8 @@ export function HomeNews() {
               </div>
 
               <div className="pt-3 border-t border-[#E8E2D5]/70 flex items-center justify-between text-xs font-bold text-[#9A221A]">
-                <span className="hover:underline">Đọc tiếp →</span>
-                <span className="text-[#A8A29E] font-normal">➦ Chia sẻ</span>
+                <Link href="/news" className="hover:underline">Đọc tiếp →</Link>
+                <span className="text-[#A8A29E] font-normal cursor-pointer">➦ Chia sẻ</span>
               </div>
             </div>
           </article>
@@ -96,4 +76,3 @@ export function HomeNews() {
     </section>
   );
 }
-

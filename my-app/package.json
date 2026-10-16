@@ -9,11 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "seed": "node --env-file=.env prisma/seed.mjs"
-  },
-  "prisma": {
-    "seed": "node --env-file=.env prisma/seed.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.10.0",

@@ -12,6 +12,22 @@ export interface ApiResponse<T = unknown> {
   timestamp: string;
 }
 
+/**
+ * Định dạng thời gian theo múi giờ Việt Nam: giờ trước ngày sau (HH:mm:ss DD/MM/YYYY)
+ */
+export function getVietnamTimestamp(date = new Date()): string {
+  return new Intl.DateTimeFormat("vi-VN", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour12: false,
+  }).format(date);
+}
+
 export function sendSuccess<T>(
   data: T,
   message = "Thao tác thành công",
@@ -24,7 +40,7 @@ export function sendSuccess<T>(
       message,
       data,
       ...(meta ? { meta } : {}),
-      timestamp: new Date().toISOString(),
+      timestamp: getVietnamTimestamp(),
     },
     { status: statusCode },
   );
@@ -50,9 +66,8 @@ export function sendError(
       message,
       errors,
       errorCode,
-      timestamp: new Date().toISOString(),
+      timestamp: getVietnamTimestamp(),
     },
     { status: statusCode },
   );
 }
-

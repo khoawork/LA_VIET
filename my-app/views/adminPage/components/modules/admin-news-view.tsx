@@ -1,157 +1,300 @@
 "use client";
 
-import { Newspaper, Plus, Search, Filter, Edit, Trash2, Calendar, Eye } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import type { PageNewPropsType } from "@/views/newPages/types/pagenew.type";
+import { DEFAULT_PAGE_NEW_PROPS } from "@/views/newPages/types/pagenew.type";
+import {
+  NewsMainNav,
+  NewsMainTab,
+  NewsHeaderActions,
+  NewsTabNav,
+  SectionTab,
+  NewsHeaderTab,
+  NewsFeaturedTab,
+  NewsArticlesTab,
+  NewsStatsTab,
+  NewsCtaTab,
+  NewsSeoTab,
+  NewsSectionPreview,
+  NewsArticlesManagement,
+  NewsCategoriesManagement,
+} from "./news";
 
-export function AdminNewsView() {
-  const newsList = [
-    {
-      id: 1,
-      title: "Khai mở sơn mài liên ngành: Cầu nối giữa hội họa hàn lâm và kiến trúc",
-      category: "Nghiên cứu văn hoá",
-      author: "Ban Biên Tập",
-      date: "12/10/2026",
-      views: "1.4K",
-      status: "Đã xuất bản",
-    },
-    {
-      id: 2,
-      title: "Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống vùng Phú Thọ",
-      category: "Kỹ thuật di sản",
-      author: "Nghệ nhân Phan Văn",
-      date: "08/10/2026",
-      views: "2.1K",
-      status: "Đã xuất bản",
-    },
-    {
-      id: 3,
-      title: "Triển lãm 'Hồn Đất Thếp Vàng': Hành trình tôn vinh chất liệu sơn ta",
-      category: "Sự kiện & Triển lãm",
-      author: "Hội đồng Giám tuyển",
-      date: "01/10/2026",
-      views: "950",
-      status: "Bản nháp",
-    },
-  ];
+interface AdminNewsViewProps {
+  initialMainTab?: NewsMainTab;
+}
+
+export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps) {
+  const [activeMainTab, setActiveMainTab] = useState<NewsMainTab>(initialMainTab);
+  const [articlesCount, setArticlesCount] = useState<number | undefined>(undefined);
+  const [categoriesCount, setCategoriesCount] = useState<number | undefined>(undefined);
+
+  // States dành cho Tab "Nội dung Website (CMS)"
+  const [activeSectionTab, setActiveSectionTab] = useState<SectionTab>("header");
+  const [formData, setFormData] = useState<PageNewPropsType>(DEFAULT_PAGE_NEW_PROPS);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  // Đọc query param ?tab= khi mount và khi popstate
+  useEffect(() => {
+    const parseUrlTab = () => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const tab = params.get("tab");
+        if (tab === "content" || tab === "articles" || tab === "categories") {
+          setActiveMainTab(tab);
+        }
+      }
+    };
+
+    parseUrlTab();
+    window.addEventListener("popstate", parseUrlTab);
+    return () => window.removeEventListener("popstate", parseUrlTab);
+  }, []);
+
+  // Chuyển tab chính và cập nhật query URL
+  const handleSelectMainTab = (tab: NewsMainTab) => {
+    setActiveMainTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.pushState(null, "", url.toString());
+    }
+  };
+
+  // 1. Tải cấu trúc trang từ API
+  useEffect(() => {
+    async function fetchPageContent() {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/admin/news/page");
+        const json = await res.json();
+        if (json.success && json.data?.props) {
+          setFormData(json.data.props);
+        }
+      } catch (err) {
+        console.error("Lỗi khi tải cấu trúc trang tin tức:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPageContent();
+  }, []);
+
+  // Tự ẩn thông báo sau 4 giây
+  useEffect(() => {
+    if (alertInfo) {
+      const timer = setTimeout(() => setAlertInfo(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertInfo]);
+
+  // 2. Lưu thay đổi cấu trúc trang qua API PUT
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const res = await fetch("/api/admin/news/page", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ props: formData }),
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        setAlertInfo({
+          type: "success",
+          message: "Đã lưu toàn bộ thay đổi cấu trúc trang Tin tức thành công!",
+        });
+        if (json.data?.props) {
+          setFormData(json.data.props);
+        }
+      } else {
+        setAlertInfo({
+          type: "error",
+          message: json.message || "Không thể lưu thay đổi, vui lòng thử lại.",
+        });
+      }
+    } catch {
+      setAlertInfo({
+        type: "error",
+        message: "Lỗi kết nối máy chủ khi lưu cấu trúc trang.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // 3. Khôi phục về mặc định qua API POST reset
+  const handleReset = async () => {
+    if (
+      !confirm(
+        "Bạn có chắc chắn muốn khôi phục toàn bộ nội dung trang Tin tức về mặc định ban đầu?",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setSaving(true);
+      const res = await fetch("/api/admin/news/page", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reset" }),
+      });
+      const json = await res.json();
+
+      if (json.success && json.data?.props) {
+        setFormData(json.data.props);
+        setAlertInfo({
+          type: "success",
+          message: "Đã khôi phục cấu trúc trang Tin tức về mặc định thành công!",
+        });
+      }
+    } catch {
+      setAlertInfo({
+        type: "error",
+        message: "Lỗi khi khôi phục dữ liệu mặc định.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
-      {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[#FAF1EC] text-[#5A0B0E] flex items-center justify-center">
-            <Newspaper className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-[#1E1917]">Quản lý Tin tức &amp; Bài viết</h1>
-            <p className="text-xs text-[#695D56] mt-0.5">
-              Soạn thảo, duyệt bài nghiên cứu di sản sơn mài, hoạt động triển lãm và sự kiện
-            </p>
-          </div>
-        </div>
+      {/* 1. THANH ĐIỀU HƯỚNG CHÍNH (PRIMARY NAV) DÀNH CHO TOÀN BỘ PHÂN HỆ TIN TỨC */}
+      <NewsMainNav
+        activeTab={activeMainTab}
+        onSelectTab={handleSelectMainTab}
+        articlesCount={articlesCount}
+        categoriesCount={categoriesCount}
+      />
 
-        <button
-          type="button"
-          onClick={() => alert("Mở form viết bài mới")}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5A0B0E] hover:bg-[#721217] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Viết bài mới</span>
-        </button>
-      </div>
+      {/* 2. TAB: NỘI DUNG WEBSITE (PAGE CMS 6 SECTIONS) */}
+      {activeMainTab === "content" && (
+        <div className="space-y-6">
+          {/* Alert Banner */}
+          {alertInfo && (
+            <div
+              className={`flex items-center gap-3 p-4 rounded-xl text-xs font-semibold transition-all ${
+                alertInfo.type === "success"
+                  ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                  : "bg-rose-50 text-rose-800 border border-rose-200"
+              }`}
+            >
+              {alertInfo.type === "success" ? (
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+              ) : (
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              )}
+              <span>{alertInfo.message}</span>
+            </div>
+          )}
 
-      {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Tìm kiếm bài viết theo tiêu đề, tác giả, chuyên mục..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#EAE2D5] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#5A0B0E]"
+          {/* Header & Top Bar Actions */}
+          <NewsHeaderActions
+            saving={saving}
+            onSave={handleSave}
+            onReset={handleReset}
           />
-        </div>
 
-        <div className="flex gap-2">
-          <button
-            type="button"
-            className="px-4 py-2.5 rounded-xl bg-white border border-[#EAE2D5] text-xs font-semibold text-stone-700 flex items-center gap-2 hover:bg-stone-50"
-          >
-            <Filter className="w-4 h-4 text-stone-500" />
-            <span>Tất cả chuyên mục</span>
-          </button>
-        </div>
-      </div>
+          {/* Navigation Tabs giữa 6 Section CMS */}
+          <NewsTabNav
+            activeTab={activeSectionTab}
+            onSelectTab={setActiveSectionTab}
+          />
 
-      {/* News Table */}
-      <div className="bg-white rounded-2xl border border-[#EAE2D5] shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
-            <thead>
-              <tr className="bg-[#FAF6F0] border-b border-[#EAE2D5] text-[#695D56] font-bold uppercase tracking-wider">
-                <th className="py-3.5 px-5">Bài viết</th>
-                <th className="py-3.5 px-4">Chuyên mục</th>
-                <th className="py-3.5 px-4">Tác giả</th>
-                <th className="py-3.5 px-4">Ngày đăng</th>
-                <th className="py-3.5 px-4">Lượt xem</th>
-                <th className="py-3.5 px-4">Trạng thái</th>
-                <th className="py-3.5 px-5 text-right">Thao tác</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#EAE2D5]/70 font-medium text-[#2A2421]">
-              {newsList.map((news) => (
-                <tr key={news.id} className="hover:bg-stone-50/70 transition-colors">
-                  <td className="py-4 px-5">
-                    <div className="font-bold text-[#1E1917] max-w-md line-clamp-1">
-                      {news.title}
-                    </div>
-                  </td>
-                  <td className="py-4 px-4 text-[#695D56]">{news.category}</td>
-                  <td className="py-4 px-4 text-stone-600">{news.author}</td>
-                  <td className="py-4 px-4 text-stone-600 inline-flex items-center gap-1 mt-4">
-                    <Calendar className="w-3.5 h-3.5 text-stone-400" />
-                    {news.date}
-                  </td>
-                  <td className="py-4 px-4 text-stone-600">
-                    <span className="inline-flex items-center gap-1">
-                      <Eye className="w-3.5 h-3.5 text-stone-400" />
-                      {news.views}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                        news.status === "Đã xuất bản"
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                          : "bg-stone-100 text-stone-700 border-stone-200"
-                      }`}
-                    >
-                      {news.status}
-                    </span>
-                  </td>
-                  <td className="py-4 px-5 text-right">
-                    <div className="inline-flex items-center gap-2">
-                      <button
-                        type="button"
-                        title="Chỉnh sửa bài viết"
-                        className="p-1.5 rounded-lg text-stone-500 hover:text-[#5A0B0E] hover:bg-stone-100 transition-colors"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        type="button"
-                        title="Xóa bài viết"
-                        className="p-1.5 rounded-lg text-stone-500 hover:text-red-700 hover:bg-stone-100 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-[#EAE2D5]">
+              <Loader2 className="w-8 h-8 text-[#9A1C1F] animate-spin mb-3" />
+              <p className="text-xs font-semibold text-[#695D56]">
+                Đang tải cấu trúc nội dung trang Tin tức...
+              </p>
+            </div>
+          ) : (
+            /* 2-Column Layout: Editor (Left) & Live Preview (Right) */
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Cột trái: Form chỉnh sửa Section đang chọn */}
+              <div className="lg:col-span-7 space-y-6">
+                {activeSectionTab === "header" && (
+                  <NewsHeaderTab
+                    data={formData.header}
+                    onChange={(header) => setFormData({ ...formData, header })}
+                  />
+                )}
+
+                {activeSectionTab === "featured" && (
+                  <NewsFeaturedTab
+                    data={formData.featured}
+                    onChange={(featured) =>
+                      setFormData({ ...formData, featured })
+                    }
+                  />
+                )}
+
+                {activeSectionTab === "articles" && (
+                  <NewsArticlesTab
+                    data={formData.articlesSection}
+                    onChange={(articlesSection) =>
+                      setFormData({ ...formData, articlesSection })
+                    }
+                  />
+                )}
+
+                {activeSectionTab === "stats" && (
+                  <NewsStatsTab
+                    data={formData.stats}
+                    onChange={(stats) => setFormData({ ...formData, stats })}
+                  />
+                )}
+
+                {activeSectionTab === "cta" && (
+                  <NewsCtaTab
+                    data={formData.cta}
+                    onChange={(cta) => setFormData({ ...formData, cta })}
+                  />
+                )}
+
+                {activeSectionTab === "seo" && (
+                  <NewsSeoTab
+                    data={formData.seo}
+                    onChange={(seo) => setFormData({ ...formData, seo })}
+                  />
+                )}
+              </div>
+
+              {/* Cột phải: Live Preview trực quan kế bên editor */}
+              <div className="lg:col-span-5">
+                <NewsSectionPreview
+                  activeTab={activeSectionTab}
+                  data={formData}
+                />
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      {/* 3. TAB: BÀI VIẾT TIN TỨC (NEWS ARTICLES MANAGEMENT) */}
+      {activeMainTab === "articles" && (
+        <NewsArticlesManagement
+          onArticlesCountChange={setArticlesCount}
+          onCategoriesCountChange={setCategoriesCount}
+        />
+      )}
+
+      {/* 4. TAB: CHUYÊN MỤC TIN TỨC (CATEGORY-NEWS MANAGEMENT) */}
+      {activeMainTab === "categories" && (
+        <NewsCategoriesManagement
+          onCategoriesCountChange={setCategoriesCount}
+        />
+      )}
     </div>
   );
 }
-

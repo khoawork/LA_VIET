@@ -1,3 +1,10 @@
+export interface AdminNavSubItem {
+  id: string;
+  label: string;
+  href: string;
+  badge?: string | number;
+}
+
 export interface AdminNavItem {
   id: string;
   label: string;
@@ -5,6 +12,7 @@ export interface AdminNavItem {
   icon: string;
   badge?: string | number;
   active?: boolean;
+  subItems?: AdminNavSubItem[];
 }
 
 export interface AdminNavSection {

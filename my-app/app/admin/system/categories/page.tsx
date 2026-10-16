@@ -1,12 +1,5 @@
-import { Metadata } from "next";
-import { AdminCategoriesView } from "@/views/adminPage";
-
-export const metadata: Metadata = {
-  title: "Hệ Thống: Danh Mục Dữ Liệu | Quản Trị LÀ VIỆT",
-  description: "Quản lý danh mục dữ liệu hệ thống Là Việt",
-};
+import { redirect } from "next/navigation";
 
 export default function AdminCategoriesPage() {
-  return <AdminCategoriesView />;
+  redirect("/admin/news-category");
 }
-
