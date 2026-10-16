@@ -1,7 +1,14 @@
 import { ArrowUpRight, CheckCircle2, Globe, Sparkles, ShieldCheck } from "lucide-react";
 import { ABOUT_VALUES } from "../services/about.services";
+import type { AboutValuesSectionType } from "@/shared/schema/pages/about-product.schema";
 
-export function AboutValues() {
+interface AboutValuesProps {
+  data?: AboutValuesSectionType;
+}
+
+export function AboutValues({ data }: AboutValuesProps) {
+  const items = data?.items && data.items.length > 0 ? data.items : ABOUT_VALUES;
+
   const getIcon = (id: string) => {
     switch (id) {
       case "vision":
@@ -11,20 +18,24 @@ export function AboutValues() {
       case "core-values":
         return <ShieldCheck className="w-5 h-5 text-[#4A423D]" />;
       default:
-        return null;
+        return <ShieldCheck className="w-5 h-5 text-[#9A1C1F]" />;
     }
   };
 
   return (
     <section className="mb-10 sm:mb-12">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {ABOUT_VALUES.map((val) => (
+        {items.map((val) => (
           <div
             key={val.id}
             className="p-6 sm:p-7 relative bg-white rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex flex-col justify-between border border-[#EAE2D5]/90 overflow-hidden hover:shadow-md transition-shadow min-h-[380px]"
           >
             {/* Top gradient accent line */}
-            <div className={`w-full h-1.5 left-0 top-0 absolute bg-gradient-to-r ${val.gradient}`} />
+            <div
+              className={`w-full h-1.5 left-0 top-0 absolute bg-gradient-to-r ${
+                val.gradient || "from-[#9A1C1F] via-[#9A1C1F]/80 to-transparent"
+              }`}
+            />
 
             <div className="flex flex-col gap-4">
               <div className="w-11 h-11 bg-[#FAF1EC] rounded-xl flex justify-center items-center shadow-xs">
@@ -44,7 +55,7 @@ export function AboutValues() {
                 {val.description}
               </p>
 
-              {val.pillars && (
+              {val.pillars && val.pillars.length > 0 && (
                 <div className="flex flex-col gap-2 pt-1">
                   {val.pillars.map((pillar, idx) => (
                     <div key={idx} className="inline-flex items-start gap-2">
@@ -59,10 +70,16 @@ export function AboutValues() {
             </div>
 
             <div className="pt-6 inline-flex justify-between items-center border-t border-[#EAE2D5]/70 mt-4">
-              <span className={`text-xs font-bold uppercase tracking-wider ${val.accentColor}`}>
+              <span
+                className={`text-xs font-bold uppercase tracking-wider ${
+                  val.accentColor || "text-[#9A1C1F]"
+                }`}
+              >
                 {val.tag}
               </span>
-              <ArrowUpRight className={`w-4 h-4 ${val.accentColor}`} />
+              <ArrowUpRight
+                className={`w-4 h-4 ${val.accentColor || "text-[#9A1C1F]"}`}
+              />
             </div>
           </div>
         ))}
