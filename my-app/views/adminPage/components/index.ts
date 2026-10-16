@@ -17,6 +17,7 @@ export * from "./modules/admin-contact-view";
 
 // 6 trang quản lý hệ thống (Ảnh 1)
 export * from "./modules/admin-categories-view";
+export * from "./modules/admin-news-category-view";
 export * from "./modules/admin-users-view";
 export * from "./modules/admin-logs-view";
 export * from "./modules/admin-menu-view";

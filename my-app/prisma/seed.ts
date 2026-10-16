@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { prisma } from "./prisma.service";
 import { DEFAULT_PAGE_NEW_PROPS } from "../views/newPages/types/pagenew.type";
+import { DEFAULT_PAGE_HOME_PROPS } from "../views/homePage/types/pagehome.type";
 
 async function main() {
   console.log("🌱 Bắt đầu khởi tạo dữ liệu mẫu (Seeding data)...");
@@ -196,6 +197,22 @@ async function main() {
     },
   });
   console.log("  ✓ Đã upsert thành công trang 'news' vào bảng `pages`");
+
+  // 4. Seed Page Structure (Trang Home CMS)
+  console.log("🏠 Đang khởi tạo cấu trúc trang CMS Trang chủ (Page: 'home')...");
+  await prisma.page.upsert({
+    where: { slug: "home" },
+    create: {
+      name: "Trang Chủ Là Việt",
+      slug: "home",
+      props: DEFAULT_PAGE_HOME_PROPS as any,
+    },
+    update: {
+      name: "Trang Chủ Là Việt",
+      props: DEFAULT_PAGE_HOME_PROPS as any,
+    },
+  });
+  console.log("  ✓ Đã upsert thành công trang 'home' vào bảng `pages`");
 
   console.log("🎉 Hoàn tất gieo dữ liệu hạt giống (Seed completed successfully)!");
 }

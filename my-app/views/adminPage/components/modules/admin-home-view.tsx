@@ -1,91 +1,240 @@
 "use client";
 
-import { Home, Save, Sparkles, Image as ImageIcon, Eye } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import type { PageHomePropsType } from "@/views/homePage/types/pagehome.type";
+import { DEFAULT_PAGE_HOME_PROPS } from "@/views/homePage/types/pagehome.type";
+import {
+  HomeHeaderActions,
+  HomeTabNav,
+  HomeSectionTab,
+  HomeHeroTab,
+  HomeStatisticsTab,
+  HomeSpotlightTab,
+  HomeNewsTab,
+  HomePartnersTab,
+  HomeCtaTab,
+  HomeSeoTab,
+  HomeSectionPreview,
+} from "./home";
 
 export function AdminHomeView() {
+  const [activeTab, setActiveTab] = useState<HomeSectionTab>("hero");
+  const [formData, setFormData] = useState<PageHomePropsType>(DEFAULT_PAGE_HOME_PROPS);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  // 1. Tải cấu trúc trang chủ từ API
+  useEffect(() => {
+    async function fetchHomeContent() {
+      try {
+        setLoading(true);
+        const res = await fetch("/api/admin/home/page");
+        const json = await res.json();
+        if (json.success && json.data?.props) {
+          setFormData(json.data.props);
+        }
+      } catch (err) {
+        console.error("Lỗi khi tải cấu trúc Trang chủ:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchHomeContent();
+  }, []);
+
+  // Tự ẩn thông báo sau 4 giây
+  useEffect(() => {
+    if (alertInfo) {
+      const timer = setTimeout(() => setAlertInfo(null), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [alertInfo]);
+
+  // 2. Lưu thay đổi qua API PUT
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      const res = await fetch("/api/admin/home/page", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ props: formData }),
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        setAlertInfo({
+          type: "success",
+          message: "Đã lưu toàn bộ thay đổi cấu trúc Trang chủ thành công!",
+        });
+        if (json.data?.props) {
+          setFormData(json.data.props);
+        }
+      } else {
+        setAlertInfo({
+          type: "error",
+          message: json.message || "Không thể lưu thay đổi, vui lòng thử lại.",
+        });
+      }
+    } catch {
+      setAlertInfo({
+        type: "error",
+        message: "Lỗi kết nối máy chủ khi lưu cấu trúc Trang chủ.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // 3. Khôi phục về mặc định qua API POST reset
+  const handleReset = async () => {
+    if (
+      !confirm(
+        "Bạn có chắc chắn muốn khôi phục toàn bộ nội dung Trang chủ về mặc định ban đầu?",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setSaving(true);
+      const res = await fetch("/api/admin/home/page", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reset" }),
+      });
+      const json = await res.json();
+
+      if (json.success && json.data?.props) {
+        setFormData(json.data.props);
+        setAlertInfo({
+          type: "success",
+          message: "Đã khôi phục cấu trúc Trang chủ về mặc định thành công!",
+        });
+      }
+    } catch {
+      setAlertInfo({
+        type: "error",
+        message: "Lỗi khi khôi phục dữ liệu mặc định.",
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-[#f3e9db]">
+        <Loader2 className="w-8 h-8 text-[#9A1C1F] animate-spin mb-3" />
+        <p className="text-xs font-semibold text-[#695D56]">
+          Đang tải cấu trúc nội dung Trang chủ...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[#FAF1EC] text-[#5A0B0E] flex items-center justify-center">
-            <Home className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-[#1E1917]">Quản lý Trang chủ</h1>
-            <p className="text-xs text-[#695D56] mt-0.5">
-              Tùy chỉnh biểu ngữ Hero, các khối giới thiệu tiêu điểm và sản phẩm nổi bật
-            </p>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => alert("Đã lưu cấu hình Trang chủ thành công!")}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5A0B0E] hover:bg-[#721217] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+      {/* Alert Banner */}
+      {alertInfo && (
+        <div
+          className={`flex items-center gap-3 p-4 rounded-xl text-xs font-semibold transition-all ${
+            alertInfo.type === "success"
+              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+              : "bg-rose-50 text-rose-800 border border-rose-200"
+          }`}
         >
-          <Save className="w-4 h-4" />
-          <span>Lưu thay đổi</span>
-        </button>
-      </div>
+          {alertInfo.type === "success" ? (
+            <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+          ) : (
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+          )}
+          <span>{alertInfo.message}</span>
+        </div>
+      )}
 
-      {/* Hero Banner Section Form */}
-      <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#EAE2D5] shadow-xs space-y-6">
-        <div className="flex items-center justify-between pb-4 border-b border-[#EAE2D5]">
-          <h2 className="text-base font-bold text-[#1E1917] flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#E5A93C]" />
-            Khối Biểu Ngữ Chính (Hero Section)
-          </h2>
-          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-            Đang hiển thị
-          </span>
+      {/* Header & Top Bar Actions */}
+      <HomeHeaderActions
+        saving={saving}
+        onSave={handleSave}
+        onReset={handleReset}
+      />
+
+      {/* Navigation Tabs giữa 7 Section Trang chủ */}
+      <HomeTabNav activeTab={activeTab} onSelectTab={setActiveTab} />
+
+      {/* 2-Column Layout: Form Editor (Left 7 Cols) & Live Preview (Right 5 Cols) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Cột trái: Form chỉnh sửa Section đang chọn */}
+        <div className="lg:col-span-7 space-y-6">
+          {activeTab === "hero" && (
+            <HomeHeroTab
+              data={formData.hero}
+              onChange={(hero) => setFormData({ ...formData, hero })}
+            />
+          )}
+
+          {activeTab === "statistics" && (
+            <HomeStatisticsTab
+              data={formData.statistics}
+              onChange={(statistics) =>
+                setFormData({ ...formData, statistics })
+              }
+            />
+          )}
+
+          {activeTab === "spotlight" && (
+            <HomeSpotlightTab
+              data={formData.spotlight}
+              onChange={(spotlight) =>
+                setFormData({ ...formData, spotlight })
+              }
+            />
+          )}
+
+          {activeTab === "news" && (
+            <HomeNewsTab
+              data={formData.newsSection}
+              onChange={(newsSection) =>
+                setFormData({ ...formData, newsSection })
+              }
+            />
+          )}
+
+          {activeTab === "partners" && (
+            <HomePartnersTab
+              data={formData.partners}
+              onChange={(partners) =>
+                setFormData({ ...formData, partners })
+              }
+            />
+          )}
+
+          {activeTab === "cta" && (
+            <HomeCtaTab
+              data={formData.cta}
+              onChange={(cta) => setFormData({ ...formData, cta })}
+            />
+          )}
+
+          {activeTab === "seo" && (
+            <HomeSeoTab
+              data={formData.seo}
+              onChange={(seo) => setFormData({ ...formData, seo })}
+            />
+          )}
         </div>
 
-        <div className="grid grid-cols-1 gap-5">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-[#4A423D]">
-              Tiêu đề chính (Heading 1)
-            </label>
-            <input
-              type="text"
-              defaultValue="HÀNH TRÌNH TÔN VINH DI SẢN SƠN MÀI TRONG KHÔNG GIAN ĐƯƠNG ĐẠI"
-              className="w-full px-4 py-2.5 rounded-xl border border-[#EAE2D5] bg-[#FAF6F0]/40 text-sm text-[#1E1917] font-medium focus:outline-none focus:border-[#5A0B0E]"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-[#4A423D]">
-              Mô tả ngắn (Lead Paragraph)
-            </label>
-            <textarea
-              rows={3}
-              defaultValue="Kế thừa nền tảng nhựa mủ sơn ta Phú Thọ nguyên bản cùng các thành tựu vật liệu mới, tạo lập cầu nối giữa di sản hội hoạ hàn lâm và thực tiễn kiến trúc quy mô lớn."
-              className="w-full px-4 py-2.5 rounded-xl border border-[#EAE2D5] bg-[#FAF6F0]/40 text-sm text-[#1E1917] font-medium focus:outline-none focus:border-[#5A0B0E]"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold uppercase tracking-wider text-[#4A423D]">
-              Ảnh nền Hero (URL hoặc tải lên)
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                defaultValue="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80"
-                className="flex-1 px-4 py-2.5 rounded-xl border border-[#EAE2D5] bg-[#FAF6F0]/40 text-sm text-[#1E1917] font-medium focus:outline-none focus:border-[#5A0B0E]"
-              />
-              <button
-                type="button"
-                className="px-4 py-2.5 rounded-xl border border-[#EAE2D5] hover:bg-stone-50 text-xs font-semibold flex items-center gap-2"
-              >
-                <ImageIcon className="w-4 h-4 text-stone-500" />
-                <span>Chọn ảnh</span>
-              </button>
-            </div>
-          </div>
+        {/* Cột phải: Live Preview trực quan kế bên editor */}
+        <div className="lg:col-span-5">
+          <HomeSectionPreview activeTab={activeTab} data={formData} />
         </div>
       </div>
     </div>
   );
 }
-
