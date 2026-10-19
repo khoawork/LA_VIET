@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   experimental: {
     agentFeedback: true,
   },
+// hii
   cacheComponents: true,
   partialPrefetching: true,
   images: {
