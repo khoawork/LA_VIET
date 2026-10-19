@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutGrid,
   Home,
@@ -35,6 +36,32 @@ export function AdminSidebar({
   onCloseMobile,
 }: AdminSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const [currentUser, setCurrentUser] = useState<{
+    fullname: string;
+    role: string;
+    avatar?: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.data?.user) {
+          setCurrentUser(data.data.user);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  async function handleLogout() {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {}
+    router.push("/admin/login");
+    router.refresh();
+  }
 
   const getIcon = (iconName: string) => {
     const props = { className: "w-4 h-4 shrink-0" };
@@ -134,7 +161,15 @@ export function AdminSidebar({
               )}
 
               <nav className="space-y-1">
-                {section.items.map((item) => {
+                {section.items
+                  .filter((item) => {
+                    // Chỉ có ADMIN mới thấy tab Tài khoản & Phân quyền, các role khác không thấy
+                    if (item.href === "/admin/system/users") {
+                      return currentUser?.role === "ADMIN";
+                    }
+                    return true;
+                  })
+                  .map((item) => {
                   const isActive =
                     pathname === item.href ||
                     (item.id === "dashboard" &&
@@ -180,27 +215,34 @@ export function AdminSidebar({
           <div className="flex items-center justify-between gap-3 p-2 rounded-xl">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-9 h-9 rounded-full bg-[#d1a25b] text-[#5A0B0E] flex items-center justify-center font-bold text-sm shrink-0 shadow-inner">
-                {ADMIN_USER.avatarText}
+                {currentUser?.fullname
+                  ? currentUser.fullname.slice(0, 1).toUpperCase()
+                  : ADMIN_USER.avatarText}
               </div>
               {!collapsed && (
                 <div className="flex flex-col min-w-0">
                   <span className="text-xs font-bold text-white truncate leading-tight">
-                    {ADMIN_USER.name}
+                    {currentUser?.fullname || ADMIN_USER.name}
                   </span>
                   <span className="text-[10px] text-[#f3e9db] font-medium uppercase tracking-wider truncate">
-                    {ADMIN_USER.role}
+                    {currentUser?.role === "ADMIN"
+                      ? "Quản Trị Viên (Admin)"
+                      : currentUser?.role === "MANAGER"
+                      ? "Quản Lý (Manager)"
+                      : ADMIN_USER.role}
                   </span>
                 </div>
               )}
             </div>
 
-            <Link
-              href="/admin/login"
+            <button
+              type="button"
+              onClick={handleLogout}
               title="Đăng xuất khỏi trang quản trị"
-              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-black/20 transition-colors"
+              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-black/20 transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
-            </Link>
+            </button>
           </div>
         </div>
       </aside>

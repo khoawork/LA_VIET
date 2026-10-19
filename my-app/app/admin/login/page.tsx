@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { AdminLogin } from "@/views/adminPage/components/admin-login";
 
 export const metadata: Metadata = {
@@ -7,5 +8,15 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLoginPage() {
-  return <AdminLogin />;
+  return (
+    <Suspense
+      fallback={
+        <div className="fixed inset-0 bg-[#a21f1f] flex items-center justify-center text-white text-sm font-bold">
+          Đang tải trang đăng nhập...
+        </div>
+      }
+    >
+      <AdminLogin />
+    </Suspense>
+  );
 }
