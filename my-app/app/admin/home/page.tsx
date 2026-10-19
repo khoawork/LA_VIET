@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminHomeView } from "@/views/adminPage";
+import { AdminHomeView } from "@/views/adminPage/components/modules/admin-home-view";
 
 export const metadata: Metadata = {
   title: "Quản Lý Trang Chủ | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminHomePage() {
   return <AdminHomeView />;
 }
-

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminProductsView } from "@/views/adminPage";
+import { AdminProductsView } from "@/views/adminPage/components/modules/admin-products-view";
 
 export const metadata: Metadata = {
   title: "Quản Lý Sản Phẩm | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminProductsPage() {
   return <AdminProductsView />;
 }
-

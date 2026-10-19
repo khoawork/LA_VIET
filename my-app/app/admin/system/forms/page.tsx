@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminFormsView } from "@/views/adminPage";
+import { AdminFormsView } from "@/views/adminPage/components/modules/admin-forms-view";
 
 export const metadata: Metadata = {
   title: "Hệ Thống: Quản Lý Biểu Mẫu | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminFormsPage() {
   return <AdminFormsView />;
 }
-

@@ -59,7 +59,7 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
         label: "Tin tức",
         href: "/admin/news",
         icon: "Newspaper",
-        badge: "15",
+        badge: "CMS",
       },
       {
         id: "contact",
@@ -74,22 +74,16 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
     title: "HỆ THỐNG",
     items: [
       {
-        id: "categories",
-        label: "Danh mục dữ liệu",
-        href: "/admin/system/categories",
-        icon: "Database",
-      },
-      {
         id: "users",
         label: "Tài khoản & Phân quyền",
         href: "/admin/system/users",
         icon: "Users",
       },
       {
-        id: "logs",
-        label: "Nhật ký hoạt động",
-        href: "/admin/system/logs",
-        icon: "History",
+        id: "categories",
+        label: "Danh mục dữ liệu",
+        href: "/admin/system/categories",
+        icon: "Database",
       },
       {
         id: "menu",

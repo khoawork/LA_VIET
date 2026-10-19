@@ -59,7 +59,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           breadcrumb={getBreadcrumbTitle()}
         />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#f7f5f1]">
+        <main className={`min-h-0 flex-1 p-4 sm:p-6 lg:p-8 bg-[#f7f5f1] ${pathname === "/admin/system/categories" ? "overflow-hidden" : "overflow-y-auto"}`}>
           {children}
         </main>
       </div>

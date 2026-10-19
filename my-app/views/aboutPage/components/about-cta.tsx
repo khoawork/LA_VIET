@@ -1,7 +1,24 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
+import type { AboutCtaSectionType } from "@/shared/schema/pages/about-product.schema";
 
-export function AboutCta() {
+interface AboutCtaProps {
+  data?: AboutCtaSectionType;
+}
+
+export function AboutCta({ data }: AboutCtaProps) {
+  const badge = data?.badge || "KHỞI TẠO TÁC PHẨM ĐỘC BẢN";
+  const heading = data?.heading || "ĐỒNG HÀNH KIẾN TẠO DỰ ÁN CÙNG LÀ VIỆT";
+  const description =
+    data?.description ||
+    "Hãy liên hệ với đội ngũ giám tuyển và kỹ sư chuyên môn của chúng tôi để đưa tinh hoa sơn mài hội hoạ vào không gian kiến trúc của bạn.";
+
+  const primaryLabel = data?.primaryButton?.label || "ĐẶT LỊCH TƯ VẤN CHUYÊN GIA";
+  const primaryLink = data?.primaryButton?.link || "/contact";
+
+  const secondaryLabel = data?.secondaryButton?.label || "XEM CATALOGUE DỰ ÁN";
+  const secondaryLink = data?.secondaryButton?.link || "/products";
+
   return (
     <section className="mb-8">
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#690E12] via-[#851619] to-[#600C10] text-white p-8 sm:p-10 lg:p-12 shadow-2xl">
@@ -15,34 +32,34 @@ export function AboutCta() {
               <svg className="w-4 h-4 fill-current text-rose-300" viewBox="0 0 24 24">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
-              <span>KHỞI TẠO TÁC PHẨM ĐỘC BẢN</span>
+              <span>{badge}</span>
             </div>
 
             <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase leading-snug">
-              ĐỒNG HÀNH KIẾN TẠO DỰ ÁN CÙNG LÀ VIỆT
+              {heading}
             </h2>
 
             <p className="text-xs sm:text-sm text-rose-100/80 leading-relaxed max-w-xl">
-              Hãy liên hệ với đội ngũ giám tuyển và kỹ sư chuyên môn của chúng tôi để đưa tinh hoa sơn mài hội hoạ vào không gian kiến trúc của bạn.
+              {description}
             </p>
           </div>
 
           {/* Right action buttons column */}
           <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
             <Link
-              href="/contact"
+              href={primaryLink}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white hover:bg-rose-50 text-[#851619] font-bold text-xs uppercase tracking-wider shadow-lg transition-transform active:scale-[0.98]"
             >
-              <span>ĐẶT LỊCH TƯ VẤN CHUYÊN GIA</span>
+              <span>{primaryLabel}</span>
               <ArrowRight className="w-4 h-4 text-[#851619]" />
             </Link>
 
             <Link
-              href="/products"
+              href={secondaryLink}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs uppercase tracking-wider transition-colors active:scale-[0.98]"
             >
               <BookOpen className="w-4 h-4 text-white" />
-              <span>XEM CATALOGUE DỰ ÁN</span>
+              <span>{secondaryLabel}</span>
             </Link>
           </div>
         </div>

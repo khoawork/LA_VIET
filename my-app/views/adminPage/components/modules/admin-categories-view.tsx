@@ -16,10 +16,11 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { ProjectDataTab } from "./projects";
-import { AdminProductsView } from "./admin-products-view";
+import { AdminProductDataTab } from "./admin-product-data-tab";
 
 type CategoryTab = "projectCategories" | "productCategories";
-type MainTab = "news" | "projects" | "products" | "categories" | CategoryTab;
+type MainTab = "news" | "projects" | "products";
+type CategoryManagerTab = "categories" | CategoryTab;
 
 interface DataCategory {
   id: number;
@@ -57,13 +58,13 @@ interface NewsCategoryData {
   };
 }
 
-const emptyNewsForm = (categoryId = 0) => ({
+const emptyNewsForm = (categoryId = 0, date = "") => ({
   name: "",
   image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
   categoryId,
   preside: "Ban Nghiên cứu Là Việt",
   presideIcon: "FlaskConical",
-  date: new Date().toLocaleDateString("sv-SE"),
+  date,
   description: "",
   button: "Xem chi tiết",
   reading: "5 phút đọc",
@@ -73,6 +74,8 @@ const emptyNewsForm = (categoryId = 0) => ({
 export function AdminCategoriesView() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("news");
   const [projectCreateOpen, setProjectCreateOpen] = useState(false);
+  const [productCreateOpen, setProductCreateOpen] = useState(false);
+  const [categoryManagerTab, setCategoryManagerTab] = useState<CategoryManagerTab | null>(null);
   
   // State danh mục
   const [newsCategories, setNewsCategories] = useState<NewsCategoryData[]>([]);
@@ -146,7 +149,7 @@ export function AdminCategoriesView() {
   };
 
   // Tạo chuyên mục mới
-  const handleCreateCategory = async (e: React.FormEvent) => {
+  const handleCreateCategory = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setCategoryError(null);
 
@@ -183,7 +186,7 @@ export function AdminCategoriesView() {
   };
 
   // Cập nhật chuyên mục
-  const handleUpdateCategory = async (e: React.FormEvent) => {
+  const handleUpdateCategory = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!editingCategory || !editingCategory.name.trim()) {
       setCategoryError("Vui lòng nhập tên chuyên mục.");
@@ -286,7 +289,21 @@ export function AdminCategoriesView() {
     setDataCategoryError("");
   };
 
-  const handleSaveDataCategory = async (event: React.FormEvent) => {
+  const openCategoryManager = () => {
+    const tab: CategoryManagerTab = activeMainTab === "news"
+      ? "categories"
+      : activeMainTab === "projects" ? "projectCategories" : "productCategories";
+    setCategoryManagerTab(tab);
+    if (tab === "categories") {
+      setCategoryError(null);
+      setNewCategoryName("");
+      setIsCreateCategoryModalOpen(true);
+    } else {
+      openDataCategoryModal(tab);
+    }
+  };
+
+  const handleSaveDataCategory = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!dataCategoryModal) return;
     const name = dataCategoryName.trim();
@@ -348,7 +365,7 @@ export function AdminCategoriesView() {
 
   const openCreateNews = () => {
     setEditingNewsId(null);
-    setFormData(emptyNewsForm(newsCategories[0]?.id));
+    setFormData(emptyNewsForm(newsCategories[0]?.id, new Date().toLocaleDateString("sv-SE")));
     setNewsError(null);
     setIsNewsModalOpen(true);
   };
@@ -372,7 +389,7 @@ export function AdminCategoriesView() {
   };
 
   // Lưu bài viết tin tức
-  const handleSaveNews = async (e: React.FormEvent) => {
+  const handleSaveNews = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setNewsError(null);
 
@@ -454,13 +471,10 @@ export function AdminCategoriesView() {
     { id: "news", label: "Quản lý Tin tức", icon: Newspaper },
     { id: "projects", label: "Quản lý dự án", icon: FolderKanban },
     { id: "products", label: "Quản lý Sản phẩm", icon: Package },
-    { id: "categories", label: "Danh mục Tin tức", icon: Database },
-    { id: "projectCategories", label: "Danh mục Dự án", icon: Database },
-    { id: "productCategories", label: "Danh mục Sản phẩm", icon: Database },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="flex h-full min-h-0 flex-col gap-6 overflow-hidden [&_button]:cursor-pointer [&_button:disabled]:cursor-not-allowed">
       {/* Toast thông báo */}
       {toast && (
         <div
@@ -480,87 +494,61 @@ export function AdminCategoriesView() {
       )}
 
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex shrink-0 flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#f3e9db]">
             <Database className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#1E1917]">Hệ thống: Danh mục &amp; Dữ liệu</h1>
-            <p className="text-xs text-stone-600 mt-0.5">
+            <h1 className="text-xl font-bold text-[#1E1917] sm:text-2xl">Hệ thống: Danh mục &amp; Dữ liệu</h1>
+            <p className="mt-0.5 text-sm text-stone-600">
               Quản lý tin tức, dự án, sản phẩm và các danh mục dữ liệu
             </p>
           </div>
         </div>
 
-        {activeMainTab === "news" ? (
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
           <button
             type="button"
-            onClick={openCreateNews}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+            onClick={openCategoryManager}
+            className="inline-flex items-center gap-2 rounded-xl border border-[#f3e9db] bg-[#FAF1EC] px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-[#a21f1f] shadow-sm transition-all hover:bg-[#F3E2D9]"
           >
-            <Plus className="w-4 h-4" />
-            <span>Tạo bài viết mới</span>
+            <Plus className="h-4 w-4" /> Thêm danh mục
           </button>
-        ) : activeMainTab === "projects" ? (
           <button
             type="button"
-            disabled={dataCategories.projectCategories.length === 0}
-            title={dataCategories.projectCategories.length === 0 ? "Hãy tạo danh mục dự án trước" : undefined}
-            onClick={() => setProjectCreateOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Tạo dự án mới</span>
-          </button>
-        ) : activeMainTab === "products" ? (
-          <button
-            type="button"
-            onClick={() => window.alert("Mở form thêm sản phẩm mới")}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Tạo sản phẩm mới</span>
-          </button>
-        ) : activeMainTab === "categories" ? (
-          <button
-            type="button"
+            title={activeMainTab !== "news" && dataCategories[activeMainTab === "projects" ? "projectCategories" : "productCategories"].length === 0 ? "Hãy tạo danh mục trước" : undefined}
             onClick={() => {
-              setCategoryError(null);
-              setNewCategoryName("");
-              setIsCreateCategoryModalOpen(true);
+              if (activeMainTab === "news") openCreateNews();
+              else if (activeMainTab === "projects") {
+                if (dataCategories.projectCategories.length === 0) openCategoryManager();
+                else setProjectCreateOpen(true);
+              } else {
+                if (dataCategories.productCategories.length === 0) openCategoryManager();
+                else setProductCreateOpen(true);
+              }
             }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#a21f1f] px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-white shadow-sm transition-all hover:bg-[#851619]"
           >
-            <Plus className="w-4 h-4" />
-            <span>Tạo chuyên mục mới</span>
+            <Plus className="h-4 w-4" />
+            {activeMainTab === "news" ? "Tạo bài viết mới" : activeMainTab === "projects" ? "Tạo dự án mới" : "Tạo sản phẩm mới"}
           </button>
-        ) : activeMainTab === "projectCategories" || activeMainTab === "productCategories" ? (
-          <button
-            type="button"
-            onClick={() => openDataCategoryModal(activeMainTab)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Tạo danh mục {categoryTabs[activeMainTab].label} mới</span>
-          </button>
-        ) : null}
+        </div>
       </div>
 
-      {/* Ba tab quản lý, tiếp theo là ba tab danh mục */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-[#f3e9db] pb-2">
-        {[navTabs.slice(0, 3), navTabs.slice(3)].map((group, index) => (
-          <div key={index} className={`flex flex-wrap items-center gap-2 ${index === 1 ? "lg:border-l lg:border-[#e8ddce] lg:pl-3" : ""}`}>
-            {group.map((tab) => (
+      {/* Ba tab quản lý dữ liệu */}
+      <div className="flex w-full min-w-0 shrink-0 flex-nowrap items-center gap-3 overflow-x-auto overscroll-x-contain border-b border-[#f3e9db] pb-2 touch-pan-x">
+        {navTabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => {
                   setProjectCreateOpen(false);
+                  setProductCreateOpen(false);
                   setActiveMainTab(tab.id);
                 }}
                 aria-current={activeMainTab === tab.id ? "page" : undefined}
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                   activeMainTab === tab.id
                     ? "bg-[#a21f1f] text-white shadow-sm"
                     : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
@@ -569,8 +557,6 @@ export function AdminCategoriesView() {
                 <tab.icon className="w-4 h-4" />
                 <span>{tab.label}</span>
               </button>
-            ))}
-          </div>
         ))}
       </div>
 
@@ -581,11 +567,17 @@ export function AdminCategoriesView() {
           onCloseCreate={() => setProjectCreateOpen(false)}
         />
       )}
-      {activeMainTab === "products" && <AdminProductsView embedded />}
+      {activeMainTab === "products" && (
+        <AdminProductDataTab
+          categories={dataCategories.productCategories}
+          createOpen={productCreateOpen}
+          onCloseCreate={() => setProductCreateOpen(false)}
+        />
+      )}
 
       {/* TAB BÀI VIẾT TIN TỨC */}
       {activeMainTab === "news" && (
-        <div className="space-y-4">
+         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
           {/* Thanh tìm kiếm & Lọc */}
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
@@ -599,7 +591,7 @@ export function AdminCategoriesView() {
                   void fetchNewsList(e.target.value, selectedFilterCategory, 1);
                 }}
                 placeholder="Tìm kiếm bài viết theo tiêu đề, mô tả..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-sm font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -610,7 +602,7 @@ export function AdminCategoriesView() {
                 setNewsPage(1);
                 void fetchNewsList(searchKeyword, e.target.value, 1);
               }}
-              className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-semibold text-[#1E1917]"
+              className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-sm font-semibold text-[#1E1917]"
             >
               <option value="">Tất cả danh mục tin tức</option>
               {newsCategories.map((c) => (
@@ -622,77 +614,81 @@ export function AdminCategoriesView() {
           </div>
 
           {/* Bảng danh sách bài viết */}
-          <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
+          <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
             {newsLoading ? (
-              <div className="py-16 text-center text-xs font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
+              <div className="py-16 text-center text-sm font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
                 <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
                 <span>Đang tải danh sách bài viết...</span>
               </div>
             ) : newsList.length === 0 ? (
-              <div className="py-16 text-center text-xs text-stone-500">
+              <div className="py-16 text-center text-sm text-stone-500">
                 Chưa có bài viết nào. Hãy bấm nút &quot;Tạo bài viết mới&quot; ở trên để thêm bài viết đầu tiên.
               </div>
             ) : (
-              <table className="w-full text-left border-collapse text-xs">
+              <table className="w-full min-w-[1120px] table-fixed border-collapse text-left text-sm">
                 <thead>
-                  <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
-                    <th className="py-3.5 px-5">Bài viết</th>
-                    <th className="py-3.5 px-4">Chuyên mục</th>
-                    <th className="py-3.5 px-4">Tác giả / Chủ trì</th>
-                    <th className="py-3.5 px-4">Ngày đăng</th>
-                    <th className="py-3.5 px-5 text-right">Thao tác</th>
+                  <tr className="border-b border-[#f3e9db] bg-[#f7f5f1] font-bold text-stone-700">
+                    <th className="w-96 whitespace-nowrap px-5 py-3.5">Bài viết</th>
+                    <th className="w-52 whitespace-nowrap px-4 py-3.5">Chuyên mục</th>
+                    <th className="w-52 whitespace-nowrap px-4 py-3.5">Tác giả / chủ trì</th>
+                    <th className="w-32 whitespace-nowrap px-4 py-3.5">Ngày đăng</th>
+                    <th className="w-48 min-w-48 px-4 py-3.5">
+                      <div className="grid grid-cols-2 gap-1">
+                        <span className="text-center">Thao tác</span>
+                      </div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#f3e9db] font-medium text-[#1E1917]">
                   {newsList.map((item) => (
                     <tr key={item.id} className="hover:bg-[#f7f5f1]/50 transition-colors">
                       <td className="py-3.5 px-5">
-                        <div className="flex items-center gap-3">
+                         <div className="flex min-w-0 items-center gap-3">
                           <img
                             src={item.image}
                             alt={item.name}
                             className="w-12 h-10 object-cover rounded-lg border border-[#f3e9db] shrink-0"
                           />
-                          <div className="min-w-0 max-w-md">
+                           <div className="min-w-0 flex-1">
                             <span className="font-bold text-[#1E1917] block truncate">
                               {item.name}
                             </span>
-                            <span className="text-[11px] text-stone-500 font-mono">
+                             <span className="block truncate font-mono text-xs text-stone-500">
                               /{item.slug}
                             </span>
                           </div>
                         </div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#F0DCD6]">
+                         <span className="block truncate rounded-full border border-[#F0DCD6] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]" title={item.category?.name}>
                           {item.category?.name || `Danh mục #${item.categoryId}`}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-stone-600 font-semibold">
-                        {item.preside || "Là Việt"}
+                       <td className="py-3.5 px-4 text-stone-600 font-semibold">
+                         <span className="block truncate" title={item.preside}>{item.preside || "Là Việt"}</span>
                       </td>
-                      <td className="py-3.5 px-4 text-stone-500 text-[11px]">
+                       <td className="whitespace-nowrap py-3.5 px-4 text-stone-500">
                         {new Date(item.date).toLocaleDateString("vi-VN")}
                       </td>
-                      <td className="py-3.5 px-5 text-right">
-                        <div className="inline-flex items-center gap-1.5">
+                      <td className="w-48 min-w-48 whitespace-nowrap px-4 py-3.5">
+                        <div className="grid grid-cols-2 gap-1">
                           <button
                             type="button"
                             onClick={() => openEditNews(item)}
-                            className="p-1.5 rounded-lg text-stone-500 hover:text-[#9A1C1F] hover:bg-stone-100 transition-colors cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC] transition-colors cursor-pointer"
                             title="Sửa bài viết"
                             aria-label={`Sửa bài viết ${item.name}`}
                           >
-                            <Edit className="w-4 h-4" />
+                            <Edit className="w-4 h-4" /> Sửa
                           </button>
                           <button
                             type="button"
                             onClick={() => handleDeleteNews(item.id, item.name)}
-                            className="p-1.5 rounded-lg text-stone-400 hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 font-semibold text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
                             title="Xóa bài viết"
                             aria-label={`Xóa bài viết ${item.name}`}
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="w-4 h-4" /> Xóa
                           </button>
                         </div>
                       </td>
@@ -702,7 +698,7 @@ export function AdminCategoriesView() {
               </table>
             )}
           </div>
-          <div className="flex items-center justify-between text-xs text-stone-600">
+          <div className="flex shrink-0 items-center justify-between text-sm text-stone-600">
             <span>Trang {newsPage}/{newsTotalPages}</span>
             <div className="flex gap-2">
               <button
@@ -732,50 +728,77 @@ export function AdminCategoriesView() {
         </div>
       )}
 
-      {/* TAB DANH MỤC TIN TỨC */}
-      {activeMainTab === "categories" && (
+      {categoryManagerTab && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4">
+          <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-[#f7f5f1] shadow-2xl">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EAE2D5] bg-white p-5">
+              <h2 className="text-lg font-bold text-[#1E1917]">
+                Danh mục {categoryManagerTab === "categories" ? "Tin tức" : categoryTabs[categoryManagerTab].label}
+              </h2>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (categoryManagerTab === "categories") {
+                      setCategoryError(null);
+                      setNewCategoryName("");
+                      setIsCreateCategoryModalOpen(true);
+                    } else {
+                      openDataCategoryModal(categoryManagerTab);
+                    }
+                  }}
+                   className="inline-flex items-center gap-2 rounded-xl bg-[#a21f1f] px-4 py-2.5 text-sm font-bold text-white"
+                >
+                  <Plus className="h-4 w-4" /> Thêm danh mục
+                </button>
+                <button type="button" onClick={() => setCategoryManagerTab(null)} aria-label="Đóng danh mục" className="rounded-lg p-2 text-stone-500 hover:bg-stone-100"><X className="h-5 w-5" /></button>
+              </div>
+            </div>
+            <div className="space-y-4 overflow-y-auto p-5">
+      {/* DANH MỤC TIN TỨC */}
+      {categoryManagerTab === "categories" && (
         <div className="space-y-4">
           {/* Header Bar của Tab Danh mục */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#f3e9db] shadow-xs">
-            <div className="text-xs font-semibold text-stone-600">
+             <div className="text-sm font-semibold text-stone-600">
               Tổng cộng có <span className="font-bold text-[#9A1C1F]">{newsCategories.length}</span> chuyên mục bài viết
             </div>
           </div>
 
           <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
             {categoriesLoading ? (
-              <div className="py-16 text-center text-xs font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
+               <div className="py-16 text-center text-sm font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
                 <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
                 <span>Đang tải danh mục...</span>
               </div>
             ) : newsCategories.length === 0 ? (
-              <div className="py-16 text-center text-xs text-stone-500">
+               <div className="py-16 text-center text-sm text-stone-500">
                 Chưa có chuyên mục nào. Bấm nút &quot;Tạo chuyên mục mới&quot; ở trên để thêm chuyên mục đầu tiên.
               </div>
             ) : (
-              <table className="w-full text-left border-collapse text-xs">
+               <table className="w-full min-w-[760px] table-fixed border-collapse text-left text-sm">
                 <thead>
-                  <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
-                    <th className="py-3.5 px-5">ID</th>
-                    <th className="py-3.5 px-5">Tên danh mục tin tức</th>
-                    <th className="py-3.5 px-4 text-center">Số bài viết</th>
-                    <th className="py-3.5 px-4">Phân hệ</th>
-                    <th className="py-3.5 px-5 text-right">Thao tác</th>
+                   <tr className="border-b border-[#f3e9db] bg-[#f7f5f1] font-bold text-stone-700">
+                     <th className="w-20 px-5 py-3.5">ID</th>
+                     <th className="w-64 px-5 py-3.5">Tên danh mục tin tức</th>
+                     <th className="w-28 px-4 py-3.5 text-center">Số bài viết</th>
+                     <th className="w-44 px-4 py-3.5">Phân hệ</th>
+                     <th className="w-28 px-5 py-3.5 text-right">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#f3e9db] font-medium text-[#1E1917]">
                   {newsCategories.map((cat) => (
                     <tr key={cat.id} className="hover:bg-[#f7f5f1]/50 transition-colors">
                       <td className="py-3.5 px-5 text-stone-500 font-mono">#{cat.id}</td>
-                      <td className="py-3.5 px-5 font-bold text-[#1E1917]">{cat.name}</td>
+                       <td className="py-3.5 px-5 font-bold text-[#1E1917]"><span className="block truncate" title={cat.name}>{cat.name}</span></td>
                       <td className="py-3.5 px-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#F0DCD6]">
+                         <span className="inline-block whitespace-nowrap rounded-full border border-[#F0DCD6] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]">
                           {cat._count?.news ?? 0} bài viết
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-stone-100 text-stone-600">
-                          Tin tức &amp; Nghiên cứu
+                         <span className="block truncate rounded-md bg-stone-100 px-2 py-0.5 text-xs font-semibold text-stone-600">
+                           Tin tức &amp; nghiên cứu
                         </span>
                       </td>
                       <td className="py-3.5 px-5 text-right">
@@ -811,38 +834,38 @@ export function AdminCategoriesView() {
         </div>
       )}
 
-      {(activeMainTab === "projectCategories" || activeMainTab === "productCategories") && (
+      {(categoryManagerTab === "projectCategories" || categoryManagerTab === "productCategories") && (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-[#f3e9db] bg-white p-4 text-xs font-semibold text-stone-600 shadow-xs">
-            Tổng cộng có <span className="font-bold text-[#9A1C1F]">{dataCategories[activeMainTab].length}</span> danh mục {categoryTabs[activeMainTab].label}
+           <div className="rounded-2xl border border-[#f3e9db] bg-white p-4 text-sm font-semibold text-stone-600 shadow-xs">
+            Tổng cộng có <span className="font-bold text-[#9A1C1F]">{dataCategories[categoryManagerTab].length}</span> danh mục {categoryTabs[categoryManagerTab].label}
           </div>
           <div className="overflow-x-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
-            {dataCategoriesLoading[activeMainTab] ? (
-              <div className="flex items-center justify-center gap-2 py-16 text-xs text-stone-500">
+            {dataCategoriesLoading[categoryManagerTab] ? (
+               <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
                 <Loader2 className="h-5 w-5 animate-spin" /> Đang tải danh mục...
               </div>
-            ) : dataCategories[activeMainTab].length === 0 ? (
-              <p className="py-16 text-center text-xs text-stone-500">
-                Chưa có danh mục {categoryTabs[activeMainTab].label}. Bấm nút tạo danh mục ở trên để thêm danh mục đầu tiên.
+            ) : dataCategories[categoryManagerTab].length === 0 ? (
+               <p className="py-16 text-center text-sm text-stone-500">
+                Chưa có danh mục {categoryTabs[categoryManagerTab].label}. Bấm nút tạo danh mục ở trên để thêm danh mục đầu tiên.
               </p>
             ) : (
-              <table className="w-full text-left text-xs">
+               <table className="w-full min-w-[620px] table-fixed text-left text-sm">
                 <thead className="border-b border-[#f3e9db] bg-[#f7f5f1] text-stone-700">
                   <tr>
-                    <th className="px-5 py-3">ID</th>
-                    <th className="px-5 py-3">Tên danh mục {categoryTabs[activeMainTab].label}</th>
-                    <th className="px-5 py-3 text-right">Thao tác</th>
+                     <th className="w-20 px-5 py-3">ID</th>
+                     <th className="px-5 py-3">Tên danh mục {categoryTabs[categoryManagerTab].label}</th>
+                     <th className="w-44 px-5 py-3 text-right">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#f3e9db]">
-                  {dataCategories[activeMainTab].map((item) => (
+                  {dataCategories[categoryManagerTab].map((item) => (
                     <tr key={item.id}>
                       <td className="px-5 py-3 font-mono text-stone-500">#{item.id}</td>
-                      <td className="px-5 py-3 font-bold text-[#1E1917]">{item.name}</td>
+                       <td className="px-5 py-3 font-bold text-[#1E1917]"><span className="block truncate" title={item.name}>{item.name}</span></td>
                       <td className="px-5 py-3 text-right whitespace-nowrap">
                         <button
                           type="button"
-                          onClick={() => openDataCategoryModal(activeMainTab, item)}
+                          onClick={() => openDataCategoryModal(categoryManagerTab, item)}
                           className="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]"
                           aria-label={`Sửa danh mục ${item.name}`}
                         >
@@ -850,7 +873,7 @@ export function AdminCategoriesView() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleDeleteDataCategory(activeMainTab, item)}
+                          onClick={() => handleDeleteDataCategory(categoryManagerTab, item)}
                           className="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-red-700 hover:bg-red-50"
                           aria-label={`Xóa danh mục ${item.name}`}
                         >
@@ -862,6 +885,11 @@ export function AdminCategoriesView() {
                 </tbody>
               </table>
             )}
+          </div>
+        </div>
+      )}
+
+            </div>
           </div>
         </div>
       )}

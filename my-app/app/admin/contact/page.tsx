@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminContactView } from "@/views/adminPage";
+import { AdminContactView } from "@/views/adminPage/components/modules/admin-contact-view";
 
 export const metadata: Metadata = {
   title: "Nội Dung Trang Liên Hệ | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminContactPage() {
   return <AdminContactView />;
 }
-

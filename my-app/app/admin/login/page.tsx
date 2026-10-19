@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminLoginView } from "@/views/adminPage";
+import { AdminLogin } from "@/views/adminPage/components/admin-login";
 
 export const metadata: Metadata = {
   title: "Đăng Nhập Quản Trị | LÀ VIỆT",
@@ -7,6 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLoginPage() {
-  return <AdminLoginView />;
+  return <AdminLogin />;
 }
-

@@ -3,15 +3,42 @@ import { Home, ChevronRight, ShieldCheck } from "lucide-react";
 import { ProductCategory } from "../types";
 import { PRODUCT_CATEGORIES } from "../data/products.data";
 
+export interface HeroSectionData {
+  badge?: string;
+  heading?: string;
+  subHeading?: string;
+  description?: string;
+  metrics?: Array<{ value: string; label: string }>;
+  image?: string;
+}
+
 interface ProductsHeroProps {
   activeCategory: ProductCategory;
   onSelectCategory: (cat: ProductCategory) => void;
+  heroData?: HeroSectionData;
+  categories?: Array<{ id: string; label: string }>;
 }
 
 export function ProductsHero({
   activeCategory,
   onSelectCategory,
+  heroData,
+  categories,
 }: ProductsHeroProps) {
+  const categoryList = categories && categories.length > 0 ? categories : PRODUCT_CATEGORIES;
+  const badge = heroData?.badge || "GIÁM TUYỂN ĐỘC QUYỀN";
+  const heading = heroData?.heading || "DANH MỤC TÁC PHẨM & ỨNG DỤNG SƠN MÀI";
+  const description =
+    heroData?.description ||
+    "Tại xưởng hội hoạ Là Việt, chất liệu sơn ta nguyên bản từ cây sơn Phú Thọ giao thoa cùng tư duy không gian đương đại. Từng nét dát vàng quỳ, cẩn ốc xà cừ hay mài quang kỳ công được chuyển hoá thành các đại hoạ phẩm vách ốp, bàn trà điêu khắc và tác phẩm độc bản – bảo lưu trọn vẹn khí chất phương Đông.";
+  const metrics =
+    heroData?.metrics && heroData.metrics.length > 0
+      ? heroData.metrics
+      : [
+          { value: "100%", label: "SƠN TA TỰ NHIÊN" },
+          { value: "06+", label: "THÁNG CHẾ TÁC" },
+          { value: "ĐỘC BẢN", label: "KHÔNG BẢN SAO" },
+        ];
   return (
     <section className="w-full bg-[#F3E9DA] border-b border-[#E5DCD0] py-10">
       <div className="w-full max-w-[1280px] mx-auto px-6 space-y-8">
@@ -33,61 +60,45 @@ export function ProductsHero({
           {/* Curator Tag */}
           <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.6px] text-[#B71C1C]">
             <ShieldCheck className="w-4 h-4 text-[#B71C1C]" />
-            <span>GIÁM TUYỂN ĐỘC QUYỀN</span>
+            <span>{badge}</span>
           </div>
         </div>
 
-        {/* Title, Description & 3 Metrics */}
+        {/* Title, Description & Dynamic Metrics */}
         <div className="space-y-4">
-          <h1 className="text-3xl sm:text-4xl lg:text-[36px] font-extrabold uppercase text-[#2B1F1A] leading-tight sm:leading-10 tracking-tight">
-            DANH MỤC TÁC PHẨM &amp;<br />
-            ỨNG DỤNG SƠN MÀI
+          <h1 className="text-3xl sm:text-4xl lg:text-[36px] font-extrabold uppercase text-[#2B1F1A] leading-tight sm:leading-10 tracking-tight whitespace-pre-line">
+            {heading}
           </h1>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pt-1">
-            <p className="text-[#61524D] text-[15px] sm:text-[16px] leading-6 max-w-2xl font-normal">
-              Tại xưởng hội hoạ Là Việt, chất liệu sơn ta nguyên bản từ cây sơn Phú Thọ giao thoa cùng tư duy không gian đương đại. Từng nét dát vàng quỳ, cẩn ốc xà cừ hay mài quang kỳ công được chuyển hoá thành các đại hoạ phẩm vách ốp, bàn trà điêu khắc và tác phẩm độc bản – bảo lưu trọn vẹn khí chất phương Đông.
+            <p className="text-[#61524D] text-[15px] sm:text-[16px] leading-6 max-w-2xl font-normal whitespace-pre-line">
+              {description}
             </p>
 
-            {/* 3 Metrics */}
+            {/* Dynamic Metrics */}
             <div className="flex items-center gap-6 shrink-0 pt-2 lg:pt-0">
-              <div className="flex items-center gap-2">
-                <span className="text-[#B71C1C] text-[14px] font-bold uppercase tracking-[0.6px]">
-                  100%
-                </span>
-                <span className="text-[#61524D] text-[11px] font-semibold uppercase tracking-[0.6px] leading-4">
-                  SƠN TA TỰ<br />NHIÊN
-                </span>
-              </div>
-
-              <div className="w-[1px] h-4 bg-[#D9CEBE]" />
-
-              <div className="flex items-center gap-2">
-                <span className="text-[#B71C1C] text-[14px] font-bold uppercase tracking-[0.6px]">
-                  06+
-                </span>
-                <span className="text-[#61524D] text-[11px] font-semibold uppercase tracking-[0.6px] leading-4">
-                  THÁNG CHẾ<br />TÁC
-                </span>
-              </div>
-
-              <div className="w-[1px] h-4 bg-[#D9CEBE]" />
-
-              <div className="flex items-center gap-2">
-                <span className="text-[#B71C1C] text-[14px] font-bold uppercase tracking-[0.6px]">
-                  ĐỘC<br />BẢN
-                </span>
-                <span className="text-[#61524D] text-[11px] font-semibold uppercase tracking-[0.6px] leading-4">
-                  KHÔNG BẢN<br />SAO
-                </span>
-              </div>
+              {metrics.map((metric, idx) => (
+                <div key={idx} className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#B71C1C] text-[14px] font-bold uppercase tracking-[0.6px]">
+                      {metric.value}
+                    </span>
+                    <span className="text-[#61524D] text-[11px] font-semibold uppercase tracking-[0.6px] leading-4 whitespace-pre-line">
+                      {metric.label}
+                    </span>
+                  </div>
+                  {idx < metrics.length - 1 && (
+                    <div className="w-[1px] h-4 bg-[#D9CEBE]" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         {/* Filter Categories Tabs */}
         <div className="flex flex-wrap items-center gap-2.5 pt-2">
-          {PRODUCT_CATEGORIES.map((cat) => {
+          {categoryList.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
               <button

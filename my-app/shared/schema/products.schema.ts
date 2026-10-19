@@ -27,6 +27,7 @@ export const ProductsResponseSchema = z.object({
   id: z.number(),
   name: z.string(),
   image: z.url(),
+  categoryId: z.number(),
   category: z.object({
     name: z.string(),
   }),

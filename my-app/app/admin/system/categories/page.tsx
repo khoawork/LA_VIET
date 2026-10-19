@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { AdminCategoriesView } from "@/views/adminPage";
 
 export const metadata: Metadata = {
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminCategoriesPage() {
   return <AdminCategoriesView />;
 }
-

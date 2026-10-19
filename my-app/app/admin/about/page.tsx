@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AdminAboutView } from "@/views/adminPage";
+import { AdminAboutView } from "@/views/adminPage/components/modules/admin-about-view";
 
 export const metadata: Metadata = {
   title: "Quản Lý Về Chúng Tôi | Quản Trị LÀ VIỆT",
@@ -9,4 +9,3 @@ export const metadata: Metadata = {
 export default function AdminAboutPage() {
   return <AdminAboutView />;
 }
-
