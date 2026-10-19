@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Edit, Loader2, Plus, Search } from "lucide-react";
+import { Edit, Loader2, Search, Trash2 } from "lucide-react";
 import {
+  deleteProject,
   getProjectById,
-  getProjectCategories,
   getProjects,
 } from "../../../services/projects/page-project.service";
 import type {
@@ -14,9 +14,14 @@ import type {
 } from "../../../types/projects/project-data.type";
 import { ProjectFormModal } from "./project-form-modal";
 
-export function ProjectDataTab() {
+interface ProjectDataTabProps {
+  categories: ProjectCategory[];
+  createOpen: boolean;
+  onCloseCreate: () => void;
+}
+
+export function ProjectDataTab({ categories, createOpen, onCloseCreate }: ProjectDataTabProps) {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
-  const [categories, setCategories] = useState<ProjectCategory[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
@@ -26,26 +31,13 @@ export function ProjectDataTab() {
   const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [editingProject, setEditingProject] = useState<ProjectDetail | null>(
     null,
   );
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    let mounted = true;
-    getProjectCategories()
-      .then((data) => {
-        if (mounted) setCategories(data);
-      })
-      .catch((err: Error) => {
-        if (mounted) setError(err.message);
-      });
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -84,10 +76,32 @@ export function ProjectDataTab() {
 
   function handleSaved() {
     setModalOpen(false);
+    onCloseCreate();
     setEditingProject(null);
     setMessage("Đã lưu dự án thành công.");
     setLoading(true);
     setRefresh((value) => value + 1);
+  }
+
+  async function handleDelete(project: ProjectItem) {
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa dự án "${project.name}"?`)) return;
+    setDeletingId(project.id);
+    setError("");
+    setMessage("");
+    try {
+      await deleteProject(project.id);
+      setMessage(`Đã xóa dự án "${project.name}" thành công.`);
+      setLoading(true);
+      if (projects.length === 1 && page > 1) {
+        setPage(page - 1);
+      } else {
+        setRefresh((value) => value + 1);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Không thể xóa dự án.");
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   return (
@@ -109,23 +123,11 @@ export function ProjectDataTab() {
         </p>
       )}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#f3e9db] bg-white p-4 shadow-xs">
+      <div className="rounded-2xl border border-[#f3e9db] bg-white p-4 shadow-xs">
         <p className="text-xs font-semibold text-stone-600">
           Có <span className="font-bold text-[#9A1C1F]">{totalItems}</span> dự
           án trong dữ liệu
         </p>
-        <button
-          type="button"
-          disabled={categories.length === 0}
-          onClick={() => {
-            setEditingProject(null);
-            setModalOpen(true);
-            setMessage("");
-          }}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#a21f1f] px-4 py-2.5 text-xs font-bold text-white disabled:opacity-50"
-        >
-          <Plus className="h-4 w-4" /> Tạo dự án mới
-        </button>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row">
@@ -216,10 +218,10 @@ export function ProjectDataTab() {
                   <td className="max-w-xs truncate px-4 py-3 text-stone-600">
                     {project.description}
                   </td>
-                  <td className="px-5 py-3 text-right">
+                  <td className="px-5 py-3 text-right whitespace-nowrap">
                     <button
                       type="button"
-                      disabled={editingId === project.id}
+                      disabled={editingId === project.id || deletingId === project.id}
                       onClick={() => openEdit(project.id)}
                       className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC] disabled:opacity-50"
                     >
@@ -229,6 +231,20 @@ export function ProjectDataTab() {
                         <Edit className="h-4 w-4" />
                       )}{" "}
                       Sửa
+                    </button>
+                    <button
+                      type="button"
+                      disabled={deletingId === project.id || editingId === project.id}
+                      onClick={() => handleDelete(project)}
+                      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 font-semibold text-red-700 hover:bg-red-50 disabled:opacity-50"
+                      aria-label={`Xóa dự án ${project.name}`}
+                    >
+                      {deletingId === project.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="h-4 w-4" />
+                      )}{" "}
+                      Xóa
                     </button>
                   </td>
                 </tr>
@@ -268,12 +284,15 @@ export function ProjectDataTab() {
         </div>
       </div>
 
-      {modalOpen && (
+      {(modalOpen || createOpen) && (
         <ProjectFormModal
-          key={editingProject?.id ?? "new"}
+          key={createOpen ? "new" : (editingProject?.id ?? "new")}
           categories={categories}
-          project={editingProject}
-          onClose={() => setModalOpen(false)}
+          project={createOpen ? null : editingProject}
+          onClose={() => {
+            setModalOpen(false);
+            onCloseCreate();
+          }}
           onSaved={handleSaved}
         />
       )}

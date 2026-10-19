@@ -1,8 +1,8 @@
 "use client";
 
-import { Package, Plus, Search, Filter, Edit, Trash2, Tag } from "lucide-react";
+import { Package, Plus, Search, Filter, Edit, Trash2 } from "lucide-react";
 
-export function AdminProductsView() {
+export function AdminProductsView({ embedded = false }: { embedded?: boolean }) {
   const products = [
     {
       id: 1,
@@ -41,7 +41,7 @@ export function AdminProductsView() {
   return (
     <div className="space-y-6">
       {/* View Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
+      {!embedded && <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-[#FAF1EC] text-[#5A0B0E] flex items-center justify-center">
             <Package className="w-5 h-5" />
@@ -57,12 +57,12 @@ export function AdminProductsView() {
         <button
           type="button"
           onClick={() => alert("Mở form thêm sản phẩm mới")}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#5A0B0E] hover:bg-[#721217] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Thêm tác phẩm mới</span>
+          <span>Tạo sản phẩm mới</span>
         </button>
-      </div>
+      </div>}
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row gap-3">

@@ -8,16 +8,28 @@ import {
   Edit,
   Trash2,
   Newspaper,
-  Calendar,
-  User,
-  Clock,
+  FolderKanban,
+  Package,
   X,
   Loader2,
   CheckCircle2,
   AlertCircle,
-  ExternalLink,
 } from "lucide-react";
 import { ProjectDataTab } from "./projects";
+import { AdminProductsView } from "./admin-products-view";
+
+type CategoryTab = "projectCategories" | "productCategories";
+type MainTab = "news" | "projects" | "products" | "categories" | CategoryTab;
+
+interface DataCategory {
+  id: number;
+  name: string;
+}
+
+const categoryTabs = {
+  projectCategories: { label: "dự án", endpoint: "/api/project-categories" },
+  productCategories: { label: "sản phẩm", endpoint: "/api/product-categories" },
+} as const;
 
 interface NewsItemData {
   id: number;
@@ -45,8 +57,22 @@ interface NewsCategoryData {
   };
 }
 
+const emptyNewsForm = (categoryId = 0) => ({
+  name: "",
+  image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
+  categoryId,
+  preside: "Ban Nghiên cứu Là Việt",
+  presideIcon: "FlaskConical",
+  date: new Date().toLocaleDateString("sv-SE"),
+  description: "",
+  button: "Xem chi tiết",
+  reading: "5 phút đọc",
+  slug: "",
+});
+
 export function AdminCategoriesView() {
-  const [activeMainTab, setActiveMainTab] = useState<"categories" | "news" | "projects">("news");
+  const [activeMainTab, setActiveMainTab] = useState<MainTab>("news");
+  const [projectCreateOpen, setProjectCreateOpen] = useState(false);
   
   // State danh mục
   const [newsCategories, setNewsCategories] = useState<NewsCategoryData[]>([]);
@@ -60,28 +86,33 @@ export function AdminCategoriesView() {
   const [categorySubmitting, setCategorySubmitting] = useState<boolean>(false);
   const [categoryError, setCategoryError] = useState<string | null>(null);
 
+  const [dataCategories, setDataCategories] = useState<Record<CategoryTab, DataCategory[]>>({
+    projectCategories: [],
+    productCategories: [],
+  });
+  const [dataCategoriesLoading, setDataCategoriesLoading] = useState<Record<CategoryTab, boolean>>({
+    projectCategories: true,
+    productCategories: true,
+  });
+  const [dataCategoryModal, setDataCategoryModal] = useState<{ tab: CategoryTab; item: DataCategory | null } | null>(null);
+  const [dataCategoryName, setDataCategoryName] = useState("");
+  const [dataCategorySubmitting, setDataCategorySubmitting] = useState(false);
+  const [dataCategoryError, setDataCategoryError] = useState("");
+
   // State bài viết tin tức
   const [newsList, setNewsList] = useState<NewsItemData[]>([]);
   const [newsLoading, setNewsLoading] = useState<boolean>(false);
+  const [newsPage, setNewsPage] = useState(1);
+  const [newsTotalPages, setNewsTotalPages] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<string>("");
 
-  // Modal tạo bài viết mới
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
-  const [createSubmitting, setCreateSubmitting] = useState<boolean>(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
-    categoryId: 1,
-    preside: "Ban Nghiên cứu Là Việt",
-    presideIcon: "FlaskConical",
-    date: "2026-10-14",
-    description: "",
-    button: "Xem chi tiết",
-    reading: "5 phút đọc",
-  });
+  // Modal tạo và sửa bài viết
+  const [isNewsModalOpen, setIsNewsModalOpen] = useState(false);
+  const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
+  const [newsSubmitting, setNewsSubmitting] = useState(false);
+  const [newsError, setNewsError] = useState<string | null>(null);
+  const [formData, setFormData] = useState(() => emptyNewsForm());
 
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
@@ -100,9 +131,12 @@ export function AdminCategoriesView() {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setNewsCategories(json.data);
-        if (json.data.length > 0) {
-          setFormData((prev) => ({ ...prev, categoryId: json.data[0].id }));
-        }
+        setFormData((prev) => ({
+          ...prev,
+          categoryId: json.data.some((category: NewsCategoryData) => category.id === prev.categoryId)
+            ? prev.categoryId
+            : (json.data[0]?.id ?? 0),
+        }));
       }
     } catch (err) {
       console.error("Lỗi tải danh mục:", err);
@@ -210,10 +244,10 @@ export function AdminCategoriesView() {
   };
 
   // Load danh sách bài viết tin tức
-  const fetchNewsList = async (search = searchKeyword, catId = selectedFilterCategory) => {
+  const fetchNewsList = async (search = searchKeyword, catId = selectedFilterCategory, page = newsPage) => {
     try {
       setNewsLoading(true);
-      let url = "/api/news?limit=20";
+      let url = `/api/news?limit=20&page=${page}`;
       if (search) url += `&search=${encodeURIComponent(search)}`;
       if (catId) url += `&categoryId=${encodeURIComponent(catId)}`;
 
@@ -221,6 +255,7 @@ export function AdminCategoriesView() {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setNewsList(json.data);
+        setNewsTotalPages(json.meta?.totalPages ?? 1);
       }
     } catch (err) {
       console.error("Lỗi tải bài viết tin tức:", err);
@@ -229,29 +264,135 @@ export function AdminCategoriesView() {
     }
   };
 
+  const fetchDataCategories = async (tab: CategoryTab) => {
+    setDataCategoriesLoading((prev) => ({ ...prev, [tab]: true }));
+    try {
+      const response = await fetch(categoryTabs[tab].endpoint, { cache: "no-store" });
+      const data = await response.json();
+      if (!response.ok || !Array.isArray(data)) {
+        throw new Error(data?.message || `Không thể tải danh mục ${categoryTabs[tab].label}.`);
+      }
+      setDataCategories((prev) => ({ ...prev, [tab]: data }));
+    } catch (error) {
+      setToast({ type: "error", message: error instanceof Error ? error.message : "Không thể tải danh mục." });
+    } finally {
+      setDataCategoriesLoading((prev) => ({ ...prev, [tab]: false }));
+    }
+  };
+
+  const openDataCategoryModal = (tab: CategoryTab, item: DataCategory | null = null) => {
+    setDataCategoryModal({ tab, item });
+    setDataCategoryName(item?.name ?? "");
+    setDataCategoryError("");
+  };
+
+  const handleSaveDataCategory = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!dataCategoryModal) return;
+    const name = dataCategoryName.trim();
+    if (!name) {
+      setDataCategoryError("Vui lòng nhập tên danh mục.");
+      return;
+    }
+
+    const { tab, item } = dataCategoryModal;
+    setDataCategorySubmitting(true);
+    setDataCategoryError("");
+    try {
+      const response = await fetch(
+        item ? `${categoryTabs[tab].endpoint}/${item.id}` : categoryTabs[tab].endpoint,
+        {
+          method: item ? "PUT" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        },
+      );
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.message || `Không thể lưu danh mục ${categoryTabs[tab].label}.`);
+      }
+      setDataCategoryModal(null);
+      setToast({ type: "success", message: `Đã ${item ? "cập nhật" : "tạo"} danh mục ${categoryTabs[tab].label} thành công.` });
+      await fetchDataCategories(tab);
+    } catch (error) {
+      setDataCategoryError(error instanceof Error ? error.message : "Không thể lưu danh mục.");
+    } finally {
+      setDataCategorySubmitting(false);
+    }
+  };
+
+  const handleDeleteDataCategory = async (tab: CategoryTab, item: DataCategory) => {
+    if (!window.confirm(`Bạn có chắc chắn muốn xóa danh mục "${item.name}"?`)) return;
+    try {
+      const response = await fetch(`${categoryTabs[tab].endpoint}/${item.id}`, { method: "DELETE" });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.message || `Không thể xóa danh mục ${categoryTabs[tab].label}.`);
+      }
+      setToast({ type: "success", message: `Đã xóa danh mục "${item.name}" thành công.` });
+      await fetchDataCategories(tab);
+    } catch (error) {
+      setToast({ type: "error", message: error instanceof Error ? error.message : "Không thể xóa danh mục." });
+    }
+  };
+
   useEffect(() => {
-    fetchCategories();
-    fetchNewsList();
+    const timer = window.setTimeout(() => {
+      void fetchCategories();
+      void fetchNewsList();
+      void fetchDataCategories("projectCategories");
+      void fetchDataCategories("productCategories");
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
-  // Xử lý tạo bài viết tin tức mới
-  const handleCreateNews = async (e: React.FormEvent) => {
+  const openCreateNews = () => {
+    setEditingNewsId(null);
+    setFormData(emptyNewsForm(newsCategories[0]?.id));
+    setNewsError(null);
+    setIsNewsModalOpen(true);
+  };
+
+  const openEditNews = (item: NewsItemData) => {
+    setEditingNewsId(item.id);
+    setFormData({
+      name: item.name,
+      image: item.image,
+      categoryId: item.categoryId,
+      preside: item.preside,
+      presideIcon: item.presideIcon,
+      date: item.date.slice(0, 10),
+      description: item.description,
+      button: item.button,
+      reading: item.reading,
+      slug: item.slug,
+    });
+    setNewsError(null);
+    setIsNewsModalOpen(true);
+  };
+
+  // Lưu bài viết tin tức
+  const handleSaveNews = async (e: React.FormEvent) => {
     e.preventDefault();
-    setCreateError(null);
+    setNewsError(null);
 
     if (!formData.name.trim()) {
-      setCreateError("Vui lòng nhập tiêu đề bài viết.");
+      setNewsError("Vui lòng nhập tiêu đề bài viết.");
       return;
     }
     if (!formData.description.trim()) {
-      setCreateError("Vui lòng nhập mô tả tóm tắt bài viết.");
+      setNewsError("Vui lòng nhập mô tả tóm tắt bài viết.");
+      return;
+    }
+    if (!formData.categoryId || !formData.date) {
+      setNewsError("Vui lòng chọn chuyên mục và ngày xuất bản.");
       return;
     }
 
     try {
-      setCreateSubmitting(true);
-      const res = await fetch("/api/news", {
-        method: "POST",
+      setNewsSubmitting(true);
+      const res = await fetch(editingNewsId === null ? "/api/news" : `/api/news/${editingNewsId}`, {
+        method: editingNewsId === null ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
@@ -263,33 +404,23 @@ export function AdminCategoriesView() {
           description: formData.description,
           button: formData.button,
           reading: formData.reading,
+          slug: formData.slug.trim() || undefined,
         }),
       });
 
       const json = await res.json();
       if (json.success) {
-        setToast({ type: "success", message: "Đã tạo bài viết tin tức mới thành công!" });
-        setIsCreateModalOpen(false);
-        // Reset form
-        setFormData({
-          name: "",
-          image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
-          categoryId: newsCategories[0]?.id || 1,
-          preside: "Ban Nghiên cứu Là Việt",
-          presideIcon: "FlaskConical",
-          date: new Date().toISOString().split("T")[0],
-          description: "",
-          button: "Xem chi tiết",
-          reading: "5 phút đọc",
-        });
-        fetchNewsList();
+        setToast({ type: "success", message: editingNewsId === null ? "Đã tạo bài viết tin tức mới thành công!" : "Đã cập nhật bài viết tin tức thành công!" });
+        setIsNewsModalOpen(false);
+        setEditingNewsId(null);
+        await Promise.all([fetchNewsList(), fetchCategories()]);
       } else {
-        setCreateError(json.message || "Tạo bài viết thất bại.");
+        setNewsError(json.message || "Không thể lưu bài viết.");
       }
-    } catch (err) {
-      setCreateError("Lỗi kết nối máy chủ khi tạo bài viết.");
+    } catch {
+      setNewsError("Lỗi kết nối máy chủ khi lưu bài viết.");
     } finally {
-      setCreateSubmitting(false);
+      setNewsSubmitting(false);
     }
   };
 
@@ -302,7 +433,15 @@ export function AdminCategoriesView() {
       const json = await res.json();
       if (json.success) {
         setToast({ type: "success", message: `Đã xóa bài viết "${title}" thành công!` });
-        fetchNewsList();
+        if (newsList.length === 1 && newsPage > 1) {
+          setNewsPage(newsPage - 1);
+          await Promise.all([
+            fetchNewsList(searchKeyword, selectedFilterCategory, newsPage - 1),
+            fetchCategories(),
+          ]);
+        } else {
+          await Promise.all([fetchNewsList(), fetchCategories()]);
+        }
       } else {
         setToast({ type: "error", message: json.message || "Xóa bài viết thất bại." });
       }
@@ -310,6 +449,15 @@ export function AdminCategoriesView() {
       setToast({ type: "error", message: "Lỗi kết nối khi xóa bài viết." });
     }
   };
+
+  const navTabs: { id: MainTab; label: string; icon: typeof Database }[] = [
+    { id: "news", label: "Quản lý Tin tức", icon: Newspaper },
+    { id: "projects", label: "Quản lý dự án", icon: FolderKanban },
+    { id: "products", label: "Quản lý Sản phẩm", icon: Package },
+    { id: "categories", label: "Danh mục Tin tức", icon: Database },
+    { id: "projectCategories", label: "Danh mục Dự án", icon: Database },
+    { id: "productCategories", label: "Danh mục Sản phẩm", icon: Database },
+  ];
 
   return (
     <div className="space-y-6">
@@ -340,7 +488,7 @@ export function AdminCategoriesView() {
           <div>
             <h1 className="text-xl font-bold text-[#1E1917]">Hệ thống: Danh mục &amp; Dữ liệu</h1>
             <p className="text-xs text-stone-600 mt-0.5">
-              Quản lý danh mục, bài viết Tin tức và dữ liệu Dự án
+              Quản lý tin tức, dự án, sản phẩm và các danh mục dữ liệu
             </p>
           </div>
         </div>
@@ -348,11 +496,31 @@ export function AdminCategoriesView() {
         {activeMainTab === "news" ? (
           <button
             type="button"
-            onClick={() => setIsCreateModalOpen(true)}
+            onClick={openCreateNews}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
           >
             <Plus className="w-4 h-4" />
             <span>Tạo bài viết mới</span>
+          </button>
+        ) : activeMainTab === "projects" ? (
+          <button
+            type="button"
+            disabled={dataCategories.projectCategories.length === 0}
+            title={dataCategories.projectCategories.length === 0 ? "Hãy tạo danh mục dự án trước" : undefined}
+            onClick={() => setProjectCreateOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Tạo dự án mới</span>
+          </button>
+        ) : activeMainTab === "products" ? (
+          <button
+            type="button"
+            onClick={() => window.alert("Mở form thêm sản phẩm mới")}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Tạo sản phẩm mới</span>
           </button>
         ) : activeMainTab === "categories" ? (
           <button
@@ -367,52 +535,53 @@ export function AdminCategoriesView() {
             <Plus className="w-4 h-4" />
             <span>Tạo chuyên mục mới</span>
           </button>
+        ) : activeMainTab === "projectCategories" || activeMainTab === "productCategories" ? (
+          <button
+            type="button"
+            onClick={() => openDataCategoryModal(activeMainTab)}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Tạo danh mục {categoryTabs[activeMainTab].label} mới</span>
+          </button>
         ) : null}
       </div>
 
-      {/* Tabs chuyển đổi giữa Bài viết Tin Tức và Danh mục Dữ liệu */}
-      <div className="flex items-center gap-3 border-b border-[#f3e9db] pb-2">
-        <button
-          type="button"
-          onClick={() => setActiveMainTab("news")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-            activeMainTab === "news"
-              ? "bg-[#a21f1f] text-white shadow-sm"
-              : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
-          }`}
-        >
-          <Newspaper className="w-4 h-4" />
-          <span>Quản lý &amp; Tạo mới Bài viết Tin tức ({newsList.length})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveMainTab("categories")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-            activeMainTab === "categories"
-              ? "bg-[#a21f1f] text-white shadow-sm"
-              : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
-          }`}
-        >
-          <Database className="w-4 h-4" />
-          <span>Danh mục Tin tức ({newsCategories.length})</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveMainTab("projects")}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-            activeMainTab === "projects"
-              ? "bg-[#a21f1f] text-white shadow-sm"
-              : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
-          }`}
-        >
-          <Database className="w-4 h-4" />
-          <span>Quản lý &amp; Tạo mới Dự án</span>
-        </button>
+      {/* Ba tab quản lý, tiếp theo là ba tab danh mục */}
+      <div className="flex flex-wrap items-center gap-3 border-b border-[#f3e9db] pb-2">
+        {[navTabs.slice(0, 3), navTabs.slice(3)].map((group, index) => (
+          <div key={index} className={`flex flex-wrap items-center gap-2 ${index === 1 ? "lg:border-l lg:border-[#e8ddce] lg:pl-3" : ""}`}>
+            {group.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  setProjectCreateOpen(false);
+                  setActiveMainTab(tab.id);
+                }}
+                aria-current={activeMainTab === tab.id ? "page" : undefined}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeMainTab === tab.id
+                    ? "bg-[#a21f1f] text-white shadow-sm"
+                    : "bg-[#f7f5f1] text-stone-700 hover:bg-[#ede5d8]"
+                }`}
+              >
+                <tab.icon className="w-4 h-4" />
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
 
-      {activeMainTab === "projects" && <ProjectDataTab />}
+      {activeMainTab === "projects" && (
+        <ProjectDataTab
+          categories={dataCategories.projectCategories}
+          createOpen={projectCreateOpen}
+          onCloseCreate={() => setProjectCreateOpen(false)}
+        />
+      )}
+      {activeMainTab === "products" && <AdminProductsView embedded />}
 
       {/* TAB BÀI VIẾT TIN TỨC */}
       {activeMainTab === "news" && (
@@ -426,7 +595,8 @@ export function AdminCategoriesView() {
                 value={searchKeyword}
                 onChange={(e) => {
                   setSearchKeyword(e.target.value);
-                  fetchNewsList(e.target.value, selectedFilterCategory);
+                  setNewsPage(1);
+                  void fetchNewsList(e.target.value, selectedFilterCategory, 1);
                 }}
                 placeholder="Tìm kiếm bài viết theo tiêu đề, mô tả..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
@@ -437,7 +607,8 @@ export function AdminCategoriesView() {
               value={selectedFilterCategory}
               onChange={(e) => {
                 setSelectedFilterCategory(e.target.value);
-                fetchNewsList(searchKeyword, e.target.value);
+                setNewsPage(1);
+                void fetchNewsList(searchKeyword, e.target.value, 1);
               }}
               className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-semibold text-[#1E1917]"
             >
@@ -507,9 +678,19 @@ export function AdminCategoriesView() {
                         <div className="inline-flex items-center gap-1.5">
                           <button
                             type="button"
+                            onClick={() => openEditNews(item)}
+                            className="p-1.5 rounded-lg text-stone-500 hover:text-[#9A1C1F] hover:bg-stone-100 transition-colors cursor-pointer"
+                            title="Sửa bài viết"
+                            aria-label={`Sửa bài viết ${item.name}`}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
                             onClick={() => handleDeleteNews(item.id, item.name)}
                             className="p-1.5 rounded-lg text-stone-400 hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
                             title="Xóa bài viết"
+                            aria-label={`Xóa bài viết ${item.name}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -520,6 +701,33 @@ export function AdminCategoriesView() {
                 </tbody>
               </table>
             )}
+          </div>
+          <div className="flex items-center justify-between text-xs text-stone-600">
+            <span>Trang {newsPage}/{newsTotalPages}</span>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={newsLoading || newsPage <= 1}
+                onClick={() => {
+                  setNewsPage(newsPage - 1);
+                  void fetchNewsList(searchKeyword, selectedFilterCategory, newsPage - 1);
+                }}
+                className="rounded-lg border border-[#f3e9db] bg-white px-3 py-2 disabled:opacity-50"
+              >
+                Trước
+              </button>
+              <button
+                type="button"
+                disabled={newsLoading || newsPage >= newsTotalPages}
+                onClick={() => {
+                  setNewsPage(newsPage + 1);
+                  void fetchNewsList(searchKeyword, selectedFilterCategory, newsPage + 1);
+                }}
+                className="rounded-lg border border-[#f3e9db] bg-white px-3 py-2 disabled:opacity-50"
+              >
+                Sau
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -532,18 +740,6 @@ export function AdminCategoriesView() {
             <div className="text-xs font-semibold text-stone-600">
               Tổng cộng có <span className="font-bold text-[#9A1C1F]">{newsCategories.length}</span> chuyên mục bài viết
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setCategoryError(null);
-                setNewCategoryName("");
-                setIsCreateCategoryModalOpen(true);
-              }}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer self-start sm:self-auto"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Thêm chuyên mục</span>
-            </button>
           </div>
 
           <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
@@ -615,8 +811,99 @@ export function AdminCategoriesView() {
         </div>
       )}
 
-      {/* MODAL TẠO BÀI VIẾT MỚI */}
-      {isCreateModalOpen && (
+      {(activeMainTab === "projectCategories" || activeMainTab === "productCategories") && (
+        <div className="space-y-4">
+          <div className="rounded-2xl border border-[#f3e9db] bg-white p-4 text-xs font-semibold text-stone-600 shadow-xs">
+            Tổng cộng có <span className="font-bold text-[#9A1C1F]">{dataCategories[activeMainTab].length}</span> danh mục {categoryTabs[activeMainTab].label}
+          </div>
+          <div className="overflow-x-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+            {dataCategoriesLoading[activeMainTab] ? (
+              <div className="flex items-center justify-center gap-2 py-16 text-xs text-stone-500">
+                <Loader2 className="h-5 w-5 animate-spin" /> Đang tải danh mục...
+              </div>
+            ) : dataCategories[activeMainTab].length === 0 ? (
+              <p className="py-16 text-center text-xs text-stone-500">
+                Chưa có danh mục {categoryTabs[activeMainTab].label}. Bấm nút tạo danh mục ở trên để thêm danh mục đầu tiên.
+              </p>
+            ) : (
+              <table className="w-full text-left text-xs">
+                <thead className="border-b border-[#f3e9db] bg-[#f7f5f1] text-stone-700">
+                  <tr>
+                    <th className="px-5 py-3">ID</th>
+                    <th className="px-5 py-3">Tên danh mục {categoryTabs[activeMainTab].label}</th>
+                    <th className="px-5 py-3 text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#f3e9db]">
+                  {dataCategories[activeMainTab].map((item) => (
+                    <tr key={item.id}>
+                      <td className="px-5 py-3 font-mono text-stone-500">#{item.id}</td>
+                      <td className="px-5 py-3 font-bold text-[#1E1917]">{item.name}</td>
+                      <td className="px-5 py-3 text-right whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => openDataCategoryModal(activeMainTab, item)}
+                          className="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]"
+                          aria-label={`Sửa danh mục ${item.name}`}
+                        >
+                          <Edit className="h-4 w-4" /> Sửa
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteDataCategory(activeMainTab, item)}
+                          className="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-semibold text-red-700 hover:bg-red-50"
+                          aria-label={`Xóa danh mục ${item.name}`}
+                        >
+                          <Trash2 className="h-4 w-4" /> Xóa
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      )}
+
+      {dataCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#EAE2D5] bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#EAE2D5] bg-[#FAF8F5] p-5">
+              <h3 className="text-sm font-bold text-[#1E1917]">
+                {dataCategoryModal.item ? "Sửa" : "Tạo"} danh mục {categoryTabs[dataCategoryModal.tab].label}
+              </h3>
+              <button type="button" onClick={() => setDataCategoryModal(null)} aria-label="Đóng" className="text-stone-500 hover:text-[#9A1C1F]">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <form onSubmit={handleSaveDataCategory} className="space-y-4 p-6">
+              {dataCategoryError && <p role="alert" className="rounded-lg bg-rose-50 p-3 text-xs text-rose-700">{dataCategoryError}</p>}
+              <label className="block space-y-1.5 text-xs font-semibold text-[#1E1917]">
+                Tên danh mục *
+                <input
+                  required
+                  maxLength={100}
+                  autoFocus
+                  value={dataCategoryName}
+                  onChange={(event) => setDataCategoryName(event.target.value)}
+                  className="w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs focus:border-[#9A1C1F] focus:outline-none"
+                />
+              </label>
+              <div className="flex justify-end gap-3 border-t border-[#EAE2D5] pt-4">
+                <button type="button" onClick={() => setDataCategoryModal(null)} className="rounded-xl border border-[#EAE2D5] px-4 py-2 text-xs font-semibold">Hủy</button>
+                <button type="submit" disabled={dataCategorySubmitting} className="inline-flex items-center gap-2 rounded-xl bg-[#a21f1f] px-5 py-2 text-xs font-bold text-white disabled:opacity-50">
+                  {dataCategorySubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {dataCategoryModal.item ? "Lưu thay đổi" : "Tạo danh mục"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL TẠO VÀ SỬA BÀI VIẾT */}
+      {isNewsModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
           <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col max-h-[90vh]">
             {/* Modal Header */}
@@ -624,12 +911,13 @@ export function AdminCategoriesView() {
               <div className="flex items-center gap-2.5">
                 <Newspaper className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="font-bold text-sm text-[#1E1917] uppercase tracking-wide">
-                  Tạo bài viết tin tức mới
+                  {editingNewsId === null ? "Tạo bài viết tin tức mới" : "Chỉnh sửa bài viết tin tức"}
                 </h3>
               </div>
               <button
                 type="button"
-                onClick={() => setIsCreateModalOpen(false)}
+                onClick={() => setIsNewsModalOpen(false)}
+                aria-label="Đóng"
                 className="p-1 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100"
               >
                 <X className="w-5 h-5" />
@@ -637,11 +925,16 @@ export function AdminCategoriesView() {
             </div>
 
             {/* Modal Form Body */}
-            <form onSubmit={handleCreateNews} className="p-6 space-y-4 overflow-y-auto">
-              {createError && (
+            <form onSubmit={handleSaveNews} className="p-6 space-y-4 overflow-y-auto">
+              {newsCategories.length === 0 && (
+                <p role="alert" className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
+                  Hãy tạo ít nhất một chuyên mục tin tức trước khi lưu bài viết.
+                </p>
+              )}
+              {newsError && (
                 <div className="p-3 rounded-lg bg-rose-50 text-rose-800 text-xs font-semibold flex items-center gap-2 border border-rose-200">
                   <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{createError}</span>
+                  <span>{newsError}</span>
                 </div>
               )}
 
@@ -724,6 +1017,30 @@ export function AdminCategoriesView() {
                 />
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-[#1E1917]">Đường dẫn bài viết (slug)</label>
+                  <input
+                    type="text"
+                    maxLength={255}
+                    placeholder={editingNewsId === null ? "Tự tạo theo tiêu đề nếu để trống" : "Để trống để giữ đường dẫn hiện tại"}
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-[#1E1917]">Chữ trên nút</label>
+                  <input
+                    type="text"
+                    maxLength={100}
+                    value={formData.button}
+                    onChange={(e) => setFormData({ ...formData, button: e.target.value })}
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                  />
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#1E1917]">
                   Mô tả tóm tắt nội dung <span className="text-red-600">*</span>
@@ -742,22 +1059,24 @@ export function AdminCategoriesView() {
               <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setIsCreateModalOpen(false)}
+                  onClick={() => setIsNewsModalOpen(false)}
                   className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  disabled={createSubmitting}
+                  disabled={newsSubmitting || newsCategories.length === 0}
                   className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm disabled:opacity-50"
                 >
-                  {createSubmitting ? (
+                  {newsSubmitting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
+                  ) : editingNewsId === null ? (
                     <Plus className="w-4 h-4" />
+                  ) : (
+                    <Edit className="w-4 h-4" />
                   )}
-                  <span>{createSubmitting ? "Đang lưu..." : "Xác nhận tạo bài viết"}</span>
+                  <span>{newsSubmitting ? "Đang lưu..." : editingNewsId === null ? "Xác nhận tạo bài viết" : "Lưu thay đổi"}</span>
                 </button>
               </div>
             </form>
