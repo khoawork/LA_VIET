@@ -63,7 +63,7 @@ export function ProjectFilterTab({ data, categories, onChange }: Props) {
         onClick={() =>
           onChange({ key: [...data.key, { name: "", categories: [] }] })
         }
-        className="inline-flex items-center gap-2 rounded-xl border border-[#EAE2D5] px-4 py-2.5 text-xs font-bold text-[#9A1C1F]"
+        className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#EAE2D5] px-4 py-2.5 text-xs font-bold text-[#9A1C1F] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF1EC]"
       >
         <Plus className="h-4 w-4" /> Thêm nhóm lọc
       </button>

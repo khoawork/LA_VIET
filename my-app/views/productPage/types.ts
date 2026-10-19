@@ -15,9 +15,10 @@ export interface ProductItem {
     dimension?: string;
     material?: string;
     badge?: string;
-    badgeColor?: "red" | "dark";
+    badgeColor?: "red" | "dark" | `#${string}`;
     yearOrSpec?: string;
+    buttonLabel?: string;
     isTechnicalSpec?: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
   };
 }

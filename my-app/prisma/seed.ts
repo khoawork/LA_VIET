@@ -605,6 +605,7 @@ async function seedPages(
     procedure: {
       eyebrow: "TỪ Ý TƯỞNG ĐẾN CÔNG TRÌNH",
       title: "Quy trình đồng hành",
+      description: "Đảm bảo tính đồng nhất giữa tinh thần giám tuyển nghệ thuật và tiêu chuẩn kỹ thuật xây dựng khắt khe nhất.",
       steps: [
         {
           order: "01",

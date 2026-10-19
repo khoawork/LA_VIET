@@ -18,28 +18,28 @@ export function AdminHeader({
   return (
     <header
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="sticky top-0 z-30 h-16 w-full bg-white/95 backdrop-blur-md border-b border-[#f3e9db] px-4 sm:px-8 flex items-center justify-between"
+      className="sticky top-0 z-30 flex h-14 w-full items-center justify-between gap-2 border-b border-[#f3e9db] bg-white/95 px-2 backdrop-blur-md sm:h-16 sm:px-8"
     >
       {/* Left: Mobile Toggle & Breadcrumbs */}
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-1 sm:gap-3">
         <button
           type="button"
           onClick={onOpenMobileSidebar}
-          className="lg:hidden p-2 rounded-lg text-[#a21f1f] hover:bg-[#f7f5f1] transition-colors"
+          className="shrink-0 rounded-lg p-2 text-[#a21f1f] transition-colors hover:bg-[#f7f5f1] lg:hidden"
           aria-label="Mở menu quản trị"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <nav className="flex items-center gap-2 text-xs font-semibold text-stone-600">
-          <span className="hover:text-[#a21f1f] transition-colors">Quản trị</span>
-          <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-          <span className="text-[#a21f1f] font-bold">{breadcrumb}</span>
+        <nav className="flex min-w-0 items-center gap-2 text-xs font-semibold text-stone-600">
+          <span className="hidden whitespace-nowrap transition-colors hover:text-[#a21f1f] sm:inline">Quản trị</span>
+          <ChevronRight className="hidden h-3.5 w-3.5 shrink-0 text-stone-400 sm:block" />
+          <span className="block min-w-0 truncate font-bold text-[#a21f1f]">{breadcrumb}</span>
         </nav>
       </div>
 
       {/* Right: Actions */}
-      <div className="flex items-center gap-3">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-3">
         {/* Notification Bell */}
         <button
           type="button"
@@ -68,9 +68,10 @@ export function AdminHeader({
         <Link
           href="/"
           target="_blank"
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-[#f3e9db] bg-[#f7f5f1] hover:border-[#a21f1f] hover:text-white hover:bg-[#a21f1f] text-stone-800 text-xs font-bold uppercase tracking-wider transition-all shadow-xs"
+          aria-label="Xem website"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#f3e9db] bg-[#f7f5f1] px-2 py-1.5 text-xs font-bold uppercase tracking-wider text-stone-800 shadow-xs transition-all hover:border-[#a21f1f] hover:bg-[#a21f1f] hover:text-white sm:px-3.5"
         >
-          <span>Xem website</span>
+          <span className="hidden sm:inline">Xem website</span>
           <ExternalLink className="w-3.5 h-3.5" />
         </Link>
       </div>

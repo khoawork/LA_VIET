@@ -43,6 +43,7 @@ export function PageProjectContent() {
           procedure: data.props.procedure ?? {
             eyebrow: "",
             title: "",
+            description: "",
             steps: [],
           },
           cta: data.props.cta ?? {
@@ -187,7 +188,7 @@ export function PageProjectContent() {
           )}
           {activeTab === "procedure" && (
             <ProjectProcedureTab
-              data={draft.procedure ?? { eyebrow: "", title: "", steps: [] }}
+              data={draft.procedure ?? { eyebrow: "", title: "", description: "", steps: [] }}
               onChange={(procedure) =>
                 setDraft((current) =>
                   current ? { ...current, procedure } : current,

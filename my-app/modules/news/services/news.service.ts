@@ -41,6 +41,7 @@ export class NewsService {
       where.OR = [
         { name: { contains: query.search } },
         { description: { contains: query.search } },
+        { preside: { contains: query.search } },
       ];
     }
 

@@ -15,7 +15,7 @@ export function ProjectFilters({ groups, selectedIndex, onSelect }: Props) {
           type="button"
           aria-pressed={selectedIndex === index}
           onClick={() => onSelect(index)}
-          className={`cursor-pointer whitespace-nowrap rounded-lg px-4 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all sm:px-5 ${
+          className={`cursor-pointer whitespace-nowrap rounded-sm px-4 py-2.5 text-sm font-semibold uppercase tracking-wide transition-all sm:px-5 ${
             selectedIndex === index
               ? "bg-[#9A1C1F] text-white shadow-sm"
               : "bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF]"

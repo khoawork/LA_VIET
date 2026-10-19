@@ -55,7 +55,7 @@ export function ProjectCategoryMultiselect({
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="mt-1.5 flex w-full items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 text-left font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+        className="mt-1.5 flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 text-left font-normal text-[#1E1917] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
       >
         <span className="min-w-0 truncate">{summary}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-[#695D56] transition-transform ${open ? "rotate-180" : ""}`} />
@@ -70,7 +70,7 @@ export function ProjectCategoryMultiselect({
           <button
             type="button"
             onClick={() => onChange([])}
-            className="flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left hover:bg-[#FAF8F5]"
+            className="flex w-full cursor-pointer items-center justify-between rounded-lg px-2.5 py-2 text-left font-normal transition-colors hover:bg-[#FAF1EC]"
           >
             <span>Tất cả</span>
             {selectedIds.length === 0 && <Check className="h-4 w-4 text-[#9A1C1F]" />}

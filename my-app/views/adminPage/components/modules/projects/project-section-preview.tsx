@@ -66,6 +66,11 @@ export function ProjectSectionPreview({ activeTab, data }: Props) {
           {data.procedure?.eyebrow}
         </p>
         <h4 className="font-bold">{data.procedure?.title}</h4>
+        {data.procedure?.description && (
+          <p className="text-xs leading-relaxed text-[#695D56]">
+            {data.procedure.description}
+          </p>
+        )}
         {(data.procedure?.steps ?? []).map((step, index) => (
           <div key={index} className="rounded-xl bg-white p-3 text-xs">
             <strong>

@@ -52,7 +52,7 @@ export function IconSelect({ label, value, onChange }: Props) {
         aria-expanded={open}
         aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
-        className="mt-1.5 flex h-10 w-full items-center gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 text-left focus:border-[#9A1C1F] focus:outline-none"
+        className="mt-1.5 flex h-10 w-full cursor-pointer items-center gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 text-left font-normal transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
       >
         {value && <IonIcon name={value} />}
         <span className="min-w-0 flex-1 truncate">
@@ -90,7 +90,7 @@ export function IconSelect({ label, value, onChange }: Props) {
                     setQuery("");
                     setOpen(false);
                   }}
-                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left font-normal hover:bg-[#FAF8F5]"
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 text-left font-normal transition-colors hover:bg-[#FAF1EC]"
                 >
                   <IonIcon name={name} />
                   <span className="truncate">{name}</span>

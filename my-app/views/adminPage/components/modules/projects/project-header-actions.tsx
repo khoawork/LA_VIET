@@ -31,7 +31,7 @@ export function ProjectHeaderActions({ slug, saving, onSave }: Props) {
         type="button"
         disabled={saving}
         onClick={onSave}
-        className="inline-flex items-center gap-2 rounded-xl bg-[#5A0B0E] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50"
+        className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#5A0B0E] px-5 py-2.5 text-xs font-bold text-white transition-colors enabled:hover:bg-[#7D171A] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {saving ? (
           <Loader2 className="h-4 w-4 animate-spin" />

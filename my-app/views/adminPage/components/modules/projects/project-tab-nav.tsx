@@ -21,7 +21,7 @@ export function ProjectTabNav({ activeTab, onSelect }: Props) {
           key={key}
           type="button"
           onClick={() => onSelect(key)}
-          className={`inline-flex shrink-0 items-center gap-2 rounded-t-xl border-b-2 px-4 py-3 text-xs font-bold ${activeTab === key ? "border-[#9A1C1F] bg-white text-[#9A1C1F]" : "border-transparent text-[#695D56] hover:bg-white"}`}
+          className={`inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-t-xl border-b-2 px-4 py-3 text-xs font-bold transition-colors ${activeTab === key ? "border-[#9A1C1F] bg-white text-[#9A1C1F] hover:bg-[#FAF1EC]" : "border-transparent text-[#695D56] hover:bg-white hover:text-[#9A1C1F]"}`}
         >
           <Icon className="h-4 w-4" /> {label}
         </button>

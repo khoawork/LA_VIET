@@ -3,77 +3,165 @@ import { CloudinaryService } from "@/shared/services/cloudinary.service";
 import { sendSuccess, sendError } from "@/shared/common/api-response";
 import { HttpStatus } from "@/shared/common/http-status";
 import { withErrorHandler } from "@/shared/utils";
+import { randomUUID } from "node:crypto";
 
-// Danh sách các định dạng ảnh hợp lệ
-const ALLOWED_MIME_TYPES = [
+const IMAGE_MIME_TYPES = new Set([
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/jpg",
   "image/gif",
   "image/svg+xml",
-];
+]);
+const WORD_MIME_TYPES: Record<string, string> = {
+  doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+};
 
-// Giới hạn dung lượng tối đa: 10MB
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+function isManagedPublicId(publicId: string, folder: string): boolean {
+  if (!publicId.startsWith(`${folder}/`)) return false;
+  const relativeId = publicId.slice(folder.length + 1);
+  return (
+    /^[^/]+$/.test(relativeId) ||
+    /^admin\/(?:news|projects|products)\/[^/]+$/.test(relativeId)
+  );
+}
+
+function assetFromManagedUrl(
+  value: string,
+  folder: string,
+): { publicId: string; resourceType: "image" | "raw" } | null {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.hostname !== "res.cloudinary.com")
+      return null;
+    const parts = url.pathname.split("/").filter(Boolean);
+    const resourceType = parts[1];
+    if (
+      parts[0] !== process.env.CLOUDINARY_CLOUD_NAME ||
+      (resourceType !== "image" && resourceType !== "raw") ||
+      parts[2] !== "upload"
+    ) {
+      return null;
+    }
+    const versionIndex = parts.findIndex(
+      (part, index) => index >= 3 && /^v\d+$/.test(part),
+    );
+    if (versionIndex < 0) return null;
+    const assetPath = decodeURIComponent(
+      parts.slice(versionIndex + 1).join("/"),
+    );
+    const publicId =
+      resourceType === "raw"
+        ? assetPath
+        : assetPath.replace(/\.(?:jpe?g|png|webp|gif|svg|avif|pdf)$/i, "");
+    if (
+      !isManagedPublicId(publicId, folder) ||
+      (publicId === assetPath && resourceType === "image")
+    )
+      return null;
+    return { publicId, resourceType };
+  } catch {
+    return null;
+  }
+}
 
 /**
  * POST /api/upload
- * Nhận FormData chứa file ảnh và upload trực tiếp lên Cloudinary
+ * Nhận FormData chứa ảnh, PDF hoặc Word và upload lên thư mục Cloudinary đã cấu hình.
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const formData = await request.formData();
-  const file = formData.get("file") as File | null;
-  const folder =
-    (formData.get("folder") as string)?.trim() || "La_Viet_Cloudinary";
+  const file = formData.get("file");
+  const folder = process.env.CLOUDINARY_FOLDER?.trim();
 
-  if (!file) {
-    return sendError("Vui lòng chọn file hình ảnh cần tải lên", HttpStatus.BAD_REQUEST);
-  }
-
-  // 1. Kiểm tra định dạng file
-  if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+  if (!folder || folder.includes("/") || folder.includes("\\")) {
     return sendError(
-      "Định dạng file không hợp lệ. Chỉ chấp nhận các định dạng: JPG, PNG, WEBP, GIF, SVG",
-      HttpStatus.BAD_REQUEST
+      "CLOUDINARY_FOLDER phải là tên một thư mục Cloudinary và không được để trống",
+      HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }
 
-  // 2. Kiểm tra kích thước file
+  if (!(file instanceof File)) {
+    return sendError("Vui lòng chọn file cần tải lên", HttpStatus.BAD_REQUEST);
+  }
+
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  const isImage = IMAGE_MIME_TYPES.has(file.type);
+  const isPdf = extension === "pdf" && file.type === "application/pdf";
+  const isWord = WORD_MIME_TYPES[extension] === file.type;
+  if (!isImage && !isPdf && !isWord) {
+    return sendError(
+      "Chỉ chấp nhận ảnh JPG, PNG, WEBP, GIF, SVG, file PDF, DOC hoặc DOCX",
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
   if (file.size > MAX_FILE_SIZE) {
     return sendError(
       "Dung lượng file vượt quá giới hạn cho phép (tối đa 10MB)",
-      HttpStatus.BAD_REQUEST
+      HttpStatus.BAD_REQUEST,
     );
   }
 
-  // 3. Chuyển File sang Buffer
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  // 4. Upload lên Cloudinary
-  const result = await CloudinaryService.uploadBuffer(buffer, folder);
+  const result = await CloudinaryService.uploadBuffer(buffer, folder, {
+    resourceType: isWord ? "raw" : "image",
+    ...(isWord ? { publicId: `${randomUUID()}.${extension}` } : {}),
+    optimizeImage: isImage,
+  });
 
   return sendSuccess(
     result,
-    "Tải ảnh lên Cloudinary thành công",
-    HttpStatus.CREATED
+    "Tải file lên Cloudinary thành công",
+    HttpStatus.CREATED,
   );
 });
 
 /**
  * DELETE /api/upload
- * Xóa ảnh trên Cloudinary theo publicId
+ * Xóa file thuộc thư mục Cloudinary đã cấu hình theo URL hoặc publicId.
  */
 export const DELETE = withErrorHandler(async (request: NextRequest) => {
   const body = await request.json().catch(() => null);
-  const publicId = body?.publicId;
-
-  if (!publicId) {
-    return sendError("Vui lòng cung cấp publicId của ảnh cần xóa", HttpStatus.BAD_REQUEST);
+  const folder = process.env.CLOUDINARY_FOLDER?.trim();
+  if (!folder || folder.includes("/") || folder.includes("\\")) {
+    return sendError(
+      "CLOUDINARY_FOLDER phải là tên một thư mục Cloudinary và không được để trống",
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
 
-  const result = await CloudinaryService.deleteImage(publicId);
-  return sendSuccess(result, "Xóa ảnh trên Cloudinary thành công");
-});
+  const fromUrl = typeof body?.url === "string";
+  const asset = fromUrl
+    ? assetFromManagedUrl(body.url, folder)
+    : { publicId: body?.publicId, resourceType: body?.resourceType ?? "image" };
 
+  if (fromUrl && !asset)
+    return sendSuccess(
+      { result: "skipped" },
+      "File không thuộc thư mục Cloudinary đã cấu hình",
+    );
+
+  if (
+    !asset ||
+    typeof asset.publicId !== "string" ||
+    !isManagedPublicId(asset.publicId, folder) ||
+    (asset.resourceType !== "image" && asset.resourceType !== "raw")
+  ) {
+    return sendError(
+      "File không thuộc thư mục Cloudinary đã cấu hình",
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+
+  const result = await CloudinaryService.deleteImage(
+    asset.publicId,
+    asset.resourceType,
+  );
+  return sendSuccess(result, "Xóa file trên Cloudinary thành công");
+});

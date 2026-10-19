@@ -63,7 +63,7 @@ export function ProjectCtaTab({ data, onChange }: Props) {
               contacts: [...contacts, { icon: "", label: "", value: "" }],
             })
           }
-          className="inline-flex items-center gap-1 text-xs font-bold text-[#9A1C1F]"
+          className="inline-flex cursor-pointer items-center gap-1 text-xs font-bold text-[#9A1C1F] transition-colors hover:text-[#6F1518] hover:underline"
         >
           <Plus className="h-4 w-4" /> Thêm liên hệ
         </button>
@@ -130,7 +130,7 @@ export function ProjectCtaTab({ data, onChange }: Props) {
               actions: [...actions, { label: "", link: undefined }],
             })
           }
-          className="inline-flex items-center gap-1 text-xs font-bold text-[#9A1C1F]"
+          className="inline-flex cursor-pointer items-center gap-1 text-xs font-bold text-[#9A1C1F] transition-colors hover:text-[#6F1518] hover:underline"
         >
           <Plus className="h-4 w-4" /> Thêm nút
         </button>

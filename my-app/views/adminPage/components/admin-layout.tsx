@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { CSSProperties } from "react";
 import { usePathname } from "next/navigation";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminHeader } from "./admin-header";
@@ -37,7 +38,10 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div
-      style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
+      style={{
+        fontFamily: "Arial, Helvetica, sans-serif",
+        "--admin-sidebar-width": sidebarCollapsed ? "5rem" : "18rem",
+      } as CSSProperties}
       className="fixed inset-0 z-50 flex overflow-hidden bg-[#f7f5f1] text-[#1E1917]"
     >
       {/* Sidebar cố định bên trái (màu #a21f1f) - Không bị tải lại khi chọn nav con */}
@@ -59,7 +63,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
           breadcrumb={getBreadcrumbTitle()}
         />
 
-        <main className={`min-h-0 flex-1 p-4 sm:p-6 lg:p-8 bg-[#f7f5f1] ${pathname === "/admin/system/categories" ? "overflow-hidden" : "overflow-y-auto"}`}>
+        <main className={`min-h-0 flex-1 bg-[#f7f5f1] ${pathname === "/admin/system/categories" ? "overflow-hidden px-3 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4" : "overflow-y-auto p-3 sm:p-6 lg:p-8"}`}>
           {children}
         </main>
       </div>

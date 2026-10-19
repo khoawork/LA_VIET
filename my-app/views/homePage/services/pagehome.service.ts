@@ -35,13 +35,10 @@ export class PageHomeService {
     // 1. Khối Hero Image
     if (isBase64Image(cloned.hero?.image?.src)) {
       try {
-        const uploadRes = await CloudinaryService.uploadString(
-          cloned.hero.image.src,
-          "La_Viet_Cloudinary/home/hero"
-        );
+        const uploadRes = await CloudinaryService.uploadString(cloned.hero.image.src);
         cloned.hero.image.src = uploadRes.url;
-      } catch (err: any) {
-        const msg = err?.message || err?.error?.message || JSON.stringify(err);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
         throw new Error(`Upload ảnh Hero lên Cloudinary thất bại: ${msg}`);
       }
     }
@@ -49,13 +46,10 @@ export class PageHomeService {
     // 2. Khối Spotlight Image
     if (isBase64Image(cloned.spotlight?.image)) {
       try {
-        const uploadRes = await CloudinaryService.uploadString(
-          cloned.spotlight.image,
-          "La_Viet_Cloudinary/home/spotlight"
-        );
+        const uploadRes = await CloudinaryService.uploadString(cloned.spotlight.image);
         cloned.spotlight.image = uploadRes.url;
-      } catch (err: any) {
-        const msg = err?.message || err?.error?.message || JSON.stringify(err);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
         throw new Error(`Upload ảnh Spotlight lên Cloudinary thất bại: ${msg}`);
       }
     }
@@ -65,13 +59,10 @@ export class PageHomeService {
       for (const article of cloned.newsSection.articles) {
         if (isBase64Image(article.img)) {
           try {
-            const uploadRes = await CloudinaryService.uploadString(
-              article.img,
-              "La_Viet_Cloudinary/home/news"
-            );
+            const uploadRes = await CloudinaryService.uploadString(article.img);
             article.img = uploadRes.url;
-          } catch (err: any) {
-            const msg = err?.message || err?.error?.message || JSON.stringify(err);
+          } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
             throw new Error(`Upload ảnh bài viết lên Cloudinary thất bại: ${msg}`);
           }
         }
@@ -81,13 +72,10 @@ export class PageHomeService {
     // 4. Khối SEO ogImage
     if (isBase64Image(cloned.seo?.ogImage)) {
       try {
-        const uploadRes = await CloudinaryService.uploadString(
-          cloned.seo.ogImage,
-          "La_Viet_Cloudinary/home/seo"
-        );
+        const uploadRes = await CloudinaryService.uploadString(cloned.seo.ogImage);
         cloned.seo.ogImage = uploadRes.url;
-      } catch (err: any) {
-        const msg = err?.message || err?.error?.message || JSON.stringify(err);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
         throw new Error(`Upload ảnh SEO lên Cloudinary thất bại: ${msg}`);
       }
     }

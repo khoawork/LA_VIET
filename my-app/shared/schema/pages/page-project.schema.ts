@@ -50,6 +50,7 @@ export const PageProjectFilterSchema = z.object({
 export const PageProjectProcedureSchema = z.object({
   eyebrow: z.string().min(1, "Eyebrow is required"),
   title: z.string().min(1, "Title is required"),
+  description: z.string().default(""),
   steps: z
     .array(
       z.object({
