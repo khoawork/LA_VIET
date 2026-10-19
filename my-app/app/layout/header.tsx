@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -27,9 +27,7 @@ interface CurrentUser {
 export default function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navLinks, setNavLinks] = useState<{ label: string; href: string }[]>(
-    DEFAULT_MENU_ITEMS.map((item) => ({ label: item.label, href: item.path }))
-  );
+  const [navLinks, setNavLinks] = useState<{ label: string; href: string }[]>([]);
   const [brand, setBrand] = useState<{ logo?: string; company?: string; tagline?: string }>({
     company: "LÀ VIỆT",
     tagline: "SƠN MÀI HỘI HOẠ LIÊN NGÀNH",
@@ -162,14 +160,7 @@ export default function Header() {
     router.refresh();
   }
 
-  const navLinks = [
-    { label: "TRANG CHỦ", href: "/" },
-    { label: "VỀ CHÚNG TÔI", href: "/about" },
-    { label: "SẢN PHẨM", href: "/products" },
-    { label: "DỰ ÁN", href: "/project" },
-    { label: "TIN TỨC", href: "/news" },
-    { label: "LIÊN HỆ", href: "/contact" },
-  ];
+
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF6F0] border-b border-[#EAE2D5] transition-all">

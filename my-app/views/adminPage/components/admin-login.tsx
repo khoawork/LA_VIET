@@ -194,16 +194,7 @@ export function AdminLogin() {
             </button>
           </form>
 
-          {/* Quick Credential Hint for Dev/Testing */}
-          <div className="mt-6 p-3 rounded-xl bg-[#FAF1EC] border border-[#F2C2BB]/40 text-[11px] text-stone-600 space-y-1">
-            <p className="font-bold text-[#9A1C1F]">Tài khoản mẫu được cấp:</p>
-            <p>
-              • <strong>Admin:</strong> <code>admin@laviet.vn</code> / <code>AdminPassword@123</code>
-            </p>
-            <p>
-              • <strong>Manager:</strong> <code>manager@laviet.vn</code> / <code>ManagerPassword@123</code>
-            </p>
-          </div>
+
 
           {/* Security Note */}
           <div className="mt-6 pt-4 border-t border-[#f3e9db] flex items-center justify-center gap-2 text-[11px] text-stone-600 font-medium">
