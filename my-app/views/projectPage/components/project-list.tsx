@@ -37,7 +37,7 @@ export function ProjectList({ projects, filter }: Props) {
       </div>
 
       {visibleProjects.length === 0 && (
-        <div className="rounded-2xl border border-[#EAE2D5] bg-white py-16 text-center text-[#695D56]">
+        <div className="rounded-md border border-[#EAE2D5] bg-white py-16 text-center text-[#695D56]">
           <p className="text-sm">Hiện chưa có dự án nào trong danh mục này.</p>
         </div>
       )}

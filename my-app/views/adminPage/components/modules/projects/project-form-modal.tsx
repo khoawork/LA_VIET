@@ -9,16 +9,19 @@ import type {
   ProjectDetail,
   ProjectFormData,
 } from "../../../types/projects/project-data.type";
+import { CategoryFilterSelect } from "../category-filter-select";
+import { ImageUploadField } from "../image-upload-field";
+import { saveWithImage } from "../../../services/image-upload.service";
 
 interface ProjectFormModalProps {
   categories: ProjectCategory[];
   project: ProjectDetail | null;
   onClose: () => void;
-  onSaved: () => void;
+  onSaved: (cleanupWarning?: string | null) => void;
 }
 
 const inputClass =
-  "w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
+  "w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
 
 export function ProjectFormModal({
   categories,
@@ -40,19 +43,24 @@ export function ProjectFormModal({
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
     setError("");
     try {
-      const data = { ...form, name: form.name.trim(), slug: form.slug.trim() };
-      if (project) {
-        await updateProject(project.id, data);
-      } else {
-        await createProject(data);
-      }
-      onSaved();
+      const { cleanupWarning } = await saveWithImage({
+        file: imageFile,
+        currentUrl: project?.image,
+        imageUrl: form.image,
+        save: async (image) => {
+          const data = { ...form, image, name: form.name.trim(), slug: form.slug.trim() };
+          if (project) await updateProject(project.id, data);
+          else await createProject(data);
+        },
+      });
+      onSaved(cleanupWarning);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Không thể lưu dự án.");
     } finally {
@@ -61,17 +69,17 @@ export function ProjectFormModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
       <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
         <div className="flex items-center justify-between border-b border-[#EAE2D5] p-5">
-          <h2 className="text-lg font-bold text-[#1E1917]">
+          <h2 className="text-xl font-bold text-[#1E1917]">
             {project ? "Chỉnh sửa dự án" : "Tạo dự án mới"}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Đóng"
-            className="text-stone-500 hover:text-[#9A1C1F]"
+            className="cursor-pointer rounded-lg p-1 text-stone-500 transition-colors hover:bg-[#FAF1EC] hover:text-[#9A1C1F]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -87,7 +95,7 @@ export function ProjectFormModal({
           )}
           <div className="grid gap-4 md:grid-cols-2">
             <label className="space-y-1.5 text-xs font-semibold">
-              Tên dự án *
+              Tên dự án <span className="text-red-600">*</span>
               <input
                 required
                 maxLength={100}
@@ -97,7 +105,7 @@ export function ProjectFormModal({
               />
             </label>
             <label className="space-y-1.5 text-xs font-semibold">
-              Slug *
+              Slug <span className="text-red-600">*</span>
               <input
                 required
                 maxLength={250}
@@ -106,24 +114,18 @@ export function ProjectFormModal({
                 className={inputClass}
               />
             </label>
-            <label className="space-y-1.5 text-xs font-semibold">
-              Danh mục *
-              <select
-                required
-                value={form.categoryId || ""}
-                onChange={(e) =>
-                  setForm({ ...form, categoryId: Number(e.target.value) })
-                }
-                className={inputClass}
-              >
-                <option value="">Chọn danh mục</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="space-y-1.5 text-sm font-semibold">
+              <span>Danh mục <span className="text-red-600">*</span></span>
+              <CategoryFilterSelect
+                label="Chọn danh mục dự án"
+                value={String(form.categoryId || "")}
+                options={categories}
+                onChange={(value) => setForm({ ...form, categoryId: Number(value) })}
+                emptyLabel="Chọn danh mục"
+                includeEmpty={false}
+                fullWidth
+              />
+            </div>
             <label className="space-y-1.5 text-xs font-semibold">
               Địa điểm
               <input
@@ -132,16 +134,15 @@ export function ProjectFormModal({
                 className={inputClass}
               />
             </label>
-            <label className="space-y-1.5 text-xs font-semibold md:col-span-2">
-              URL ảnh *
-              <input
-                required
-                type="url"
+            <div className="md:col-span-2">
+              <ImageUploadField
+                label="Hình ảnh dự án"
                 value={form.image}
-                onChange={(e) => setForm({ ...form, image: e.target.value })}
-                className={inputClass}
+                file={imageFile}
+                onUrlChange={(image) => setForm((current) => ({ ...current, image }))}
+                onFileChange={setImageFile}
               />
-            </label>
+            </div>
             <label className="space-y-1.5 text-xs font-semibold md:col-span-2">
               Caption
               <input
@@ -195,14 +196,14 @@ export function ProjectFormModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-[#EAE2D5] px-5 py-2.5 text-xs font-semibold"
+              className="cursor-pointer rounded-xl border border-[#EAE2D5] px-5 py-2.5 text-xs font-semibold transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5]"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={saving || categories.length === 0}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#9A1C1F] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#9A1C1F] px-5 py-2.5 text-xs font-bold text-white transition-colors enabled:hover:bg-[#7D171A] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving && <Loader2 className="h-4 w-4 animate-spin" />}
               {project ? "Lưu thay đổi" : "Tạo dự án"}

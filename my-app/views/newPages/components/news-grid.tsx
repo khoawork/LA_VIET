@@ -1,10 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
+import { PagePagination } from "@/shared/components/page-pagination";
 import { NewsItem } from "../types/news.type";
 import { NewsFilters, type FilterCategoryItem } from "./news-filters";
 import { NewsCard } from "./news-card";
+
+interface NewsApiItem {
+  id: number;
+  name: string;
+  slug: string;
+  categoryId: number;
+  category?: { name: string } | null;
+  preside: string;
+  date: string | null;
+  reading: string;
+  description: string;
+  image: string;
+}
 
 export function NewsGrid() {
   const [selectedCategory, setSelectedCategory] = useState<string | number>("all");
@@ -51,11 +65,11 @@ export function NewsGrid() {
         const res = await fetch(url);
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
-          const mapped: NewsItem[] = json.data.map((item: any) => ({
+          const mapped: NewsItem[] = json.data.map((item: NewsApiItem) => ({
             id: String(item.id),
             title: item.name,
             slug: item.slug,
-            category: String(item.categoryId),
+            category: String(item.categoryId) as `${number}`,
             categoryLabel: item.category?.name || "Tin tức",
             tagBadge: item.category?.name?.toUpperCase() || "TIN TỨC",
             author: item.preside || "Là Việt",
@@ -139,45 +153,12 @@ export function NewsGrid() {
 
       {/* Pagination Bar */}
       {!loading && totalPages > 1 && (
-        <div className="mt-12 flex items-center justify-center gap-2 text-xs font-semibold">
-          {/* Prev Button */}
-          <button
-            type="button"
-            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-            className="w-9 h-9 rounded-lg bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF] disabled:opacity-40 flex items-center justify-center transition-colors cursor-pointer"
-            aria-label="Trang trước"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-
-          {/* Page numbers */}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              type="button"
-              onClick={() => setCurrentPage(page)}
-              className={`w-9 h-9 rounded-lg transition-colors cursor-pointer ${
-                currentPage === page
-                  ? "bg-[#9A1C1F] text-white shadow-sm"
-                  : "bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF]"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-
-          {/* Next Button */}
-          <button
-            type="button"
-            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-            className="w-9 h-9 rounded-lg bg-[#EFE8DC] text-[#423A35] hover:bg-[#E5DDCF] disabled:opacity-40 flex items-center justify-center transition-colors cursor-pointer"
-            aria-label="Trang sau"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+        <PagePagination
+          page={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          className="mt-12"
+        />
       )}
     </section>
   );

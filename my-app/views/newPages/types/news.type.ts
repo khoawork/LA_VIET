@@ -3,7 +3,8 @@ export type NewsCategory =
   | "research-material"
   | "events-exhibition"
   | "project-diary"
-  | "interdisciplinary-cooperation";
+  | "interdisciplinary-cooperation"
+  | `${number}`;
 
 export interface NewsItem {
   id: string;

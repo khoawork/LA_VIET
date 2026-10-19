@@ -73,7 +73,7 @@ export function ProjectHeaderTab({ data, onChange }: Props) {
               ],
             })
           }
-          className="inline-flex items-center gap-1 text-xs font-bold text-[#9A1C1F]"
+          className="inline-flex cursor-pointer items-center gap-1 text-xs font-bold text-[#9A1C1F] transition-colors hover:text-[#6F1518] hover:underline"
         >
           <Plus className="h-4 w-4" /> Thêm chỉ số
         </button>

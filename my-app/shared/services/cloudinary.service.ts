@@ -10,6 +10,7 @@ cloudinary.config({
 export interface CloudinaryUploadResult {
   url: string;
   publicId: string;
+  resourceType: "image" | "raw";
   width?: number;
   height?: number;
   format?: string;
@@ -19,19 +20,26 @@ export interface CloudinaryUploadResult {
 export class CloudinaryService {
   /**
    * Upload file từ Buffer lên Cloudinary
-   * @param buffer Buffer của file ảnh
-   * @param folder Thư mục lưu trữ trên Cloudinary (mặc định: "La_Viet_Cloudinary")
+   * @param buffer Buffer của file
+   * @param folder Thư mục lưu trữ trên Cloudinary
    */
   static async uploadBuffer(
     buffer: Buffer,
-    folder: string = "La_Viet_Cloudinary",
+    folder: string,
+    options: {
+      resourceType?: "image" | "raw";
+      publicId?: string;
+      optimizeImage?: boolean;
+    } = {},
   ): Promise<CloudinaryUploadResult> {
+    const resourceType = options.resourceType ?? "image";
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder,
-          resource_type: "image",
-          transformation: [{ quality: "auto", fetch_format: "auto" }],
+          resource_type: resourceType,
+          ...(options.publicId ? { public_id: options.publicId } : {}),
+          ...(options.optimizeImage ? { transformation: [{ quality: "auto", fetch_format: "auto" }] } : {}),
         },
         (error, result?: UploadApiResponse) => {
           if (error || !result) {
@@ -40,6 +48,7 @@ export class CloudinaryService {
             resolve({
               url: result.secure_url,
               publicId: result.public_id,
+              resourceType,
               width: result.width,
               height: result.height,
               format: result.format,
@@ -56,12 +65,12 @@ export class CloudinaryService {
   /**
    * Upload chuỗi ảnh (Base64 data URI hoặc URL) lên Cloudinary
    * @param source Base64 string hoặc URL hình ảnh
-   * @param folder Thư mục lưu trữ trên Cloudinary
    */
-  static async uploadString(
-    source: string,
-    folder: string = "La_Viet",
-  ): Promise<CloudinaryUploadResult> {
+  static async uploadString(source: string): Promise<CloudinaryUploadResult> {
+    const folder = process.env.CLOUDINARY_FOLDER?.trim();
+    if (!folder || folder.includes("/") || folder.includes("\\")) {
+      throw new Error("CLOUDINARY_FOLDER phải là tên một thư mục Cloudinary và không được để trống");
+    }
     const result = await cloudinary.uploader.upload(source, {
       folder,
       resource_type: "image",
@@ -71,6 +80,7 @@ export class CloudinaryService {
     return {
       url: result.secure_url,
       publicId: result.public_id,
+      resourceType: "image",
       width: result.width,
       height: result.height,
       format: result.format,
@@ -81,7 +91,7 @@ export class CloudinaryService {
   /**
    * Xóa ảnh trên Cloudinary qua publicId
    */
-  static async deleteImage(publicId: string): Promise<unknown> {
-    return cloudinary.uploader.destroy(publicId);
+  static async deleteImage(publicId: string, resourceType: "image" | "raw" = "image"): Promise<unknown> {
+    return cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
   }
 }

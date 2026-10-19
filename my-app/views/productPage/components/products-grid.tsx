@@ -8,6 +8,13 @@ interface ProductsGridProps {
   displayedProductIds?: number[];
 }
 
+function hasLightBackground(hex: string): boolean {
+  const red = parseInt(hex.slice(1, 3), 16);
+  const green = parseInt(hex.slice(3, 5), 16);
+  const blue = parseInt(hex.slice(5, 7), 16);
+  return (red * 299 + green * 587 + blue * 114) / 1000 >= 160;
+}
+
 export function ProductsGrid({
   products = [],
   activeCategory,
@@ -48,11 +55,15 @@ export function ProductsGrid({
             {filteredProducts.map((item) => {
               const badge = item.props?.badge || "ĐỘC BẢN LÀ VIỆT";
               const badgeColor = item.props?.badgeColor || "red";
+              const customBadgeColor = /^#[0-9a-fA-F]{6}$/.test(badgeColor)
+                ? badgeColor
+                : null;
               const dimension = item.props?.dimension;
               const material = item.props?.material || "Sơn ta truyền thống";
               const yearOrSpec = item.props?.yearOrSpec || "2024";
               const categoryName = item.category?.name || item.title || "Sơn mài Là Việt";
-              const isTechnicalSpec = Boolean(item.props?.isTechnicalSpec);
+              const buttonLabel = item.props?.buttonLabel?.trim() ||
+                (item.props?.isTechnicalSpec ? "XEM THÔNG SỐ KỸ THUẬT" : "CHI TIẾT TÁC PHẨM");
 
               return (
                 <article
@@ -71,11 +82,14 @@ export function ProductsGrid({
 
                     {/* Top-Left Badge */}
                     <div
-                      className={`absolute top-2 left-2 px-2.5 py-0.5 text-white text-[10px] font-bold uppercase tracking-[1px] shadow-sm ${
-                        badgeColor === "red"
+                      style={customBadgeColor ? { backgroundColor: customBadgeColor } : undefined}
+                      className={`absolute top-2 left-2 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[1px] shadow-sm ${
+                        customBadgeColor
+                          ? "outline outline-1 outline-black/10 -outline-offset-1"
+                          : badgeColor === "red"
                           ? "bg-[linear-gradient(90deg,#B71C1C_0%,#8E1414_100%)] outline outline-1 outline-white/20 -outline-offset-1"
                           : "bg-[linear-gradient(90deg,#2B1F1A_0%,#453229_100%)] outline outline-1 outline-white/10 -outline-offset-1"
-                      }`}
+                      } ${customBadgeColor && hasLightBackground(customBadgeColor) ? "text-[#1E1917]" : "text-white"}`}
                     >
                       {badge}
                     </div>
@@ -118,11 +132,9 @@ export function ProductsGrid({
                       <div className="flex items-stretch gap-1 pt-1">
                         <button
                           type="button"
-                          className="flex-1 py-2.5 px-4 bg-[linear-gradient(180deg,#FAF6EE_0%,#F1E5D5_100%)] outline outline-1 outline-[#D9CEBE] -outline-offset-1 text-[#2B1F1A] text-[12px] font-semibold uppercase tracking-[0.6px] hover:bg-[#FAF6EE] transition-colors cursor-pointer text-center"
+                          className="flex-1 py-2.5 px-4 bg-[linear-gradient(180deg,#FAF6EE_0%,#F1E5D5_100%)] outline outline-1 outline-[#D9CEBE] -outline-offset-1 text-[#2B1F1A] text-[12px] font-semibold tracking-[0.6px] hover:bg-[#FAF6EE] transition-colors cursor-pointer text-center"
                         >
-                          {isTechnicalSpec
-                            ? "XEM THÔNG SỐ KỸ THUẬT"
-                            : "CHI TIẾT TÁC PHẨM"}
+                          {buttonLabel}
                         </button>
                         <button
                           type="button"

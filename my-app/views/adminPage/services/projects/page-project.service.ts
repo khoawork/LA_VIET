@@ -83,3 +83,8 @@ export async function updateProject(id: number, data: ProjectFormData) {
   });
   if (!response.ok) throw new Error(await readError(response));
 }
+
+export async function deleteProject(id: number) {
+  const response = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+  if (!response.ok) throw new Error(await readError(response));
+}

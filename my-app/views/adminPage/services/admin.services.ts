@@ -80,16 +80,10 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
         icon: "Users",
       },
       {
-        id: "news-category",
-        label: "Bài viết tin tức",
-        href: "/admin/news-category",
-        icon: "Newspaper",
-      },
-      {
-        id: "logs",
-        label: "Nhật ký hoạt động",
-        href: "/admin/system/logs",
-        icon: "History",
+        id: "categories",
+        label: "Danh mục dữ liệu",
+        href: "/admin/system/categories",
+        icon: "Database",
       },
       {
         id: "menu",
