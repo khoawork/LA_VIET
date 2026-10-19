@@ -24,6 +24,17 @@ export function withErrorHandler<TContext = RouteContext>(
     try {
       return await handler(req, context);
     } catch (error: unknown) {
+      // Cho phép Next.js xử lý các lỗi điều hướng và render động nội bộ (NEXT_PRERENDER_INTERRUPTED, NEXT_REDIRECT, ...)
+      if (
+        error &&
+        typeof error === "object" &&
+        "digest" in error &&
+        typeof (error as { digest: unknown }).digest === "string" &&
+        (error as { digest: string }).digest.startsWith("NEXT_")
+      ) {
+        throw error;
+      }
+
       if (error instanceof AppError) {
         return sendError(
           error.message,

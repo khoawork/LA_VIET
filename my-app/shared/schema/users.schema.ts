@@ -13,7 +13,7 @@ export class UsersRequestSchema {
     .min(1, "Full name is required")
     .max(100, "Full name must be less than 100 characters");
   avatar = z.url({ message: "Avatar must be a valid URL" }).optional();
-  role = z.enum(Role, { message: "Role must be either USER or ADMIN" });
+  role = z.enum(Role, { message: "Role must be either ADMIN, MANAGER or USER" });
 }
 
 export class UsersResponseSchema {

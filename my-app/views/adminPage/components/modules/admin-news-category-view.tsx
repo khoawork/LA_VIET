@@ -425,6 +425,3 @@ export function AdminNewsCategoryView() {
   );
 }
 
-// Re-export alias
-export { AdminNewsCategoryView as AdminCategoriesView };
-

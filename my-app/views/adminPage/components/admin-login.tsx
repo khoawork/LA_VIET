@@ -2,23 +2,60 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Lock, Mail, Eye, EyeOff, ArrowRight, ShieldCheck, ArrowLeft } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Lock,
+  Mail,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  ShieldCheck,
+  ArrowLeft,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
 export function AdminLogin() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
+
   const [email, setEmail] = useState("admin@laviet.vn");
-  const [password, setPassword] = useState("••••••••");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage(null);
     setIsLoading(true);
-    // Giả lập đăng nhập thành công sau 600ms
-    setTimeout(() => {
-      router.push("/admin/dashboard");
-    }, 600);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (response.ok && result?.success) {
+        router.push(callbackUrl);
+        router.refresh();
+      } else {
+        setErrorMessage(
+          result?.message ||
+            "Email hoặc mật khẩu không chính xác. Vui lòng thử lại."
+        );
+      }
+    } catch {
+      setErrorMessage(
+        "Không thể kết nối đến máy chủ xác thực. Vui lòng kiểm tra đường truyền."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,7 +79,7 @@ export function AdminLogin() {
           </Link>
         </div>
 
-        {/* Login Card with #f7f5f1 and borders #f3e9db */}
+        {/* Login Card */}
         <div className="bg-[#f7f5f1] rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#f3e9db]">
           {/* Brand Seal Header */}
           <div className="text-center space-y-3 mb-8">
@@ -50,7 +87,6 @@ export function AdminLogin() {
               LV
             </div>
             <div>
-              {/* Gradient Đen - Đỏ cho tiêu đề lớn theo Image 2 */}
               <h1 className="text-xl sm:text-2xl font-black tracking-tight uppercase bg-gradient-to-r from-black to-[#a21f1f] bg-clip-text text-transparent">
                 ĐĂNG NHẬP QUẢN TRỊ
               </h1>
@@ -60,6 +96,14 @@ export function AdminLogin() {
             </div>
           </div>
 
+          {/* Error Alert */}
+          {errorMessage && (
+            <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold animate-in fade-in">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+              <div className="flex-1 leading-relaxed">{errorMessage}</div>
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
@@ -68,7 +112,7 @@ export function AdminLogin() {
                 htmlFor="email"
                 className="block text-xs font-bold uppercase tracking-wider text-stone-700"
               >
-                Email / Tên đăng nhập
+                Tài khoản Gmail / Email
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-stone-400">
@@ -99,7 +143,9 @@ export function AdminLogin() {
                   href="#forgot"
                   onClick={(e) => {
                     e.preventDefault();
-                    alert("Vui lòng liên hệ quản trị viên cấp cao để cấp lại mật khẩu.");
+                    alert(
+                      "Vui lòng liên hệ quản trị viên cấp cao để được cấp lại mật khẩu."
+                    );
                   }}
                   className="text-xs font-bold text-[#a21f1f] hover:underline"
                 >
@@ -116,7 +162,7 @@ export function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="Nhập mật khẩu quản trị"
+                  placeholder="Nhập mật khẩu"
                   className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
                 />
                 <button
@@ -133,35 +179,34 @@ export function AdminLogin() {
               </div>
             </div>
 
-            {/* Remember Checkbox */}
-            <div className="flex items-center gap-2">
-              <input
-                id="remember"
-                type="checkbox"
-                defaultChecked
-                className="w-4 h-4 rounded border-stone-300 text-[#a21f1f] focus:ring-[#a21f1f]"
-              />
-              <label
-                htmlFor="remember"
-                className="text-xs font-medium text-stone-600 cursor-pointer"
-              >
-                Ghi nhớ phiên đăng nhập trên thiết bị này
-              </label>
-            </div>
-
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
               className="w-full py-3.5 px-4 rounded-xl bg-[#a21f1f] hover:bg-[#851619] active:scale-[0.99] text-white font-bold text-xs uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70 cursor-pointer"
             >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ArrowRight className="w-4 h-4" />
+              )}
               <span>{isLoading ? "ĐANG XÁC THỰC..." : "ĐĂNG NHẬP"}</span>
-              <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
+          {/* Quick Credential Hint for Dev/Testing */}
+          <div className="mt-6 p-3 rounded-xl bg-[#FAF1EC] border border-[#F2C2BB]/40 text-[11px] text-stone-600 space-y-1">
+            <p className="font-bold text-[#9A1C1F]">Tài khoản mẫu được cấp:</p>
+            <p>
+              • <strong>Admin:</strong> <code>admin@laviet.vn</code> / <code>AdminPassword@123</code>
+            </p>
+            <p>
+              • <strong>Manager:</strong> <code>manager@laviet.vn</code> / <code>ManagerPassword@123</code>
+            </p>
+          </div>
+
           {/* Security Note */}
-          <div className="mt-8 pt-5 border-t border-[#f3e9db] flex items-center justify-center gap-2 text-[11px] text-stone-600 font-medium">
+          <div className="mt-6 pt-4 border-t border-[#f3e9db] flex items-center justify-center gap-2 text-[11px] text-stone-600 font-medium">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>Khu vực bảo mật nội bộ dành riêng cho Quản trị viên</span>
           </div>

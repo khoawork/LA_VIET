@@ -1165,6 +1165,8 @@ export const UserScalarFieldEnum = {
   password: 'password',
   avatar: 'avatar',
   role: 'role',
+  refreshToken: 'refreshToken',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1295,7 +1297,8 @@ export const UserOrderByRelevanceFieldEnum = {
   email: 'email',
   username: 'username',
   password: 'password',
-  avatar: 'avatar'
+  avatar: 'avatar',
+  refreshToken: 'refreshToken'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -1346,6 +1349,13 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'Role'
  */
 export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

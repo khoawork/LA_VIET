@@ -64,21 +64,43 @@ export const PageContactMapSchema = z.object({
   })),
 });
 
+export const ContactFormFieldTypeSchema = z.enum([
+  "text",
+  "tel",
+  "email",
+  "textarea",
+  "select",
+  "number",
+  "date",
+  "radio",
+  "checkbox",
+]);
+
+export const ContactFormFieldSchema = z.object({
+  name: required("Field name"),
+  label: required("Field label"),
+  type: ContactFormFieldTypeSchema.default("text"),
+  placeholder: z.string().optional().default(""),
+  required: z.boolean().default(false),
+  options: z.array(z.string()).optional().default([]),
+  width: z.enum(["half", "full"]).optional().default("half"),
+});
+
 export const PageContactCTASchema = z.object({
   eyebrow: required("Eyebrow"),
   icon: required("CTA icon"),
-  fields: z.array(z.object({
-    name: required("Field name"),
-    label: required("Field label"),
-    type: z.enum(["text", "tel", "email", "textarea"]),
-    placeholder: z.string(),
-    required: z.boolean(),
-  })).refine((fields) => new Set(fields.map((field) => field.name)).size === fields.length, {
-    message: "Field names must be unique",
-  }),
+  fields: z
+    .array(ContactFormFieldSchema)
+    .refine(
+      (fields) => new Set(fields.map((field) => field.name)).size === fields.length,
+      {
+        message: "Field names must be unique",
+      }
+    ),
   iconPrivacy: required("Privacy icon"),
   privacyNote: required("Privacy note"),
   submitLabel: required("Submit label"),
+  googleSheetId: z.string().optional().default(""),
 });
 
 export const PageContactExperienceSchema = z.object({

@@ -677,14 +677,64 @@ async function seedPages(
   await ensurePage(contactPage.name, "contact", contactPage.props);
 }
 
+async function seedUsers() {
+  const bcrypt = await import("bcryptjs");
+  const adminPassword = await bcrypt.hash("AdminPassword@123", 10);
+  const managerPassword = await bcrypt.hash("ManagerPassword@123", 10);
+
+  await prisma.user.upsert({
+    where: { email: "admin@laviet.vn" },
+    update: {
+      fullname: "Quản Trị Viên Là Việt",
+      role: "ADMIN",
+      isActive: true,
+      password: adminPassword,
+    },
+    create: {
+      email: "admin@laviet.vn",
+      username: "admin",
+      fullname: "Quản Trị Viên Là Việt",
+      role: "ADMIN",
+      isActive: true,
+      password: adminPassword,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "manager@laviet.vn" },
+    update: {
+      fullname: "Quản Lý Nội Dung Là Việt",
+      role: "MANAGER",
+      isActive: true,
+      password: managerPassword,
+    },
+    create: {
+      email: "manager@laviet.vn",
+      username: "manager",
+      fullname: "Quản Lý Nội Dung Là Việt",
+      role: "MANAGER",
+      isActive: true,
+      password: managerPassword,
+    },
+  });
+
+  console.log("👤 Đã tạo sẵn 2 tài khoản quản trị (Admin & Manager).");
+}
+
 async function main() {
   if (process.argv.includes("--contact")) {
     await ensurePage(contactPage.name, "contact", contactPage.props);
     return;
   }
 
+  if (process.argv.includes("--users")) {
+    await seedUsers();
+    return;
+  }
+
   console.log("🌱 Bắt đầu khởi tạo dữ liệu mẫu cho website Là Việt...");
 
+  await seedUsers();
   const productIds = await seedProducts();
   await seedProjects();
   const seededNews = await seedNews();
