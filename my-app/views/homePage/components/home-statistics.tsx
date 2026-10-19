@@ -11,13 +11,13 @@ export function HomeStatistics({ data = DEFAULT_PAGE_HOME_PROPS.statistics }: Ho
     : DEFAULT_PAGE_HOME_PROPS.statistics.stats;
 
   return (
-    <section className="w-full py-20 lg:py-28 px-6 sm:px-10 lg:px-16 xl:px-24">
+    <section className="w-full py-14 lg:py-14 px-6 pt-20 sm:px-10 lg:px-16 xl:px-24">
       <div className="w-full grid lg:grid-cols-12 gap-8 items-end mb-14">
         <div className="lg:col-span-6 space-y-2">
           <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             {data.tagline}
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
+          <h2 className="text-3xl py-2 sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
             {data.title}
           </h2>
         </div>

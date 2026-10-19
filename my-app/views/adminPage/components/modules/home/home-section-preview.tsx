@@ -40,12 +40,7 @@ export function HomeSectionPreview({
         {/* PREVIEW HERO */}
         {activeTab === "hero" && (
           <div className="space-y-4 border border-[#f3e9db] p-4 rounded-xl bg-[#FAF7F2]">
-            <div className="inline-flex items-center gap-2 text-[10px] font-bold tracking-widest text-[#a21f1f] uppercase">
-              <span className="w-5 h-[2px] bg-[#a21f1f]" />
-              {data.hero?.tagline}
-            </div>
-
-            <h2 className="text-sm font-black text-[#1E1917] leading-tight">
+            <h2 className="text-sm font-bold text-[#1E1917] leading-tight">
               {data.hero?.highlightWord &&
               data.hero?.title.includes(data.hero?.highlightWord) ? (
                 <>

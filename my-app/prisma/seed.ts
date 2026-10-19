@@ -8,6 +8,7 @@ import { DEFAULT_PAGE_NEW_PROPS } from "../views/newPages/types/pagenew.type";
 import { PageContactRequestSchema } from "../shared/schema/pages/page-contact.schema";
 import { PageProjectPropsSchema } from "../shared/schema/pages/page-project.schema";
 import { ProductsPagePropsSchema } from "../shared/schema/pages/page-product.schema";
+import { DEFAULT_MENU_ITEMS } from "../shared/schema/menu.schema";
 
 const productCategories = [
   "Tranh Sơn Mài Khổ Lớn",
@@ -675,6 +676,7 @@ async function seedPages(
     },
   );
   await ensurePage(contactPage.name, "contact", contactPage.props);
+  await ensurePage("Menu & Điều Hướng Website", "menu", { items: DEFAULT_MENU_ITEMS });
 }
 
 async function main() {

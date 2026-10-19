@@ -10,17 +10,14 @@ export const HomeHeroCollectionSchema = z.object({
 });
 
 export const HomeHeroSectionSchema = z.object({
-  tagline: z.string().default("Khát vọng sơn mài Việt"),
+  tagline: z.string().optional().default(""),
   title: z
     .string()
-    .min(1, "Tiêu đề Hero không được để trống")
-    .default("NÂNG TẦM NGHỆ THUẬT SƠN MÀI TRUYỀN THỐNG TRONG KHÔNG GIAN ĐƯƠNG ĐẠI"),
+    .min(1, "Tiêu đề Hero không được để trống"),
   highlightWord: z.string().default("SƠN MÀI TRUYỀN THỐNG"),
   description: z
     .string()
-    .default(
-      "Lã Việt định vị sứ mệnh bảo tồn và phát triển tinh hoa nghệ thuật sơn mài truyền thống Việt Nam; kết hợp nhuần nhuyễn chiều sâu văn hóa bản địa cùng ngôn ngữ kiến trúc và thiết kế đương đại.",
-    ),
+    .min(1, "Mô tả Hero không được để trống"),
   primaryButton: z.object({
     text: z.string().default("Khám phá bộ sưu tập"),
     href: z.string().default("/projects"),
@@ -38,7 +35,7 @@ export const HomeHeroSectionSchema = z.object({
     tag: z.string().default("Không gian trưng bày"),
     caption: z
       .string()
-      .default("Đại sảnh Nhà Hát Đương Đại & Bích Họa Sơn Mài"),
+      .min(1, "Chú thích hình ảnh không được để trống"),
   }),
   collections: z.array(HomeHeroCollectionSchema).default([]),
 });
@@ -58,9 +55,7 @@ export const HomeStatisticsSectionSchema = z.object({
   title: z.string().default("NHỮNG CON SỐ ẤN TƯỢNG"),
   description: z
     .string()
-    .default(
-      "Mỗi tác phẩm là sự kết tinh của hàng chục công đoạn tỉ mỉ kéo dài nhiều tháng, hội tụ tinh hoa bàn tay nghệ nhân và niềm tự hào di sản văn hóa Việt Nam.",
-    ),
+    .min(1, "Mô tả Thống kê không được để trống"),
   stats: z.array(HomeStatItemSchema).default([]),
 });
 
@@ -90,7 +85,7 @@ export const HomeSpotlightSectionSchema = z.object({
   seal: z.object({
     initials: z.string().default("LV"),
     line1: z.string().default("Xưởng sơn mài"),
-    line2: z.string().default("Lã Việt"),
+    line2: z.string().default("Là Việt"),
   }),
   infoBoxes: z.array(HomeSpotlightInfoBoxSchema).default([]),
   link: z.object({
@@ -138,7 +133,7 @@ export const HomePartnersSectionSchema = z.object({
     quote: z
       .string()
       .default(
-        "Sơn mài Lã Việt mang đến chiều sâu văn hóa và đẳng cấp vượt bậc cho không gian sảnh chính của chúng tôi. Kỹ thuật chế tác thủ công tinh xảo của các nghệ nhân thực sự chinh phục mọi ánh nhìn.",
+        "Sơn mài Là Việt mang đến chiều sâu văn hóa và đẳng cấp vượt bậc cho không gian sảnh chính của chúng tôi. Kỹ thuật chế tác thủ công tinh xảo của các nghệ nhân thực sự chinh phục mọi ánh nhìn.",
       ),
     author: z
       .string()
@@ -171,7 +166,7 @@ export const HomeCtaSectionSchema = z.object({
  * 7. Schema Section Cấu hình SEO Trang chủ
  */
 export const HomeSeoSectionSchema = z.object({
-  title: z.string().default("LÃ VIỆT | Sơn Mài Hội Họa Liên Ngành"),
+  title: z.string().default("LÀ VIỆT | Sơn Mài Hội Họa Liên Ngành"),
   description: z
     .string()
     .default(
@@ -180,7 +175,7 @@ export const HomeSeoSectionSchema = z.object({
   keywords: z
     .string()
     .default(
-      "sơn mài, bích họa sơn mài, nghệ thuật sơn mài, Lã Việt, tranh sơn mài",
+      "sơn mài, bích họa sơn mài, nghệ thuật sơn mài, Là Việt, tranh sơn mài",
     ),
   ogImage: z
     .string()
@@ -232,11 +227,11 @@ export const PageHomeResponseSchema = z.object({
  */
 export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
   hero: {
-    tagline: "Khát vọng sơn mài Việt",
+    tagline: "",
     title: "NÂNG TẦM NGHỆ THUẬT SƠN MÀI TRUYỀN THỐNG TRONG KHÔNG GIAN ĐƯƠNG ĐẠI",
     highlightWord: "SƠN MÀI TRUYỀN THỐNG",
     description:
-      "Lã Việt định vị sứ mệnh bảo tồn và phát triển tinh hoa nghệ thuật sơn mài truyền thống Việt Nam; kết hợp nhuần nhuyễn chiều sâu văn hóa bản địa cùng ngôn ngữ kiến trúc và thiết kế đương đại.",
+      "Là Việt định vị sứ mệnh bảo tồn và phát triển tinh hoa nghệ thuật sơn mài truyền thống Việt Nam; kết hợp nhuần nhuyễn chiều sâu văn hóa bản địa cùng ngôn ngữ kiến trúc và thiết kế đương đại.",
     primaryButton: {
       text: "Khám phá bộ sưu tập",
       href: "/projects",
@@ -315,7 +310,7 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     seal: {
       initials: "LV",
       line1: "Xưởng sơn mài",
-      line2: "Lã Việt",
+      line2: "Là Việt",
     },
     infoBoxes: [
       { label: "Nghệ nhân chính", value: "NSƯT - Họa sĩ Đỗ Quyên" },
@@ -379,7 +374,7 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     ],
     testimonial: {
       quote:
-        "Sơn mài Lã Việt mang đến chiều sâu văn hóa và đẳng cấp vượt bậc cho không gian sảnh chính của chúng tôi. Kỹ thuật chế tác thủ công tinh xảo của các nghệ nhân thực sự chinh phục mọi ánh nhìn.",
+        "Sơn mài Là Việt mang đến chiều sâu văn hóa và đẳng cấp vượt bậc cho không gian sảnh chính của chúng tôi. Kỹ thuật chế tác thủ công tinh xảo của các nghệ nhân thực sự chinh phục mọi ánh nhìn.",
       author: "— Giám đốc Sáng tạo, Tổ hợp Nghỉ dưỡng Quốc tế",
     },
   },
@@ -398,11 +393,11 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     },
   },
   seo: {
-    title: "LÃ VIỆT | Sơn Mài Hội Họa Liên Ngành",
+    title: "LÀ VIỆT | Sơn Mài Hội Họa Liên Ngành",
     description:
       "Nâng tầm nghệ thuật sơn mài truyền thống trong không gian đương đại. Bích họa sơn mài khổ lớn, vách trang trí kiến trúc và nội thất cao cấp.",
     keywords:
-      "sơn mài, bích họa sơn mài, nghệ thuật sơn mài, Lã Việt, tranh sơn mài",
+      "sơn mài, bích họa sơn mài, nghệ thuật sơn mài, Là Việt, tranh sơn mài",
     ogImage:
       "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
   },

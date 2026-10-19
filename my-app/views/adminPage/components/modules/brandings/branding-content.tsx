@@ -32,7 +32,13 @@ export function BrandingContent() {
     editor.setDraft((current) => ({ ...current, footer }));
   }
 
-  const footerProps = { data: editor.draft.footer, onChange: updateFooter };
+  const footerProps = {
+    data: editor.draft.footer,
+    onChange: updateFooter,
+    logo: editor.draft.logo,
+    onLogoChange: (logo: string) =>
+      editor.setDraft((current) => ({ ...current, logo })),
+  };
 
   return (
     <section className="space-y-6">

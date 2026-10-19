@@ -75,7 +75,7 @@ export function AboutTechnology({ data }: AboutTechnologyProps) {
               <div key={stat.id || idx} className="flex flex-col justify-start items-start">
                 <div className="flex items-baseline">
                   <span
-                    className={`text-3xl sm:text-4xl font-black tracking-tight leading-none ${
+                    className={`text-3xl sm:text-4xl  tracking-tight leading-none ${
                       stat.accentColor || "text-[#9A1C1F]"
                     }`}
                   >

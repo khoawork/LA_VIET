@@ -67,7 +67,12 @@ export class SiteSettingsService {
   }
 
   async updateFooterContent(data: SiteSettingsFooterContentType) {
-    await this.updateFooter(data);
+    const { logo, ...footerData } = data;
+    if (logo !== undefined) {
+      const setting = await this.getSiteSettings();
+      await this.repository.updateSiteSettings(setting.id, { logo });
+    }
+    await this.updateFooter(footerData);
   }
 
   async getDetails() {

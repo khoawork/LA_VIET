@@ -7,9 +7,10 @@ import { SiteSettingsResponseSchema } from "@/shared/schema/site-settings.schema
 function safeHref(value: string | null | undefined) {
   if (!value) return null;
   if (value.startsWith("/") && !value.startsWith("//")) return value;
+  if (value.startsWith("data:image/")) return value;
   try {
     const url = new URL(value);
-    return ["http:", "https:"].includes(url.protocol) ? url.toString() : null;
+    return ["http:", "https:", "data:"].includes(url.protocol) ? url.toString() : null;
   } catch {
     return null;
   }

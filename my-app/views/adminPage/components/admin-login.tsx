@@ -46,12 +46,12 @@ export function AdminLogin() {
         <div className="bg-[#f7f5f1] rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#f3e9db]">
           {/* Brand Seal Header */}
           <div className="text-center space-y-3 mb-8">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-[#a21f1f] text-[#d1a25b] flex items-center justify-center font-black text-2xl shadow-lg border-2 border-[#d1a25b]/60">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-[#a21f1f] text-[#d1a25b] flex items-center justify-center  text-2xl shadow-lg border-2 border-[#d1a25b]/60">
               LV
             </div>
             <div>
               {/* Gradient Đen - Đỏ cho tiêu đề lớn theo Image 2 */}
-              <h1 className="text-xl sm:text-2xl font-black tracking-tight uppercase bg-gradient-to-r from-black to-[#a21f1f] bg-clip-text text-transparent">
+              <h1 className="text-xl sm:text-2xl  tracking-tight uppercase bg-gradient-to-r from-black to-[#a21f1f] bg-clip-text text-transparent">
                 ĐĂNG NHẬP QUẢN TRỊ
               </h1>
               <p className="text-xs text-stone-600 font-semibold mt-1">

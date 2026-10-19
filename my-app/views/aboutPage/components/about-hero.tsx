@@ -7,7 +7,9 @@ interface AboutHeroProps {
 
 export function AboutHero({ data }: AboutHeroProps) {
   const badge = data?.badge || "SƠN MÀI HỘI HOẠ LIÊN NGÀNH";
-  const heading = data?.heading || "HÀNH TRÌNH TÔN VINH DI SẢN SƠN MÀI TRONG KHÔNG GIAN ĐƯƠNG ĐẠI";
+  const heading =
+    data?.heading ||
+    "HÀNH TRÌNH TÔN VINH DI SẢN SƠN MÀI TRONG KHÔNG GIAN ĐƯƠNG ĐẠI";
   const description =
     data?.description ||
     "Công ty TNHH Ứng dụng Liên ngành Sơn mài Hội hoạ Là Việt kết hợp nền tảng nhựa mủ sơn ta Phú Thọ nguyên bản cùng các thành tựu vật liệu mới, tạo lập cầu nối giữa di sản hội hoạ hàn lâm và thực tiễn kiến trúc quy mô lớn.";
@@ -28,7 +30,7 @@ export function AboutHero({ data }: AboutHeroProps) {
             <span>{badge}</span>
           </div>
 
-          <h1 className="flex flex-col tracking-tight text-3xl sm:text-4xl lg:text-5xl font-black uppercase text-[#1E1917] leading-tight sm:leading-[1.15]">
+          <h1 className="flex flex-col tracking-tight text-3xl sm:text-4xl lg:text-5xl font-bold uppercase text-[#1E1917] leading-tight sm:leading-[1.15]">
             <span>{heading}</span>
           </h1>
 
@@ -49,7 +51,7 @@ export function AboutHero({ data }: AboutHeroProps) {
             <div className="relative aspect-square w-full bg-[#FAF0D9]/80 rounded-xl p-5 flex flex-col justify-center items-center overflow-hidden border border-[#E5DAC9]/80">
               {/* Traditional Lacquer Seal Stamp Graphic */}
               <div className="w-36 h-36 rounded-xl border-4 border-[#9A1C1F] bg-[#9A1C1F]/5 flex flex-col items-center justify-center text-[#9A1C1F] p-3 -rotate-1 group-hover:rotate-0 transition-transform duration-500 shadow-sm">
-                <div className="border border-[#9A1C1F] w-full h-full flex flex-col items-center justify-center font-sans font-black text-3xl tracking-tighter leading-none select-none">
+                <div className="border border-[#9A1C1F] w-full h-full flex flex-col items-center justify-center font-sans  text-3xl tracking-tighter leading-none select-none">
                   {sealTitle.split(" ").map((word, i) => (
                     <span key={i}>{word}</span>
                   ))}

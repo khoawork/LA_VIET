@@ -13,18 +13,13 @@ export function HomeHero({ data = DEFAULT_PAGE_HOME_PROPS.hero }: HomeHeroProps)
     : DEFAULT_PAGE_HOME_PROPS.hero.collections;
 
   return (
-    <section className="relative w-full border-b border-[#E8E2D5] bg-[#FAF7F2] overflow-hidden">
+    <section className="relative  border-[#E8E2D5] bg-[#FAF7F2] overflow-hidden">
       {/* Hero Main Area */}
-      <div className="w-full px-6 sm:px-10 lg:px-16 xl:px-24 pt-16 pb-14 lg:pt-24 lg:pb-28">
+      <div className="w-full px-6 sm:px-10 lg:px-16 xl:px-24 pt-4 pb-14 lg:pt-8 lg:pb-14">
         <div className="grid lg:grid-cols-12 gap-12 xl:gap-20 items-center">
           {/* Left Content */}
           <div className="lg:col-span-7 space-y-7">
-            <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
-              <span className="w-8 h-[2px] bg-[#9A221A]" />
-              {data.tagline}
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight text-[#231F20] leading-[1.12]">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-[#231F20] leading-[1.24]">
               {data.highlightWord && data.title.includes(data.highlightWord) ? (
                 <>
                   {data.title.split(data.highlightWord)[0]}
@@ -38,20 +33,20 @@ export function HomeHero({ data = DEFAULT_PAGE_HOME_PROPS.hero }: HomeHeroProps)
               )}
             </h1>
 
-            <p className="text-[#68625B] text-base sm:text-lg leading-relaxed max-w-3xl font-light">
+            <p className="text-[#68625B] text-base sm:text-lg leading-relaxed max-w-3xl">
               {data.description}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-4">
               <Link
                 href={data.primaryButton?.href || "/projects"}
-                className="px-8 py-4 rounded-full bg-[#9A221A] hover:bg-[#821B14] text-white text-xs font-bold uppercase tracking-[0.14em] transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+                className="px-8 py-4 rounded-xs bg-[#9A221A] hover:bg-[#821B14] text-white text-xs font-bold uppercase tracking-[0.14em] transition-all shadow-md hover:shadow-lg flex items-center gap-2"
               >
                 {data.primaryButton?.text || "Khám phá bộ sưu tập"} <span>→</span>
               </Link>
               <Link
                 href={data.secondaryButton?.href || "#tu-van"}
-                className="px-8 py-4 rounded-full bg-white hover:bg-[#F2ECE1] text-[#231F20] border border-[#DCD5C7] text-xs font-bold uppercase tracking-[0.14em] transition-colors"
+                className="px-8 py-4 rounded-xs bg-white hover:bg-[#F2ECE1] text-[#231F20] border border-[#DCD5C7] text-xs font-bold uppercase tracking-[0.14em] transition-colors"
               >
                 {data.secondaryButton?.text || "Tư vấn dự án"}
               </Link>
@@ -63,7 +58,7 @@ export function HomeHero({ data = DEFAULT_PAGE_HOME_PROPS.hero }: HomeHeroProps)
             <div className="relative rounded-3xl overflow-hidden border border-[#E5DDD0] shadow-2xl bg-white aspect-[4/3] lg:aspect-[5/4] w-full">
               <Image
                 src={data.image?.src || DEFAULT_PAGE_HOME_PROPS.hero.image.src}
-                alt={data.image?.caption || "Không gian triển lãm sơn mài Lã Việt"}
+                alt={data.image?.caption || "Không gian triển lãm sơn mài Là Việt"}
                 fill
                 priority
                 className="object-cover hover:scale-105 transition-transform duration-700"
@@ -83,7 +78,7 @@ export function HomeHero({ data = DEFAULT_PAGE_HOME_PROPS.hero }: HomeHeroProps)
       </div>
 
       {/* Hero Bottom Collections Ribbon (Full-width 4 columns) */}
-      <div className="w-full border-t border-[#E8E2D5] bg-white">
+      <div className="mx-6 sm:mx-10 lg:mx-16 xl:mx-24 border border-[#E8E2D5] bg-white">
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-[#E8E2D5]">
           {collections.map((col, idx) => (
             <div

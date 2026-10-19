@@ -16,7 +16,7 @@ export function HomeNews({ data = DEFAULT_PAGE_HOME_PROPS.newsSection }: HomeNew
     <section id="tin-tuc" className="w-full py-20 lg:py-28 bg-white border-y border-[#E8E2D5] px-6 sm:px-10 lg:px-16 xl:px-24">
       <div className="w-full flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
         <div className="space-y-2">
-          <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
+          <span className="text-xs  font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             {data.tagline}
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">

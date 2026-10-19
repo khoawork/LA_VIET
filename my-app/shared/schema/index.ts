@@ -6,3 +6,4 @@ export * from "./news.schema";
 export * from "./news-cates.schema";
 export * from "./pages";
 export * from "./pages.schema";
+export * from "./menu.schema";

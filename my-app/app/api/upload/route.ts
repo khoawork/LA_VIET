@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import path from "path";
+import fs from "fs/promises";
 import { CloudinaryService } from "@/shared/services/cloudinary.service";
 import { sendSuccess, sendError } from "@/shared/common/api-response";
 import { HttpStatus } from "@/shared/common/http-status";
@@ -19,7 +21,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 /**
  * POST /api/upload
- * Nhận FormData chứa file ảnh và upload trực tiếp lên Cloudinary
+ * Nhận FormData chứa file ảnh và upload lên Cloudinary (hoặc fallback lưu cục bộ vào /public/uploads)
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const formData = await request.formData();
@@ -51,12 +53,38 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  // 4. Upload lên Cloudinary
-  const result = await CloudinaryService.uploadBuffer(buffer, folder);
+  let result: { url: string; publicId: string } | null = null;
+
+  // 4. Nếu có cấu hình Cloudinary, ưu tiên tải lên Cloudinary
+  if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
+    try {
+      result = await CloudinaryService.uploadBuffer(buffer, folder);
+    } catch (error) {
+      console.warn("Cloudinary upload failed, falling back to local storage:", error);
+    }
+  }
+
+  // 5. Fallback lưu vào thư mục public/uploads
+  if (!result) {
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    await fs.mkdir(uploadsDir, { recursive: true });
+
+    const originalName = file.name || "uploaded-image.png";
+    const ext = path.extname(originalName) || ".png";
+    const baseName = path.basename(originalName, ext).replace(/[^a-zA-Z0-9_-]/g, "_");
+    const uniqueFilename = `${baseName}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}${ext}`;
+    const destinationPath = path.join(uploadsDir, uniqueFilename);
+
+    await fs.writeFile(destinationPath, buffer);
+    result = {
+      url: `/uploads/${uniqueFilename}`,
+      publicId: uniqueFilename,
+    };
+  }
 
   return sendSuccess(
     result,
-    "Tải ảnh lên Cloudinary thành công",
+    "Tải ảnh thành công",
     HttpStatus.CREATED
   );
 });

@@ -93,7 +93,7 @@ export function AdminSidebar({
         <div className="h-20 flex items-center justify-between px-5 border-b border-[#851619] shrink-0 bg-[#8f1a1a]">
           <Link href="/admin/dashboard" className="flex items-center gap-3 overflow-hidden">
             {/* Lacquer Brand Seal Icon using #d1a25b */}
-            <div className="w-10 h-10 rounded-full bg-[#d1a25b] text-[#a21f1f] flex items-center justify-center font-black text-sm shrink-0 shadow-md border-2 border-white/20">
+            <div className="w-10 h-10 rounded-full bg-[#d1a25b] text-[#a21f1f] flex items-center justify-center text-sm shrink-0 shadow-md border-2 border-white/20">
               LV
             </div>
             {!collapsed && (

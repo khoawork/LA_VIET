@@ -16,17 +16,27 @@ export function BrandingPreview({ activeTab, data }: Props) {
   if (activeTab === "brand") {
     content = (
       <div className="space-y-3">
-        {/^https?:\/\//i.test(data.logo) && (
+        {Boolean(data.logo) && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={data.logo} alt="Logo thương hiệu" className="max-h-24 max-w-full object-contain" />
+          <div className="p-2 bg-white rounded-lg border border-[#EAE2D5] inline-block shadow-2xs">
+            <img src={data.logo} alt="Logo thương hiệu" className="max-h-24 max-w-full object-contain" />
+          </div>
         )}
-        <h4 className="font-bold">{data.company || "Tên thương hiệu"}</h4>
+        <h4 className="font-bold text-[#1E1917]">{data.company || "Tên thương hiệu"}</h4>
         <p className="text-xs text-[#695D56]">{data.tagline || "Thông điệp ngắn"}</p>
       </div>
     );
   } else if (activeTab === "footer") {
     content = (
       <div className="space-y-4 text-xs text-[#695D56]">
+        {Boolean(data.logo) && (
+          <div className="flex items-center gap-2.5 pb-2 border-b border-[#EAE2D5]">
+            <img src={data.logo} alt="Logo footer" className="h-9 w-9 object-contain" />
+            <span className="font-bold text-[#1E1917] text-sm uppercase tracking-wide">
+              {data.company || "LÀ VIỆT"}
+            </span>
+          </div>
+        )}
         <p>{footer.description || "Nội dung giới thiệu footer"}</p>
         <p className="border-t border-[#EAE2D5] pt-3">{footer.copyright || "Dòng bản quyền"}</p>
       </div>

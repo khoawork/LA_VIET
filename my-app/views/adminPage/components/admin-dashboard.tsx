@@ -20,7 +20,7 @@ export function AdminDashboard() {
               <span>— KHÔNG GIAN QUẢN TRỊ</span>
             </div>
             {/* Đề mục lớn nhất dùng gradient đen - đỏ như chỉ định */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-sm">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl  tracking-tight text-white drop-shadow-sm">
               Chào mừng, {ADMIN_USER.name}
             </h1>
             <p className="text-xs sm:text-sm text-[#f3e9db]/90 leading-relaxed font-normal">

@@ -62,7 +62,7 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
           </label>
           <input
             type="text"
-            placeholder="sơn mài, Lã Việt, nghệ thuật..."
+            placeholder="sơn mài, Là Việt, nghệ thuật..."
             value={data.keywords}
             onChange={(e) => onChange({ ...data, keywords: e.target.value })}
             className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"

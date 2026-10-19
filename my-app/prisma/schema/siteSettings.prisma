@@ -1,6 +1,6 @@
 model SiteSetting {
     id      Int    @id @default(autoincrement())
-    logo    String
+    logo    String @db.Text
     company String
     tagline String
     footer  Json

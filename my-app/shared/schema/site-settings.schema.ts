@@ -46,8 +46,10 @@ export const FooterSchema = z
   })
   .catchall(z.json());
 
+export const LogoSchema = z.string().min(1, "Logo is required");
+
 export const SiteSettingsRequestSchema = z.object({
-  logo: z.url(),
+  logo: LogoSchema,
   company: z
     .string()
     .min(1, "Company is required")
@@ -63,7 +65,7 @@ export const SiteSettingsResponseSchema = SiteSettingsRequestSchema;
 
 // Each Branding tab sends only the fields it owns when editing an existing record.
 export const SiteSettingsBrandPatchSchema = z.strictObject({
-  logo: SiteSettingsRequestSchema.shape.logo,
+  logo: LogoSchema,
   company: SiteSettingsRequestSchema.shape.company,
   tagline: SiteSettingsRequestSchema.shape.tagline,
 });
@@ -71,6 +73,7 @@ export const SiteSettingsBrandPatchSchema = z.strictObject({
 export const SiteSettingsFooterContentPatchSchema = z.strictObject({
   description: FooterSchema.shape.description,
   copyright: FooterSchema.shape.copyright,
+  logo: LogoSchema.optional(),
 });
 
 export const SiteSettingsDetailsPatchSchema = z.strictObject({

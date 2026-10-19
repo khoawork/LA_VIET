@@ -11,7 +11,7 @@ export function HomePartners({ data = DEFAULT_PAGE_HOME_PROPS.partners }: HomePa
     : DEFAULT_PAGE_HOME_PROPS.partners.partners;
 
   return (
-    <section className="w-full py-20 lg:py-28 px-6 sm:px-10 lg:px-16 xl:px-24">
+    <section className="w-full py-14 lg:py-14 px-6 sm:px-10 lg:px-16 xl:px-24">
       <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
         <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
           {data.tagline}

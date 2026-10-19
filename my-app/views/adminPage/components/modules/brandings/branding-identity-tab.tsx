@@ -1,6 +1,7 @@
 import type { SiteSettingsDraft } from "../../../types/brandings/site-settings.type";
 import { BrandingField } from "./branding-field";
 import { BrandingSectionCard } from "./branding-section-card";
+import { BrandingLogoUploader } from "./branding-logo-uploader";
 
 interface Props {
   data: SiteSettingsDraft;
@@ -10,11 +11,10 @@ interface Props {
 export function BrandingIdentityTab({ data, onChange }: Props) {
   return (
     <BrandingSectionCard title="Thương hiệu" description="Logo, tên tổ chức và thông điệp nhận diện.">
-      <BrandingField
-        label="URL logo"
-        type="url"
+      <BrandingLogoUploader
+        label="Logo thương hiệu"
+        description="Tải ảnh logo từ máy tính (PNG, SVG, JPG, WEBP) hoặc nhập URL trực tiếp"
         value={data.logo}
-        placeholder="https://example.com/logo.png"
         onChange={(logo) => onChange({ ...data, logo })}
       />
       <div className="grid gap-4 sm:grid-cols-2">

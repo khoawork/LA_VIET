@@ -33,7 +33,7 @@ export function HomeSpotlight({ data = DEFAULT_PAGE_HOME_PROPS.spotlight }: Home
                 <div className="text-[10px] leading-tight font-medium uppercase tracking-wider">
                   {data.seal?.line1 || "Xưởng sơn mài"}
                   <br />
-                  {data.seal?.line2 || "Lã Việt"}
+                  {data.seal?.line2 || "Là Việt"}
                 </div>
               </div>
             </div>

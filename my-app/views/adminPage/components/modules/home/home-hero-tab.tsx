@@ -42,31 +42,17 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
       </div>
 
       <div className="space-y-4">
-        {/* Tagline & Highlight Word */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-[#1E1917]">
-              Dòng tiêu đề phụ (Tagline)
-            </label>
-            <input
-              type="text"
-              value={data.tagline}
-              onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-[#1E1917]">
-              Từ khóa gạch chân nổi bật
-            </label>
-            <input
-              type="text"
-              value={data.highlightWord}
-              onChange={(e) => onChange({ ...data, highlightWord: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
-            />
-          </div>
+        {/* Highlight Word */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold text-[#1E1917]">
+            Từ khóa gạch chân nổi bật
+          </label>
+          <input
+            type="text"
+            value={data.highlightWord}
+            onChange={(e) => onChange({ ...data, highlightWord: e.target.value })}
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+          />
         </div>
 
         {/* Tiêu đề chính */}
