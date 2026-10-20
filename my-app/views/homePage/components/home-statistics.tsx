@@ -17,7 +17,7 @@ export function HomeStatistics({ data = DEFAULT_PAGE_HOME_PROPS.statistics }: Ho
           <span className="text-xs font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             {data.tagline}
           </span>
-          <h2 className="text-3xl py-2 sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
+          <h2 className="text-3xl py-2 sm:text-4xl lg:text-5xl font-bold text-[#231F20] tracking-tight">
             {data.title}
           </h2>
         </div>
@@ -36,7 +36,7 @@ export function HomeStatistics({ data = DEFAULT_PAGE_HOME_PROPS.statistics }: Ho
             className="p-8 rounded-2xl bg-white border border-[#E8E2D5] shadow-sm hover:border-[#9A221A]/40 hover:shadow-md transition-all group"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-4xl sm:text-5xl font-black text-[#9A221A] tracking-tight">
+              <span className="text-4xl sm:text-5xl font-bold text-[#9A221A] tracking-tight">
                 {stat.num}
               </span>
               <span className="text-[10px] font-semibold text-[#9A221A] bg-[#9A221A]/10 px-2 py-0.5 rounded-full">

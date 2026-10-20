@@ -114,7 +114,7 @@ Lưu ý: gọi `/api/home` **không** làm dữ liệu hiển thị ở `/home` 
 - [schema/schema.prisma](prisma/schema/schema.prisma) đặt generator `prisma-client`, output `../generated/prisma`, datasource `mysql`. Dòng chú thích Postgres là boilerplate; cấu hình thực tế là MySQL.
 - [schema/projects.prisma](prisma/schema/projects.prisma) hiện khai báo `Project`: `id` tự tăng là khóa chính; `name` bắt buộc; `description` nullable; `createdAt` có mặc định `now()`; `updatedAt` được Prisma cập nhật. **Không có `@unique` trên `name`.**
 - [schema/page.prisma](prisma/schema/page.prisma) đang trống. Tên file không tự tạo model hay bảng `Page`.
-- [prisma.service.ts](prisma/prisma.service.ts) tạo một PrismaClient với `PrismaMariaDb`, dùng `DATABASE_HOST`, `DATABASE_PORT` (mặc định 3306), `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME`. Trong môi trường không phải production, instance được giữ trên `globalThis` để giảm tạo lại client khi reload.
+- [prisma.service.ts](prisma/prisma.service.ts) tạo một PrismaClient với `PrismaMariaDb`, dùng `DB_HOST`, `DB_PORT` (mặc định 3306), `DB_USER`, `DB_PASSWORD`, `DB_NAME`. Trong môi trường không phải production, instance được giữ trên `globalThis` để giảm tạo lại client khi reload.
 - [prisma.config.ts](prisma.config.ts) là cấu hình **Prisma CLI**: dùng `DATABASE_URL` và dự kiến migrations tại `prisma/migrations`. Đây là biến khác với bộ biến mà adapter runtime đọc. Muốn cả CLI lẫn ứng dụng hoạt động, cần cấu hình cả hai kiểu kết nối một cách nhất quán.
 - `prisma/generated/prisma/` là mã **được sinh**. Client hiện chứa cả `Project` lẫn `User`, nhưng các file schema hiện chỉ khai báo `Project`. Đây là dấu hiệu client được sinh từ một trạng thái schema khác; không lấy generated code làm nguồn sự thật, và cần generate lại sau khi sửa schema. Không chỉnh sửa bằng tay trong thư mục này.
 - Tại thời điểm đọc, **không thấy** thư mục `prisma/migrations` hoặc file `.env*` trong `my-app/`. Không có căn cứ để khẳng định DB thực tế đang có bảng nào hoặc đã áp dụng migration nào.
@@ -221,7 +221,7 @@ Tránh ghép chuỗi SQL từ input người dùng.
 
 1. Xác định resource, dữ liệu đầu vào/đầu ra và URL. Nếu cần trang, tạo `app/<route>/page.tsx`; nếu cần HTTP endpoint, tạo `app/api/<resource>/route.ts`.
 2. Khai báo model, index và ràng buộc trong `prisma/schema/`; chuẩn bị migration theo quy trình DB của nhóm. Repo hiện chưa có lịch sử migration để làm ví dụ.
-3. Cấu hình biến kết nối: `DATABASE_URL` cho Prisma CLI và `DATABASE_HOST/PORT/USER/PASSWORD/NAME` cho runtime. Không lưu mật khẩu trong repo; `.env*` đã được ignore.
+3. Cấu hình biến kết nối: `DATABASE_URL` cho Prisma CLI và `DB_HOST/PORT/USER/PASSWORD/NAME` cho runtime. Không lưu mật khẩu trong repo; `.env*` đã được ignore.
 4. Chạy Prisma generate sau khi schema đổi; không sửa `prisma/generated/prisma/` bằng tay. Kiểm tra schema và client khớp nhau trước khi dùng model mới.
 5. Viết truy vấn trong repository; viết nghiệp vụ trong service; xác định DTO và Zod schema; route chỉ nhận/validate/gọi service/trả response.
 6. Nối UI đến dữ liệu, sau đó kiểm tra `npm run lint`, `npm run build` và thử các endpoint với DB phù hợp. Các lệnh này cần môi trường DB đúng nếu build hoặc trang/route truy cập DB.

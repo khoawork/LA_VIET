@@ -45,7 +45,7 @@ export function HomeSpotlight({ data = DEFAULT_PAGE_HOME_PROPS.spotlight }: Home
               {data.tagline}
             </span>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#231F20] leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#231F20] leading-tight">
               {data.title}
             </h2>
 

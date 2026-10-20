@@ -2,10 +2,10 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Cấu hình database và dữ liệu mẫu
 
-Prisma CLI dùng `DATABASE_URL`, còn ứng dụng và seed dùng các biến
-`DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD` và
-`DATABASE_NAME`. Hãy cấu hình hai bộ biến này trong `.env` để cùng trỏ đến một
-database MySQL/MariaDB.
+Prisma CLI dùng `DATABASE_URL`, còn ứng dụng và seed dùng `DB_HOST`, `DB_PORT`,
+`DB_USER`, `DB_PASSWORD` và `DB_NAME`. Hãy cấu hình hai bộ biến này trong
+`.env` để cùng trỏ đến một database MySQL/MariaDB. `DB_PORT` mặc định là
+`3306`.
 
 Database mới cần tạo bảng theo Prisma schema trước khi seed. Từ thư mục
 `my-app`, chạy:

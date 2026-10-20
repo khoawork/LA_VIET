@@ -19,7 +19,7 @@ export function HomeNews({ data = DEFAULT_PAGE_HOME_PROPS.newsSection }: HomeNew
           <span className="text-xs  font-bold tracking-[0.22em] text-[#9A221A] uppercase">
             {data.tagline}
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#231F20] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#231F20] tracking-tight">
             {data.title}
           </h2>
         </div>
