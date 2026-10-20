@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import type { MenuItemType } from "@/shared/schema/menu.schema";
 import {
   AlertCircle,
   Eye,
@@ -494,4 +495,3 @@ export default function Header() {
   );
 }
 export { Header };
-
