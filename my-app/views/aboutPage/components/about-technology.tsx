@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Layers, Palette } from "lucide-react";
 import { ABOUT_STATS } from "../services/about.services";
 import type { AboutTechnologySectionType } from "@/shared/schema/pages/about-product.schema";
+import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface AboutTechnologyProps {
   data?: AboutTechnologySectionType;
@@ -10,12 +11,10 @@ interface AboutTechnologyProps {
 export function AboutTechnology({ data }: AboutTechnologyProps) {
   const badge = data?.badge || "KHÁI LƯỢC HỘI HOẠ LIÊN NGÀNH";
   const heading = data?.heading || "TỪ NHỰA CÂY PHÚ THỌ ĐẾN CÔNG NGHỆ BỀ MẶT HIỆN ĐẠI";
-  const desc1 =
-    data?.description1 ||
-    "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.";
-  const desc2 =
-    data?.description2 ||
-    "Thông qua liên minh chiến lược công nghệ cùng Sơn Hoa Việt, Là Việt mở rộng giới hạn của sơn mài truyền thống lên các vật liệu kiến trúc hiện đại: nhôm tấm hàng không, sợi thuỷ tinh đúc khổ lớn, đá tự nhiên và thép chịu nhiệt, đáp ứng các tiêu chuẩn khắt khe về phòng chống trầy xước, chịu ẩm và kháng tia UV trong nội ngoại thất công trình hạng sang.";
+  const description =
+    data?.description ||
+    [data?.description1, data?.description2].filter(Boolean).join("\n\n") ||
+    "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.\n\nThông qua liên minh chiến lược công nghệ cùng Sơn Hoa Việt, Là Việt mở rộng giới hạn của sơn mài truyền thống lên các vật liệu kiến trúc hiện đại: nhôm tấm hàng không, sợi thuỷ tinh đúc khổ lớn, đá tự nhiên và thép chịu nhiệt, đáp ứng các tiêu chuẩn khắt khe về phòng chống trầy xước, chịu ẩm và kháng tia UV trong nội ngoại thất công trình hạng sang.";
   const stats = data?.stats && data.stats.length > 0 ? data.stats : ABOUT_STATS;
   const workshopImage =
     data?.workshop?.image ||
@@ -57,16 +56,12 @@ export function AboutTechnology({ data }: AboutTechnologyProps) {
             </div>
 
             <h2 className="text-[#1E1917] text-2xl sm:text-3xl font-bold uppercase leading-tight">
-              {heading}
+              <FormattedColorText text={heading} as="span" />
             </h2>
 
-            <p className="text-[#5C544E] text-sm sm:text-base font-normal leading-relaxed">
-              {desc1}
-            </p>
-
-            <p className="text-[#5C544E] text-sm sm:text-base font-normal leading-relaxed">
-              {desc2}
-            </p>
+            <div className="text-[#5C544E] text-sm sm:text-base font-normal leading-relaxed whitespace-pre-line space-y-3">
+              <FormattedColorText text={description} as="div" />
+            </div>
           </div>
 
           {/* 4 Stats */}

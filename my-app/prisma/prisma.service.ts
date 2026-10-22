@@ -1,4 +1,3 @@
-
 import { PrismaClient } from "./generated/prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 
@@ -6,32 +5,49 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function requireEnvironmentVariable(name: string, allowEmpty = false) {
-  const value = process.env[name];
-  if (value === undefined || (!allowEmpty && value.length === 0)) {
-    throw new Error(`Missing required database environment variable: ${name}`);
+function getDatabaseConfig() {
+  let host = process.env.DATABASE_HOST || process.env.DB_HOST;
+  let port = Number(process.env.DATABASE_PORT || process.env.DB_PORT);
+  let user = process.env.DATABASE_USER || process.env.DB_USER;
+  let password = process.env.DATABASE_PASSWORD || process.env.DB_PASSWORD;
+  let database = process.env.DATABASE_NAME || process.env.DB_NAME;
+
+  if ((!host || !user) && process.env.DATABASE_URL) {
+    try {
+      const url = new URL(process.env.DATABASE_URL);
+      host = host || url.hostname;
+      port = port || (url.port ? Number(url.port) : 3306);
+      user = user || decodeURIComponent(url.username);
+      password =
+        password !== undefined
+          ? password
+          : decodeURIComponent(url.password);
+      database = database || url.pathname.replace(/^\//, "");
+    } catch {
+      // Fallback
+    }
   }
-  return value;
+
+  return {
+    host: host || "localhost",
+    port: port || 3306,
+    user: user || "root",
+    password: password || "",
+    database: database || "la_viet_db",
+  };
 }
 
 function createPrismaClient() {
-  const host = requireEnvironmentVariable("DB_HOST");
-  const user = requireEnvironmentVariable("DB_USER");
-  const password = requireEnvironmentVariable("DB_PASSWORD", true);
-  const database = requireEnvironmentVariable("DB_NAME");
-  const port = Number(process.env.DB_PORT ?? 3306);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new Error("DB_PORT must be an integer between 1 and 65535.");
-  }
+  const config = getDatabaseConfig();
 
   const adapter = new PrismaMariaDb({
-    host,
-    port,
-    user,
-    password,
-    database,
-    connectionLimit: 10,
-    acquireTimeout: 10_000,
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
+    database: config.database,
+    connectionLimit: 20,
+    acquireTimeout: 30_000,
     idleTimeout: 300,
     allowPublicKeyRetrieval: true,
   });

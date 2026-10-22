@@ -37,12 +37,12 @@ export default function HomePage({ initialData = DEFAULT_PAGE_HOME_PROPS }: Home
 
   return (
     <div className="w-full flex flex-col">
-      <HomeHero data={pageData.hero} />
-      <HomeStatistics data={pageData.statistics} />
-      <HomeSpotlight data={pageData.spotlight} />
-      <HomeNews data={pageData.newsSection} />
-      <HomePartners data={pageData.partners} />
-      <HomeCta data={pageData.cta} />
+      <HomeHero data={pageData?.hero} />
+      <HomeStatistics data={pageData?.statistics} />
+      <HomeSpotlight data={pageData?.spotlight} />
+      <HomeNews data={pageData?.newsSection} />
+      <HomePartners data={pageData?.partners} />
+      <HomeCta data={pageData?.cta} />
     </div>
   );
 }

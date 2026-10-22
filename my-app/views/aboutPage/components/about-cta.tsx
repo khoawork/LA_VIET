@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, BookOpen } from "lucide-react";
 import type { AboutCtaSectionType } from "@/shared/schema/pages/about-product.schema";
+import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface AboutCtaProps {
   data?: AboutCtaSectionType;
@@ -36,12 +37,12 @@ export function AboutCta({ data }: AboutCtaProps) {
             </div>
 
             <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight uppercase leading-snug">
-              {heading}
+              <FormattedColorText text={heading} as="span" />
             </h2>
 
-            <p className="text-xs sm:text-sm text-rose-100/80 leading-relaxed max-w-xl">
-              {description}
-            </p>
+            <div className="text-xs sm:text-sm text-rose-100/80 leading-relaxed max-w-xl">
+              <FormattedColorText text={description} as="p" />
+            </div>
           </div>
 
           {/* Right action buttons column */}

@@ -42,6 +42,7 @@ export interface AboutPartner {
   name: string;
   role: string;
   category: string;
+  logo?: string;
 }
 
 export interface AboutTestimonial {

@@ -2,6 +2,7 @@
 
 import { Sparkles, Layers, Image as ImageIcon } from "lucide-react";
 import type { HomeHeroSectionType } from "@/views/homePage/types/pagehome.type";
+import { ColorHighlightInput } from "../color-highlight-input";
 
 interface HomeHeroTabProps {
   data: HomeHeroSectionType;
@@ -56,15 +57,15 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
         </div>
 
         {/* Tiêu đề chính */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#1E1917]">
-            Tiêu đề chính Hero (Heading 1)
-          </label>
-          <textarea
+        <div>
+          <ColorHighlightInput
+            label="Tiêu đề chính Hero (Heading 1)"
+            placeholder="Nhập tiêu đề chính... (bôi đen chữ để chọn màu, in nghiêng, gạch chân)"
+            multiline
             rows={3}
             value={data.title}
-            onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            onChange={(newTitle) => onChange({ ...data, title: newTitle })}
+            className="font-bold text-sm"
           />
         </div>
 

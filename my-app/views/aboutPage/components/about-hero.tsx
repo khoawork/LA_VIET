@@ -1,5 +1,6 @@
 import { Sparkles, Award } from "lucide-react";
 import type { AboutHeroSectionType } from "@/shared/schema/pages/about-product.schema";
+import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface AboutHeroProps {
   data?: AboutHeroSectionType;
@@ -31,12 +32,12 @@ export function AboutHero({ data }: AboutHeroProps) {
           </div>
 
           <h1 className="flex flex-col tracking-tight text-3xl sm:text-4xl lg:text-5xl font-bold uppercase text-[#1E1917] leading-tight sm:leading-[1.15]">
-            <span>{heading}</span>
+            <FormattedColorText text={heading} as="span" />
           </h1>
 
-          <p className="text-[#5C544E] text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
-            {description}
-          </p>
+          <div className="text-[#5C544E] text-base sm:text-lg leading-relaxed font-normal max-w-3xl">
+            <FormattedColorText text={description} as="p" />
+          </div>
 
           <div className="flex items-center gap-3 pt-2">
             <span className="h-1 w-12 rounded-full bg-[#9A1C1F]" />

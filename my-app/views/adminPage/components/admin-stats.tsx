@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Package,
@@ -9,10 +12,61 @@ import {
   Mail,
   Newspaper,
   ArrowUpRight,
+  Loader2,
 } from "lucide-react";
 import { ADMIN_STATS } from "../services/admin.services";
+import { AdminStatItem } from "../types/admin.type";
 
 export function AdminStats() {
+  const [stats, setStats] = useState<AdminStatItem[]>(ADMIN_STATS);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchStats() {
+      try {
+        const res = await fetch("/api/admin/stats");
+        if (!res.ok) return;
+        const json = await res.json();
+        const data = json?.data;
+        if (data && isMounted) {
+          setStats((prev) =>
+            prev.map((item) => {
+              if (item.id === "products" && data.products !== undefined) {
+                return {
+                  ...item,
+                  value: String(data.products).padStart(2, "0"),
+                };
+              }
+              if (item.id === "project" && data.projects !== undefined) {
+                return {
+                  ...item,
+                  value: String(data.projects).padStart(2, "0"),
+                };
+              }
+              if (item.id === "news" && data.news !== undefined) {
+                return {
+                  ...item,
+                  value: String(data.news).padStart(2, "0"),
+                };
+              }
+              return item;
+            }),
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch admin stats:", error);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    }
+
+    fetchStats();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const getIcon = (iconName: string) => {
     const props = { className: "w-5 h-5 text-[#a21f1f]" };
     switch (iconName) {
@@ -40,9 +94,9 @@ export function AdminStats() {
   return (
     <div
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
     >
-      {ADMIN_STATS.map((stat) => {
+      {stats.map((stat) => {
         const CardWrapper = stat.href ? Link : "div";
 
         return (
@@ -65,9 +119,13 @@ export function AdminStats() {
                 {stat.title}
               </div>
               <div className="flex items-baseline justify-between mt-1">
-                <span className="text-3xl sm:text-4xl font-black text-[#1E1917] tracking-tight">
-                  {stat.value}
-                </span>
+                {isLoading ? (
+                  <span className="inline-block w-12 h-9 bg-stone-200 animate-pulse rounded-md mt-1" />
+                ) : (
+                  <span className="text-3xl sm:text-4xl font-black text-[#1E1917] tracking-tight">
+                    {stat.value}
+                  </span>
+                )}
                 <span className="text-xs text-[#a21f1f] font-semibold truncate ml-2">
                   {stat.statusText}
                 </span>

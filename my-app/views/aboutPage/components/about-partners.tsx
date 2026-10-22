@@ -50,8 +50,17 @@ export function AboutPartners({ data }: AboutPartnersProps) {
               key={idx}
               className="h-32 p-4 bg-white rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-[#EAE2D5] flex flex-col justify-center items-center text-center gap-1.5 transition-transform hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="w-9 h-9 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-1 border border-[#EAE2D5]/60">
-                {getPartnerIcon(partner.category)}
+              <div className="w-10 h-10 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-1 border border-[#EAE2D5]/60 overflow-hidden relative">
+                {partner.logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="w-full h-full object-contain p-1"
+                  />
+                ) : (
+                  getPartnerIcon(partner.category)
+                )}
               </div>
               <div className="text-[#1E1917] text-xs font-bold uppercase tracking-tight">
                 {partner.name}
@@ -81,7 +90,7 @@ export function AboutPartners({ data }: AboutPartnersProps) {
 
             <div className="flex-1 flex flex-col gap-2 text-center sm:text-left">
               <blockquote className="text-[#1E1917] text-base sm:text-lg font-medium leading-relaxed italic">
-                {testimonial.quote}
+                {"\"" + testimonial.quote + "\""}
               </blockquote>
 
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-2">
