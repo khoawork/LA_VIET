@@ -179,6 +179,7 @@ export type SiteSettingScalarFieldEnum = (typeof SiteSettingScalarFieldEnum)[key
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  keycloakId: 'keycloakId',
   fullname: 'fullname',
   email: 'email',
   username: 'username',
@@ -313,6 +314,7 @@ export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 export const UserOrderByRelevanceFieldEnum = {
+  keycloakId: 'keycloakId',
   fullname: 'fullname',
   email: 'email',
   username: 'username',

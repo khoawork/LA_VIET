@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   AlertCircle,
   Loader2,
+  KeyRound,
 } from "lucide-react";
 
 export function AdminLogin() {
@@ -24,7 +25,56 @@ export function AdminLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSsoLoading, setIsSsoLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // 1. Tự động bắt mã Authorization Code từ SSO Hub khi Keycloak redirect về
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      setIsSsoLoading(true);
+      setErrorMessage(null);
+      const redirectUri = window.location.origin + window.location.pathname;
+
+      fetch("/api/auth/sso-callback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, redirectUri }),
+      })
+        .then(async (res) => {
+          const result = await res.json().catch(() => null);
+          if (res.ok && result?.success) {
+            router.push(callbackUrl);
+            router.refresh();
+          } else {
+            setErrorMessage(result?.message || "Xác thực SSO thất bại.");
+          }
+        })
+        .catch(() => {
+          setErrorMessage("Không thể kết nối đến máy chủ SSO.");
+        })
+        .finally(() => {
+          setIsSsoLoading(false);
+        });
+    }
+  }, [searchParams, router, callbackUrl]);
+
+  // 2. Chuyển hướng sang SSO Hub Keycloak
+  const handleSSORedirect = () => {
+    setIsSsoLoading(true);
+    const redirectUri = window.location.origin + window.location.pathname;
+    const keycloakBaseUrl =
+      process.env.NEXT_PUBLIC_KEYCLOAK_URL || "http://localhost:8888";
+    const clientId = "app-b";
+
+    const authUrl = `${keycloakBaseUrl}/realms/sso-platform/protocol/openid-connect/auth?client_id=${encodeURIComponent(
+      clientId
+    )}&response_type=code&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&scope=openid profile email`;
+
+    window.location.href = authUrl;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,7 +132,7 @@ export function AdminLogin() {
         {/* Login Card */}
         <div className="bg-[#f7f5f1] rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#f3e9db]">
           {/* Brand Seal Header */}
-          <div className="text-center space-y-3 mb-8">
+          <div className="text-center space-y-3 mb-6">
             <div className="w-16 h-16 mx-auto rounded-2xl bg-[#a21f1f] text-[#d1a25b] flex items-center justify-center font-black text-2xl shadow-lg border-2 border-[#d1a25b]/60">
               LV
             </div>
@@ -104,8 +154,45 @@ export function AdminLogin() {
             </div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          {/* NÚT ĐĂNG NHẬP SSO HUB (NỔI BẬT) */}
+          <div className="mb-6">
+            <button
+              type="button"
+              onClick={handleSSORedirect}
+              disabled={isSsoLoading || isLoading}
+              className="w-full py-3.5 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-[#d1a25b] to-[#b88c47] hover:from-[#dfb36e] hover:to-[#c69a54] text-[#1E1917] shadow-lg shadow-[#d1a25b]/30 flex items-center justify-center gap-2.5 transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            >
+              {isSsoLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-[#1E1917]" />
+                  <span>Đang kết nối SSO Hub...</span>
+                </>
+              ) : (
+                <>
+                  <KeyRound className="w-4 h-4 text-[#1E1917]" />
+                  <span>ĐĂNG NHẬP VỚI SSO HUB</span>
+                </>
+              )}
+            </button>
+            <p className="text-[11px] text-center text-stone-500 mt-2">
+              Dùng chung tài khoản với Trung Tâm Công Nghiệp Sáng Tạo
+            </p>
+          </div>
+
+          {/* Dải phân cách */}
+          <div className="relative mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#EAE2D5]" />
+            </div>
+            <div className="relative flex justify-center text-[10px]">
+              <span className="bg-[#f7f5f1] px-3 font-bold uppercase tracking-wider text-stone-400">
+                HOẶC TÀI KHOẢN CỤC BỘ
+              </span>
+            </div>
+          </div>
+
+          {/* Form đăng nhập cục bộ */}
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-1.5">
               <label
@@ -125,7 +212,7 @@ export function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="admin@laviet.vn"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
                 />
               </div>
             </div>
@@ -162,13 +249,13 @@ export function AdminLogin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  placeholder="Nhập mật khẩu"
-                  className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
+                  placeholder="••••••••"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-600 cursor-pointer"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-stone-400 hover:text-stone-700 transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -182,24 +269,29 @@ export function AdminLogin() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3.5 px-4 rounded-xl bg-[#a21f1f] hover:bg-[#851619] active:scale-[0.99] text-white font-bold text-xs uppercase tracking-widest transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-70 cursor-pointer"
+              disabled={isLoading || isSsoLoading}
+              className="w-full py-3 px-4 rounded-xl font-bold text-xs uppercase tracking-wider bg-[#a21f1f] hover:bg-[#831618] text-white shadow-lg shadow-[#a21f1f]/20 flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-50 cursor-pointer"
             >
               {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>Đang xác thực...</span>
+                </>
               ) : (
-                <ArrowRight className="w-4 h-4" />
+                <>
+                  <span>ĐĂNG NHẬP HỆ THỐNG</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
               )}
-              <span>{isLoading ? "ĐANG XÁC THỰC..." : "ĐĂNG NHẬP"}</span>
             </button>
           </form>
 
-
-
-          {/* Security Note */}
-          <div className="mt-6 pt-4 border-t border-[#f3e9db] flex items-center justify-center gap-2 text-[11px] text-stone-600 font-medium">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Khu vực bảo mật nội bộ dành riêng cho Quản trị viên</span>
+          {/* Footer note */}
+          <div className="mt-6 pt-5 border-t border-[#f3e9db] text-center">
+            <p className="text-[11px] font-bold text-stone-500 uppercase tracking-widest flex items-center justify-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#a21f1f]" />
+              Bảo mật định danh cấp Doanh nghiệp
+            </p>
           </div>
         </div>
       </div>

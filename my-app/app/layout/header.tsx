@@ -15,6 +15,7 @@ import {
   Mail,
   ShieldCheck,
   X,
+  KeyRound,
 } from "lucide-react";
 
 interface CurrentUser {
@@ -162,8 +163,12 @@ export default function Header() {
     if (user) {
       setIsMenuOpen((prev) => !prev);
     } else {
-      setLoginError(null);
-      setIsLoginModalOpen(true);
+      const redirectUri = window.location.origin + "/admin/login";
+      const keycloakBaseUrl =
+        process.env.NEXT_PUBLIC_KEYCLOAK_URL || "http://localhost:8888";
+      window.location.href = `${keycloakBaseUrl}/realms/sso-platform/protocol/openid-connect/auth?client_id=app-b&response_type=code&redirect_uri=${encodeURIComponent(
+        redirectUri
+      )}&scope=openid profile email`;
     }
   }
 
@@ -450,6 +455,32 @@ export default function Header() {
                 <span className="leading-relaxed">{loginError}</span>
               </div>
             )}
+
+            {/* Nút Đăng nhập SSO Hub */}
+            <div className="mb-4">
+              <button
+                type="button"
+                onClick={() => {
+                  const redirectUri = window.location.origin + "/admin/login";
+                  const keycloakBaseUrl = process.env.NEXT_PUBLIC_KEYCLOAK_URL || "http://localhost:8888";
+                  window.location.href = `${keycloakBaseUrl}/realms/sso-platform/protocol/openid-connect/auth?client_id=app-b&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=openid profile email`;
+                }}
+                className="w-full py-2.5 px-4 rounded-xl font-bold text-xs bg-[#d1a25b] hover:bg-[#b88c47] text-[#1E1917] shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <KeyRound className="w-4 h-4 text-[#1E1917]" />
+                <span>ĐĂNG NHẬP VỚI SSO HUB</span>
+              </button>
+              <div className="relative my-3">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#EAE2D5]" />
+                </div>
+                <div className="relative flex justify-center text-[10px]">
+                  <span className="bg-white px-2 font-bold uppercase tracking-wider text-stone-400">
+                    HOẶC TÀI KHOẢN NỘI BỘ
+                  </span>
+                </div>
+              </div>
+            </div>
 
             {/* Form đăng nhập */}
             <form onSubmit={handleQuickLogin} className="space-y-4">
