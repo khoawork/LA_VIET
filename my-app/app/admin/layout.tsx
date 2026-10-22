@@ -10,11 +10,9 @@ export default function AdminRootLayout({
 }) {
   const pathname = usePathname();
 
-  // Màn hình đăng nhập hiển thị toàn màn hình, không kèm sidebar
   if (pathname === "/admin/login") {
     return <>{children}</>;
   }
 
-  // Khung layout cố định sidebar bên trái, chỉ hoán đổi nội dung bên phải khi chọn nav con
   return <AdminLayout>{children}</AdminLayout>;
 }
