@@ -65,13 +65,21 @@ export const AboutTechnologySectionSchema = z.object({
   heading: z
     .string()
     .default("TỪ NHỰA CÂY PHÚ THỌ ĐẾN CÔNG NGHỆ BỀ MẶT HIỆN ĐẠI"),
+  description: z
+    .string()
+    .optional()
+    .default(
+      "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.\n\nThông qua liên minh chiến lược công nghệ cùng Sơn Hoa Việt, Là Việt mở rộng giới hạn của sơn mài truyền thống lên các vật liệu kiến trúc hiện đại: nhôm tấm hàng không, sợi thuỷ tinh đúc khổ lớn, đá tự nhiên và thép chịu nhiệt, đáp ứng các tiêu chuẩn khắt khe về phòng chống trầy xước, chịu ẩm và kháng tia UV trong nội ngoại thất công trình hạng sang.",
+    ),
   description1: z
     .string()
+    .optional()
     .default(
       "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.",
     ),
   description2: z
     .string()
+    .optional()
     .default(
       "Thông qua liên minh chiến lược công nghệ cùng Sơn Hoa Việt, Là Việt mở rộng giới hạn của sơn mài truyền thống lên các vật liệu kiến trúc hiện đại: nhôm tấm hàng không, sợi thuỷ tinh đúc khổ lớn, đá tự nhiên và thép chịu nhiệt, đáp ứng các tiêu chuẩn khắt khe về phòng chống trầy xước, chịu ẩm và kháng tia UV trong nội ngoại thất công trình hạng sang.",
     ),
@@ -277,7 +285,8 @@ export const AboutOrganizationSectionSchema = z.object({
 export const AboutPartnerSchema = z.object({
   name: z.string(),
   role: z.string(),
-  category: z.string(),
+  category: z.string().optional().default("technology"),
+  logo: z.string().optional().default(""),
 });
 
 export const AboutTestimonialSchema = z.object({
@@ -295,31 +304,37 @@ export const AboutPartnersSectionSchema = z.object({
       name: "SƠN HOA VIỆT",
       role: "ĐỐI TÁC R&D KỸ THUẬT",
       category: "technology",
+      logo: "",
     },
     {
       name: "VINPEARL RESORTS",
       role: "KHÔNG GIAN VĂN HOÁ ĐẠI SẢNH",
       category: "hospitality",
+      logo: "",
     },
     {
       name: "BẢO TÀNG MỸ THUẬT",
       role: "GIÁM ĐỊNH & PHỤC CHẾ",
       category: "heritage",
+      logo: "",
     },
     {
       name: "PARK HYATT SAIGON",
       role: "BESPOKE SUITE ARTWORKS",
       category: "hospitality",
+      logo: "",
     },
     {
       name: "MASTERISE HOMES",
       role: "VÁCH TRANG TRÍ SẢNH VIP",
       category: "real-estate",
+      logo: "",
     },
     {
       name: "AA CORPORATION",
       role: "GIA CÔNG BỀ MẶT NỘI THẤT",
       category: "interior",
+      logo: "",
     },
   ]),
   testimonial: AboutTestimonialSchema.default({
@@ -391,6 +406,8 @@ export const AboutPagePropsSchema = z.object({
   technologySection: AboutTechnologySectionSchema.default({
     badge: "KHÁI LƯỢC HỘI HOẠ LIÊN NGÀNH",
     heading: "TỪ NHỰA CÂY PHÚ THỌ ĐẾN CÔNG NGHỆ BỀ MẶT HIỆN ĐẠI",
+    description:
+      "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.\n\nThông qua liên minh chiến lược công nghệ cùng Sơn Hoa Việt, Là Việt mở rộng giới hạn của sơn mài truyền thống lên các vật liệu kiến trúc hiện đại: nhôm tấm hàng không, sợi thuỷ tinh đúc khổ lớn, đá tự nhiên và thép chịu nhiệt, đáp ứng các tiêu chuẩn khắt khe về phòng chống trầy xước, chịu ẩm và kháng tia UV trong nội ngoại thất công trình hạng sang.",
     description1:
       "Là Việt được hình thành từ trăn trở giải phóng sơn mài khỏi khuôn khổ tranh treo tường thuần tuý. Chúng tôi kế thừa tinh hoa nhựa mủ sơn tự nhiên thu hoạch từ vùng gò đồi Phú Thọ – chất liệu có độ sâu quang học và tính cảm xúc mà không hoá chất nào thay thế được.",
     description2:
@@ -553,31 +570,37 @@ export const AboutPagePropsSchema = z.object({
         name: "SƠN HOA VIỆT",
         role: "ĐỐI TÁC R&D KỸ THUẬT",
         category: "technology",
+        logo: "",
       },
       {
         name: "VINPEARL RESORTS",
         role: "KHÔNG GIAN VĂN HOÁ ĐẠI SẢNH",
         category: "hospitality",
+        logo: "",
       },
       {
         name: "BẢO TÀNG MỸ THUẬT",
         role: "GIÁM ĐỊNH & PHỤC CHẾ",
         category: "heritage",
+        logo: "",
       },
       {
         name: "PARK HYATT SAIGON",
         role: "BESPOKE SUITE ARTWORKS",
         category: "hospitality",
+        logo: "",
       },
       {
         name: "MASTERISE HOMES",
         role: "VÁCH TRANG TRÍ SẢNH VIP",
         category: "real-estate",
+        logo: "",
       },
       {
         name: "AA CORPORATION",
         role: "GIA CÔNG BỀ MẶT NỘI THẤT",
         category: "interior",
+        logo: "",
       },
     ],
     testimonial: {

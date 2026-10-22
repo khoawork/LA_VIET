@@ -19,9 +19,13 @@ import {
   Trash2,
   Crown,
   Quote,
+  UploadCloud,
+  Loader2,
 } from "lucide-react";
 import type { AboutPagePropsType } from "@/shared/schema/pages/about-product.schema";
 import { DEFAULT_ABOUT_PAGE_CONFIG } from "@/modules/pages/page-about/page-about.type";
+import { ColorHighlightInput } from "./color-highlight-input";
+import { AboutImageUploader } from "./about-image-uploader";
 
 type ActiveTab = "hero" | "technology" | "values" | "organization" | "partners" | "cta";
 
@@ -37,6 +41,52 @@ export function AdminAboutView() {
   );
 
   // Toast / Alert Notification
+  const [uploadingPartnerIdx, setUploadingPartnerIdx] = useState<number | null>(null);
+
+  const handleUploadPartnerLogo = async (index: number, file: File) => {
+    if (!file) return;
+    try {
+      setUploadingPartnerIdx(index);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "La_Viet_Partners");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const json = await res.json().catch(() => null);
+
+      if (res.ok && json?.success && json?.data?.url) {
+        const updated = [...pageProps.partnersSection.items];
+        updated[index] = { ...updated[index], logo: json.data.url };
+        setPageProps({
+          ...pageProps,
+          partnersSection: { ...pageProps.partnersSection, items: updated },
+        });
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const base64 = e.target?.result as string;
+          if (base64) {
+            const updated = [...pageProps.partnersSection.items];
+            updated[index] = { ...updated[index], logo: base64 };
+            setPageProps({
+              ...pageProps,
+              partnersSection: { ...pageProps.partnersSection, items: updated },
+            });
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (err) {
+      console.error("Failed to upload partner logo:", err);
+    } finally {
+      setUploadingPartnerIdx(null);
+    }
+  };
+
   const [alert, setAlert] = useState<{
     type: "success" | "error";
     message: string;
@@ -70,6 +120,15 @@ export function AdminAboutView() {
             technologySection: {
               ...prev.technologySection,
               ...(incoming.technologySection || {}),
+              description:
+                incoming.technologySection?.description ||
+                [
+                  incoming.technologySection?.description1,
+                  incoming.technologySection?.description2,
+                ]
+                  .filter(Boolean)
+                  .join("\n\n") ||
+                prev.technologySection.description,
               stats:
                 incoming.technologySection?.stats && incoming.technologySection.stats.length > 0
                   ? incoming.technologySection.stats
@@ -77,6 +136,10 @@ export function AdminAboutView() {
               workshop: {
                 ...prev.technologySection.workshop,
                 ...(incoming.technologySection?.workshop || {}),
+                badge:
+                  incoming.technologySection?.workshop?.badge ||
+                  prev.technologySection.workshop.badge ||
+                  "XƯỞNG CHẾ TÁC HỘI HỌA",
               },
             },
             valuesSection: {
@@ -185,29 +248,6 @@ export function AdminAboutView() {
     }
   };
 
-  // 1. Hero Metrics: Add & Remove
-  const handleAddHeroMetric = () => {
-    setPageProps((prev) => ({
-      ...prev,
-      herosection: {
-        ...prev.herosection,
-        metrics: [
-          ...prev.herosection.metrics,
-          { value: "01+", label: "CHỈ SỐ MỚI" },
-        ],
-      },
-    }));
-  };
-
-  const handleRemoveHeroMetric = (index: number) => {
-    setPageProps((prev) => ({
-      ...prev,
-      herosection: {
-        ...prev.herosection,
-        metrics: prev.herosection.metrics.filter((_, i) => i !== index),
-      },
-    }));
-  };
 
   // 2. Tech Stats: Add & Remove
   const handleAddTechStat = () => {
@@ -377,6 +417,7 @@ export function AdminAboutView() {
             name: "TÊN ĐỐI TÁC MỚI",
             role: "VAI TRÒ HỢP TÁC",
             category: "technology",
+            logo: "",
           },
         ],
       },
@@ -589,109 +630,39 @@ export function AdminAboutView() {
               />
             </div>
 
-            <div className="md:col-span-2 space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Tiêu đề chính lớn (Heading) *
-              </label>
-              <input
-                type="text"
+            <div className="md:col-span-2">
+              <ColorHighlightInput
+                label="Tiêu đề chính lớn (Heading) *"
+                placeholder="Nhập tiêu đề... (bôi đen đoạn chữ để chọn màu sắc)"
                 value={pageProps.herosection.heading}
-                onChange={(e) =>
+                onChange={(newHeading) =>
                   setPageProps({
                     ...pageProps,
-                    herosection: { ...pageProps.herosection, heading: e.target.value },
+                    herosection: { ...pageProps.herosection, heading: newHeading },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="font-bold uppercase tracking-tight"
               />
             </div>
 
-            <div className="md:col-span-2 space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Đoạn văn giới thiệu sứ mệnh *
-              </label>
-              <textarea
+            <div className="md:col-span-2">
+              <ColorHighlightInput
+                label="Đoạn văn giới thiệu sứ mệnh *"
+                placeholder="Nhập đoạn văn sứ mệnh... (bôi đen đoạn chữ để chọn màu sắc)"
+                multiline
                 rows={4}
                 value={pageProps.herosection.description}
-                onChange={(e) =>
+                onChange={(newDesc) =>
                   setPageProps({
                     ...pageProps,
-                    herosection: { ...pageProps.herosection, description: e.target.value },
+                    herosection: { ...pageProps.herosection, description: newDesc },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="font-medium"
               />
             </div>
           </div>
 
-          {/* Metrics List with Add/Remove */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-[#1E1917]">Danh sách Chỉ số cam kết tại Hero</h3>
-                <p className="text-xs text-stone-500 mt-0.5">Cho phép thêm mới hoặc xóa từng chỉ số</p>
-              </div>
-
-              <button
-                type="button"
-                onClick={handleAddHeroMetric}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Thêm chỉ số</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {pageProps.herosection.metrics.map((metric, idx) => (
-                <div key={idx} className="p-4 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] space-y-2 relative">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-bold text-stone-500 uppercase tracking-widest block">
-                      Chỉ số #{idx + 1}
-                    </label>
-                    {pageProps.herosection.metrics.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveHeroMetric(idx)}
-                        className="text-stone-400 hover:text-red-700 p-1 cursor-pointer transition-colors"
-                        title="Xóa chỉ số này"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                  <input
-                    type="text"
-                    value={metric.value}
-                    onChange={(e) => {
-                      const updated = [...pageProps.herosection.metrics];
-                      updated[idx].value = e.target.value;
-                      setPageProps({
-                        ...pageProps,
-                        herosection: { ...pageProps.herosection, metrics: updated },
-                      });
-                    }}
-                    placeholder="Giá trị (VD: 100%)"
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#a21f1f]"
-                  />
-                  <input
-                    type="text"
-                    value={metric.label}
-                    onChange={(e) => {
-                      const updated = [...pageProps.herosection.metrics];
-                      updated[idx].label = e.target.value;
-                      setPageProps({
-                        ...pageProps,
-                        herosection: { ...pageProps.herosection, metrics: updated },
-                      });
-                    }}
-                    placeholder="Nhãn (VD: SƠN TA TỰ NHIÊN)"
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-medium text-stone-700"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       )}
 
@@ -723,54 +694,48 @@ export function AdminAboutView() {
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Tiêu đề (Heading)
-              </label>
-              <input
-                type="text"
+            <div>
+              <ColorHighlightInput
+                label="Tiêu đề (Heading)"
+                placeholder="Nhập tiêu đề... (bôi đen đoạn chữ để chọn màu sắc)"
                 value={pageProps.technologySection.heading}
-                onChange={(e) =>
+                onChange={(newHeading) =>
                   setPageProps({
                     ...pageProps,
-                    technologySection: { ...pageProps.technologySection, heading: e.target.value },
+                    technologySection: { ...pageProps.technologySection, heading: newHeading },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                className="font-bold"
               />
             </div>
 
-            <div className="md:col-span-2 space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Đoạn văn 1: Nguồn gốc Sơn Ta Phú Thọ
-              </label>
-              <textarea
-                rows={3}
-                value={pageProps.technologySection.description1}
-                onChange={(e) =>
+            <div className="md:col-span-2">
+              <ColorHighlightInput
+                label="Đoạn văn giới thiệu công nghệ & chất liệu *"
+                placeholder="Nhập nội dung đoạn văn... (bôi đen đoạn chữ để chọn màu sắc)"
+                multiline
+                rows={5}
+                value={
+                  pageProps.technologySection.description ||
+                  [
+                    pageProps.technologySection.description1,
+                    pageProps.technologySection.description2,
+                  ]
+                    .filter(Boolean)
+                    .join("\n\n")
+                }
+                onChange={(newDesc) =>
                   setPageProps({
                     ...pageProps,
-                    technologySection: { ...pageProps.technologySection, description1: e.target.value },
+                    technologySection: {
+                      ...pageProps.technologySection,
+                      description: newDesc,
+                      description1: newDesc,
+                      description2: "",
+                    },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-medium text-[#1E1917]"
-              />
-            </div>
-
-            <div className="md:col-span-2 space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Đoạn văn 2: Liên minh công nghệ Sơn Hoa Việt & Vật liệu mới
-              </label>
-              <textarea
-                rows={3}
-                value={pageProps.technologySection.description2}
-                onChange={(e) =>
-                  setPageProps({
-                    ...pageProps,
-                    technologySection: { ...pageProps.technologySection, description2: e.target.value },
-                  })
-                }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-medium text-[#1E1917]"
+                className="font-medium"
               />
             </div>
           </div>
@@ -875,33 +840,51 @@ export function AdminAboutView() {
             </div>
           </div>
 
-          {/* Workshop Image */}
+          {/* Workshop Block with Upload & Badge Input */}
           <div className="pt-4 border-t border-[#f3e9db] space-y-4">
             <h3 className="text-sm font-bold text-[#1E1917]">Khối Hình ảnh Xưởng Chế Tác</h3>
+
+            {/* Image Uploader */}
+            <AboutImageUploader
+              label="Hình ảnh xưởng chế tác"
+              description="Tải ảnh từ máy tính (PNG, JPG, WEBP) hoặc dán link ảnh trực tiếp"
+              value={pageProps.technologySection.workshop.image}
+              onChange={(newUrl) =>
+                setPageProps({
+                  ...pageProps,
+                  technologySection: {
+                    ...pageProps.technologySection,
+                    workshop: { ...pageProps.technologySection.workshop, image: newUrl },
+                  },
+                })
+              }
+            />
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                  Đường dẫn ảnh xưởng (URL)
+                  Xưởng chế tác hội họa (Huy hiệu / Badge) *
                 </label>
                 <input
                   type="text"
-                  value={pageProps.technologySection.workshop.image}
+                  value={pageProps.technologySection.workshop.badge || "XƯỞNG CHẾ TÁC HỘI HỌA"}
                   onChange={(e) =>
                     setPageProps({
                       ...pageProps,
                       technologySection: {
                         ...pageProps.technologySection,
-                        workshop: { ...pageProps.technologySection.workshop, image: e.target.value },
+                        workshop: { ...pageProps.technologySection.workshop, badge: e.target.value },
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-[#f3e9db] text-xs text-stone-800"
+                  placeholder="VD: XƯỞNG CHẾ TÁC HỘI HỌA"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
                 />
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                  Mô tả kỹ thuật ủ ẩm / mài nước
+                  Mô tả kỹ thuật ủ ẩm / mài nước (Caption)
                 </label>
                 <input
                   type="text"
@@ -915,7 +898,8 @@ export function AdminAboutView() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-[#f3e9db] text-xs text-stone-800"
+                  placeholder="VD: Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-stone-800"
                 />
               </div>
             </div>
@@ -1340,7 +1324,7 @@ export function AdminAboutView() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {pageProps.partnersSection.items.map((partner, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] space-y-1.5 relative">
+                <div key={idx} className="p-3.5 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] space-y-2 relative">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-stone-500 uppercase">Đối tác #{idx + 1}</span>
                     {pageProps.partnersSection.items.length > 1 && (
@@ -1365,8 +1349,8 @@ export function AdminAboutView() {
                         partnersSection: { ...pageProps.partnersSection, items: updated },
                       });
                     }}
-                    placeholder="Tên đối tác"
-                    className="w-full px-2.5 py-1 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                    placeholder="Tên đối tác (VD: SƠN HOA VIỆT)"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
                   />
                   <input
                     type="text"
@@ -1379,9 +1363,82 @@ export function AdminAboutView() {
                         partnersSection: { ...pageProps.partnersSection, items: updated },
                       });
                     }}
-                    placeholder="Vai trò hợp tác"
-                    className="w-full px-2.5 py-1 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
+                    placeholder="Vai trò hợp tác (VD: ĐỐI TÁC R&D KỸ THUẬT)"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
                   />
+
+                  {/* Logo Upload Box */}
+                  <div className="pt-2 border-t border-[#f3e9db] flex items-center gap-2.5">
+                    <input
+                      type="file"
+                      id={`partner-logo-upload-${idx}`}
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml,image/jpg"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleUploadPartnerLogo(idx, file);
+                        e.target.value = "";
+                      }}
+                    />
+
+                    <label
+                      htmlFor={`partner-logo-upload-${idx}`}
+                      className="w-12 h-12 rounded-lg border border-[#f3e9db] bg-white flex items-center justify-center shrink-0 cursor-pointer overflow-hidden group hover:border-[#9A1C1F] transition-colors relative shadow-2xs"
+                      title="Bấm để tải ảnh logo đối tác từ máy"
+                    >
+                      {uploadingPartnerIdx === idx ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-[#9A1C1F]" />
+                      ) : partner.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={partner.logo}
+                          alt={partner.name}
+                          className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-stone-400 group-hover:text-[#9A1C1F]">
+                          <UploadCloud className="w-4 h-4" />
+                          <span className="text-[8px] font-medium mt-0.5">Logo</span>
+                        </div>
+                      )}
+                    </label>
+
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-semibold text-stone-600">Logo đối tác:</label>
+                        {partner.logo && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = [...pageProps.partnersSection.items];
+                              updated[idx].logo = "";
+                              setPageProps({
+                                ...pageProps,
+                                partnersSection: { ...pageProps.partnersSection, items: updated },
+                              });
+                            }}
+                            className="text-[10px] text-rose-600 hover:underline cursor-pointer"
+                          >
+                            Gỡ logo
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        type="text"
+                        value={partner.logo || ""}
+                        onChange={(e) => {
+                          const updated = [...pageProps.partnersSection.items];
+                          updated[idx].logo = e.target.value;
+                          setPageProps({
+                            ...pageProps,
+                            partnersSection: { ...pageProps.partnersSection, items: updated },
+                          });
+                        }}
+                        placeholder="Dán URL hoặc bấm ô để tải ảnh"
+                        className="w-full px-2 py-1 rounded-lg bg-white border border-[#f3e9db] text-[11px] text-stone-700"
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -1483,20 +1540,18 @@ export function AdminAboutView() {
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#1E1917] uppercase tracking-wider">
-                Tiêu đề chính (Heading)
-              </label>
-              <input
-                type="text"
+            <div>
+              <ColorHighlightInput
+                label="Tiêu đề chính (Heading)"
+                placeholder="Nhập tiêu đề... (bôi đen đoạn chữ để chọn màu sắc)"
                 value={pageProps.ctaSection.heading}
-                onChange={(e) =>
+                onChange={(newHeading) =>
                   setPageProps({
                     ...pageProps,
-                    ctaSection: { ...pageProps.ctaSection, heading: e.target.value },
+                    ctaSection: { ...pageProps.ctaSection, heading: newHeading },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                className="font-bold"
               />
             </div>
 

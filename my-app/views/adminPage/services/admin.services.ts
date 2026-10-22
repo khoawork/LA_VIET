@@ -45,28 +45,24 @@ export const ADMIN_NAV_SECTIONS: AdminNavSection[] = [
         label: "Sản phẩm",
         href: "/admin/products",
         icon: "Package",
-        badge: "32",
       },
       {
         id: "project",
         label: "Dự án",
         href: "/admin/project",
         icon: "FolderKanban",
-        badge: "24",
       },
       {
         id: "news",
         label: "Tin tức",
         href: "/admin/news",
         icon: "Newspaper",
-        badge: "CMS",
       },
       {
         id: "contact",
         label: "Liên hệ",
         href: "/admin/contact",
         icon: "Mail",
-        badge: "4",
       },
     ],
   },
@@ -111,7 +107,7 @@ export const ADMIN_STATS: AdminStatItem[] = [
   {
     id: "products",
     title: "Sản phẩm",
-    value: "32",
+    value: "0",
     statusText: "đang quản lý",
     icon: "Package",
     href: "/admin/products",
@@ -119,7 +115,7 @@ export const ADMIN_STATS: AdminStatItem[] = [
   {
     id: "project",
     title: "Dự án",
-    value: "24",
+    value: "0",
     statusText: "đang triển khai",
     icon: "FolderKanban",
     href: "/admin/project",
@@ -127,18 +123,10 @@ export const ADMIN_STATS: AdminStatItem[] = [
   {
     id: "news",
     title: "Tin tức",
-    value: "15",
+    value: "0",
     statusText: "bài đã xuất bản",
     icon: "Newspaper",
     href: "/admin/news",
-  },
-  {
-    id: "contact",
-    title: "Hộp thư liên hệ",
-    value: "08",
-    statusText: "4 thư chưa đọc",
-    icon: "Mail",
-    href: "/admin/contact",
   },
 ];
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { HomeHeroSectionType } from "../types/pagehome.type";
 import { DEFAULT_PAGE_HOME_PROPS } from "../types/pagehome.type";
+import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface HomeHeroProps {
   data?: HomeHeroSectionType;
@@ -20,16 +21,18 @@ export function HomeHero({ data = DEFAULT_PAGE_HOME_PROPS.hero }: HomeHeroProps)
           {/* Left Content */}
           <div className="lg:col-span-7 space-y-7">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-[#231F20] leading-[1.24]">
-              {data.highlightWord && data.title.includes(data.highlightWord) ? (
+              {/<[a-z][\s\S]*>/i.test(data.title) ? (
+                <FormattedColorText text={data.title} as="span" />
+              ) : data.highlightWord && data.title.includes(data.highlightWord) ? (
                 <>
-                  {data.title.split(data.highlightWord)[0]}
+                  <FormattedColorText text={data.title.split(data.highlightWord)[0]} as="span" />
                   <span className="text-[#9A221A] underline decoration-[#9A221A]/30 underline-offset-8">
                     {data.highlightWord}
                   </span>
-                  {data.title.split(data.highlightWord)[1]}
+                  <FormattedColorText text={data.title.split(data.highlightWord)[1]} as="span" />
                 </>
               ) : (
-                data.title
+                <FormattedColorText text={data.title} as="span" />
               )}
             </h1>
 
