@@ -54,18 +54,14 @@ export class PageHomeService {
       }
     }
 
-    // 3. Khối Tin tức Trang chủ (Articles Images)
-    if (Array.isArray(cloned.newsSection?.articles)) {
-      for (const article of cloned.newsSection.articles) {
-        if (isBase64Image(article.img)) {
-          try {
-            const uploadRes = await CloudinaryService.uploadString(article.img);
-            article.img = uploadRes.url;
-          } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : String(err);
-            throw new Error(`Upload ảnh bài viết lên Cloudinary thất bại: ${msg}`);
-          }
-        }
+    // 3. Logo con dấu của khối Tiêu điểm dự án
+    if (isBase64Image(cloned.spotlight?.seal?.logo)) {
+      try {
+        const uploadRes = await CloudinaryService.uploadString(cloned.spotlight.seal.logo);
+        cloned.spotlight.seal.logo = uploadRes.url;
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        throw new Error(`Upload logo con dấu thất bại: ${msg}`);
       }
     }
 

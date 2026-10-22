@@ -1,5 +1,6 @@
 import { prisma } from "@/prisma/prisma.service";
-import { CreateProductType } from "./product.type";
+import { CreateProductType, ProductQueryType } from "./product.type";
+import type { Prisma } from "@/prisma/generated/prisma/client";
 
 export class ProductRepository {
     async createProduct(data: CreateProductType) {
@@ -28,18 +29,39 @@ export class ProductRepository {
         });
     }
 
-    async getAllProducts(categoryId?: number) {
-        return await prisma.product.findMany({
-            where: categoryId ? { categoryId } : undefined,
-            include: {
-                category: {
-                    select: {
-                        name: true,
+    async getAllProducts(query: ProductQueryType) {
+        const where: Prisma.ProductWhereInput = {
+            ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+            ...(query.search ? {
+                OR: [
+                    { name: { contains: query.search } },
+                    { title: { contains: query.search } },
+                    { description: { contains: query.search } },
+                ],
+            } : {}),
+        };
+        const [products, totalItems] = await prisma.$transaction([
+            prisma.product.findMany({
+                where,
+                skip: (query.page - 1) * query.limit,
+                take: query.limit,
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                    slug: true,
+                    description: true,
+                    category: {
+                        select: {
+                            name: true,
+                        },
                     },
                 },
-            },
-            orderBy: { id: "desc" },
-        });
+                orderBy: { id: "desc" },
+            }),
+            prisma.product.count({ where }),
+        ]);
+        return { products, totalItems };
     }
 
     async updateProduct(id: number, data: CreateProductType) {

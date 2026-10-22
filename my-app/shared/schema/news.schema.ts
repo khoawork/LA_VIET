@@ -65,6 +65,10 @@ export const NewsQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(10),
   search: z.string().trim().optional(),
   categoryId: z.coerce.number().int().positive().optional(),
+  categoryIds: z.string()
+    .regex(/^[1-9]\d*(,[1-9]\d*)*$/)
+    .transform((value) => [...new Set(value.split(",").map(Number))])
+    .optional(),
   sortBy: z.enum(["id", "name", "date", "createdAt"]).default("createdAt"),
   sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });

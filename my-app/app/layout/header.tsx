@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import type { MenuItemType } from "@/shared/schema/menu.schema";
 import {
   AlertCircle,
   Eye,
@@ -24,10 +25,60 @@ interface CurrentUser {
   avatar?: string | null;
 }
 
+interface HeaderNavLink {
+  label: string;
+  href: string;
+}
+
+function HeaderNavLinks({
+  links,
+  pathname,
+  mobile = false,
+  onNavigate,
+}: {
+  links: HeaderNavLink[];
+  pathname: string | null;
+  mobile?: boolean;
+  onNavigate?: () => void;
+}) {
+  const currentPath = pathname?.replace(/\/+$/, "") || "/";
+
+  return links.map((link) => {
+    const linkPath = link.href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+    const active = pathname !== null && (
+      currentPath === linkPath ||
+      (linkPath !== "/" && currentPath.startsWith(`${linkPath}/`))
+    );
+
+    return (
+      <Link
+        key={`${link.href}-${link.label}`}
+        href={link.href}
+        onClick={onNavigate}
+        aria-current={active ? "page" : undefined}
+        className={mobile
+          ? `border-b-2 py-1 transition-colors ${active
+              ? "border-[#B71C1C] font-bold text-[#B71C1C]"
+              : "border-[#EAE2D5]/50 hover:text-[#B71C1C]"}`
+          : `border-b-[3px] py-1.5 uppercase transition-colors ${active
+              ? "border-[#B71C1C] font-semibold text-[#B71C1C]"
+              : "border-transparent hover:text-[#B71C1C]"}`}
+      >
+        {link.label}
+      </Link>
+    );
+  });
+}
+
+function PathAwareNavLinks(props: Omit<Parameters<typeof HeaderNavLinks>[0], "pathname">) {
+  const pathname = usePathname();
+  return <HeaderNavLinks {...props} pathname={pathname} />;
+}
+
 export default function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navLinks, setNavLinks] = useState<{ label: string; href: string }[]>([]);
+  const [navLinks, setNavLinks] = useState<HeaderNavLink[]>([]);
   const [brand, setBrand] = useState<{ logo?: string; company?: string; tagline?: string }>({
     company: "LÀ VIỆT",
     tagline: "SƠN MÀI HỘI HOẠ LIÊN NGÀNH",
@@ -164,37 +215,33 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF6F0] border-b border-[#EAE2D5] transition-all">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-20 flex items-center justify-between relative">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 min-h-20 py-2 flex items-center justify-between relative">
         {/* Brand / Logo */}
-        <Link href="/" className="flex items-center gap-3 group select-none">
+        <Link href="/" className="group flex shrink-0 items-center gap-3 select-none">
           {brand.logo && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={brand.logo}
-              alt={brand.company || "Logo"}
-              className="h-10 w-10 sm:h-11 sm:w-11 object-contain shrink-0"
-            />
-          )}
-          <div className="flex flex-col">
-            <span className="font-bold text-xl sm:text-2xl text-[#1E1917] tracking-wider uppercase leading-tight group-hover:text-[#9A1C1F] transition-colors">
-              {brand.company || "LÀ VIỆT"}
+            <span className="flex shrink-0 self-stretch items-center border-r-2 border-[#E5D7C4] pr-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={brand.logo}
+                alt={brand.company || "Logo"}
+                className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+              />
             </span>
-            <span className="text-[9px] sm:text-[10px] tracking-[0.25em] text-[#695D56] font-medium uppercase mt-0.5">
+          )}
+          <span className="min-w-0">
+            <strong className="block text-[22px] font-bold uppercase leading-none tracking-wide text-[#B91F1F] transition-colors group-hover:text-[#981919] sm:text-[25px]">
+              {brand.company || "LÀ VIỆT"}
+            </strong>
+            <span className="mt-1 block whitespace-nowrap text-[12px] font-semibold uppercase leading-none tracking-wide text-[#6D6058] sm:text-[13px]">
               {brand.tagline || "SƠN MÀI HỘI HOẠ LIÊN NGÀNH"}
             </span>
-          </div>
+          </span>
         </Link>
 
-        <nav className="hidden xl:flex items-center gap-7 2xl:gap-9 text-[13px] font-medium tracking-wider text-[#4A423D]">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="hover:text-[#9A1C1F] transition-colors uppercase py-1"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden xl:flex items-center gap-7 2xl:gap-9 text-[15px] 2xl:text-base font-medium tracking-wider text-[#4A423D]">
+          <Suspense fallback={<HeaderNavLinks links={navLinks} pathname={null} />}>
+            <PathAwareNavLinks links={navLinks} />
+          </Suspense>
         </nav>
 
         {/* Action Group */}
@@ -331,17 +378,10 @@ export default function Header() {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden bg-[#FAF6F0] border-t border-[#EAE2D5] px-6 py-5 space-y-4 shadow-lg animate-in fade-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col space-y-3 text-sm font-semibold tracking-wider text-[#4A423D]">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#9A1C1F] py-1 border-b border-[#EAE2D5]/50 transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="flex flex-col space-y-3 text-base font-semibold tracking-wider text-[#4A423D]">
+            <Suspense fallback={<HeaderNavLinks links={navLinks} pathname={null} mobile onNavigate={() => setMobileMenuOpen(false)} />}>
+              <PathAwareNavLinks links={navLinks} mobile onNavigate={() => setMobileMenuOpen(false)} />
+            </Suspense>
           </nav>
 
           <div className="pt-2 space-y-2">

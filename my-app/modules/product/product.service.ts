@@ -1,5 +1,5 @@
 import { productRepository, ProductRepository } from "./product.repository";
-import { CreateProductType } from "./product.type";
+import { CreateProductType, ProductQueryType } from "./product.type";
 
 export class ProductService {
     constructor(private readonly productRepository: ProductRepository) {}
@@ -12,8 +12,8 @@ export class ProductService {
         return await this.productRepository.getProductById(id);
     }
 
-    async getAllProducts(categoryId?: number) {
-        return await this.productRepository.getAllProducts(categoryId);
+    async getAllProducts(query: ProductQueryType) {
+        return await this.productRepository.getAllProducts(query);
     }
 
     async updateProduct(id: number, data: CreateProductType) {

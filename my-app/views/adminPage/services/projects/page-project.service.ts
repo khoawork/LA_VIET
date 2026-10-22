@@ -11,8 +11,11 @@ import type {
 
 async function readError(response: Response) {
   const body = await response.json().catch(() => null);
-  const issue = body?.errors?.[0];
-  return issue ? `${issue.field}: ${issue.message}` : body?.message || "Không thể xử lý dự án. Vui lòng thử lại.";
+  const issue = Array.isArray(body?.errors) ? body.errors[0] : null;
+  if (issue && typeof issue.message === "string") {
+    return issue.field ? `${issue.field}: ${issue.message}` : issue.message;
+  }
+  return body?.message || "Không thể xử lý dự án. Vui lòng thử lại.";
 }
 
 export async function getPageProject(): Promise<PageProjectData> {

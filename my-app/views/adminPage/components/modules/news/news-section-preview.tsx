@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   Eye,
   Sparkles,
@@ -11,7 +10,6 @@ import {
   Clock,
   ArrowRight,
   ChevronRight,
-  ChevronDown,
   Globe,
   BookOpenCheck,
   Mail,
@@ -191,7 +189,7 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
         {/* PREVIEW: ARTICLES & GRID CONFIG */}
         {activeTab === "articles" && (
           <div className="space-y-4">
-            <div className="flex items-end justify-between border-b border-[#EAE2D5] pb-3">
+            <div className="border-b border-[#EAE2D5] pb-3">
               <div>
                 <span className="text-[10px] font-bold tracking-[0.2em] text-[#9A1C1F] uppercase block">
                   {data.articlesSection.eyebrow}
@@ -200,13 +198,17 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
                   {data.articlesSection.title}
                 </h3>
               </div>
-              <div className="flex items-center gap-1 text-xs text-[#695D56]">
-                <span>{data.articlesSection.sortLabel}</span>
-                <span className="font-bold text-[#9A1C1F] bg-[#FAF3E8] px-2 py-1 rounded text-[11px] inline-flex items-center gap-1">
-                  {data.articlesSection.defaultSort}
-                  <ChevronDown className="w-3 h-3" />
+            </div>
+
+            <div className="flex flex-wrap gap-1.5">
+              {(data.articlesSection.filterGroups.length > 0
+                ? data.articlesSection.filterGroups
+                : [{ name: "TẤT CẢ BẢN TIN", categories: [] }]
+              ).map((group, index) => (
+                <span key={index} className={`rounded px-2 py-1 text-[10px] font-bold ${index === 0 ? "bg-[#9A1C1F] text-white" : "bg-[#EFE8DC] text-[#423A35]"}`}>
+                  {group.name || "Nhóm chưa đặt tên"}
                 </span>
-              </div>
+              ))}
             </div>
 
             {/* Sample Grid Preview */}
@@ -235,9 +237,6 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
               ))}
             </div>
 
-            <div className="text-center py-2 bg-[#FAF8F5] rounded-lg border border-dashed border-[#EAE2D5] text-[11px] text-[#695D56]">
-              Hiển thị tối đa <span className="font-bold text-[#9A1C1F]">{data.articlesSection.itemsPerPage}</span> bài viết mỗi trang
-            </div>
           </div>
         )}
 

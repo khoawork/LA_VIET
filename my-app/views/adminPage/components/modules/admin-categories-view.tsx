@@ -83,6 +83,7 @@ function newsApiError(body: { message?: string; errors?: { field?: string; messa
 
 export function AdminCategoriesView() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("news");
+  const [visitedTabs, setVisitedTabs] = useState<MainTab[]>(["news"]);
   const [projectCreateOpen, setProjectCreateOpen] = useState(false);
   const [productCreateOpen, setProductCreateOpen] = useState(false);
   const [categoryManagerTab, setCategoryManagerTab] = useState<CategoryManagerTab | null>(null);
@@ -360,7 +361,7 @@ export function AdminCategoriesView() {
     const timer = window.setTimeout(async () => {
       setNewsLoading(true);
       setNewsListError("");
-      const params = new URLSearchParams({ page: String(newsPage), limit: "20" });
+      const params = new URLSearchParams({ page: String(newsPage), limit: "10" });
       if (debouncedSearch) params.set("search", debouncedSearch);
       if (selectedFilterCategory) params.set("categoryId", selectedFilterCategory);
 
@@ -622,6 +623,7 @@ export function AdminCategoriesView() {
                   setProjectCreateOpen(false);
                   setProductCreateOpen(false);
                   setActiveMainTab(tab.id);
+                  setVisitedTabs((current) => current.includes(tab.id) ? current : [...current, tab.id]);
                 }}
                 aria-current={activeMainTab === tab.id ? "page" : undefined}
                 className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl px-2.5 py-2 text-xs font-bold transition-all cursor-pointer sm:gap-2 sm:px-4 sm:py-2.5 sm:text-sm ${
@@ -668,21 +670,27 @@ export function AdminCategoriesView() {
       </div>
       </div>
 
-      {activeMainTab === "projects" && (
-        <ProjectDataTab
-          categories={dataCategories.projectCategories}
-          filterHost={filterHost}
-          createOpen={projectCreateOpen}
-          onCloseCreate={() => setProjectCreateOpen(false)}
-        />
+      {visitedTabs.includes("projects") && (
+        <div className={activeMainTab === "projects" ? "flex min-h-0 flex-1 flex-col" : "hidden"}>
+          <ProjectDataTab
+            active={activeMainTab === "projects"}
+            categories={dataCategories.projectCategories}
+            filterHost={filterHost}
+            createOpen={projectCreateOpen}
+            onCloseCreate={() => setProjectCreateOpen(false)}
+          />
+        </div>
       )}
-      {activeMainTab === "products" && (
-        <AdminProductDataTab
-          categories={dataCategories.productCategories}
-          filterHost={filterHost}
-          createOpen={productCreateOpen}
-          onCloseCreate={() => setProductCreateOpen(false)}
-        />
+      {visitedTabs.includes("products") && (
+        <div className={activeMainTab === "products" ? "flex min-h-0 flex-1 flex-col" : "hidden"}>
+          <AdminProductDataTab
+            active={activeMainTab === "products"}
+            categories={dataCategories.productCategories}
+            filterHost={filterHost}
+            createOpen={productCreateOpen}
+            onCloseCreate={() => setProductCreateOpen(false)}
+          />
+        </div>
       )}
 
       {/* TAB BÀI VIẾT TIN TỨC */}

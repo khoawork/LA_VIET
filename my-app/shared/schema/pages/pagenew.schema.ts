@@ -55,12 +55,10 @@ export const NewsFeaturedSectionSchema = z.object({
 export const NewsArticlesSectionSchema = z.object({
   eyebrow: z.string().default("DÒNG SỰ KIỆN & HỒ SƠ KỸ THUẬT"),
   title: z.string().default("CÁC BÀI VIẾT VÀ BÁO CÁO MỚI NHẤT"),
-  sortLabel: z.string().default("Sắp xếp theo:"),
-  defaultSort: z.string().default("Mới nhất"),
-  emptyText: z
-    .string()
-    .default("Hiện chưa có bài viết nào trong chuyên mục này."),
-  itemsPerPage: z.number().int().positive().default(6),
+  filterGroups: z.array(z.object({
+    name: z.string().min(1, "Tên nhóm lọc không được để trống"),
+    categories: z.array(z.number().int().positive()).default([]),
+  })).default([]),
 });
 
 /**

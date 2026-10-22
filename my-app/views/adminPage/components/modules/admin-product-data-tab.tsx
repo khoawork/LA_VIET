@@ -18,15 +18,18 @@ interface ProductCategory {
   name: string;
 }
 
-interface ProductItem {
+interface ProductListItem {
   id: number;
   name: string;
-  title: string;
   description: string;
   image: string;
   slug: string;
-  categoryId: number;
   category: { name: string };
+}
+
+interface ProductItem extends ProductListItem {
+  title: string;
+  categoryId: number;
   props: unknown;
 }
 
@@ -115,10 +118,11 @@ function makeSlug(value: string): string {
 
 async function responseError(response: Response): Promise<string> {
   const body = await response.json().catch(() => null);
-  const issue = body?.errors?.[0];
-  return issue
-    ? `${issue.field}: ${issue.message}`
-    : body?.message || "Không thể xử lý sản phẩm.";
+  const issue = Array.isArray(body?.errors) ? body.errors[0] : null;
+  if (issue && typeof issue.message === "string") {
+    return issue.field ? `${issue.field}: ${issue.message}` : issue.message;
+  }
+  return body?.message || "Không thể xử lý sản phẩm.";
 }
 
 const inputClass =
@@ -379,74 +383,91 @@ function ProductFormModal({
 }
 
 export function AdminProductDataTab({
+  active,
   categories,
   filterHost,
   createOpen,
   onCloseCreate,
 }: {
+  active: boolean;
   categories: ProductCategory[];
   filterHost: HTMLDivElement | null;
   createOpen: boolean;
   onCloseCreate: () => void;
 }) {
-  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [products, setProducts] = useState<ProductListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search.trim().toLowerCase(), 500);
   const [categoryId, setCategoryId] = useState("");
   const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const searchPending = search.trim().toLowerCase() !== debouncedSearch;
   const [editingProduct, setEditingProduct] = useState<ProductItem | null>(
     null,
   );
+  const [loadingProductId, setLoadingProductId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [cleanupWarning, setCleanupWarning] = useState("");
 
   useEffect(() => {
-    let mounted = true;
-    fetch("/api/products", { cache: "no-store" })
+    if (searchPending) return;
+    const controller = new AbortController();
+    const params = new URLSearchParams({ page: String(page), limit: "10" });
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    if (categoryId) params.set("categoryId", categoryId);
+
+    fetch(`/api/products?${params}`, { cache: "no-store", signal: controller.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error(await responseError(response));
-        const data = await response.json();
-        if (!Array.isArray(data))
+        const result = await response.json();
+        if (!result.success || !Array.isArray(result.data) || !result.meta)
           throw new Error("Dữ liệu sản phẩm không hợp lệ.");
-        if (mounted) {
-          setProducts(data);
+        if (!controller.signal.aborted) {
+          if (page > result.meta.totalPages) {
+            setPage(result.meta.totalPages);
+            return;
+          }
+          setProducts(result.data);
+          setTotalPages(result.meta.totalPages);
           setError("");
         }
       })
       .catch((cause: unknown) => {
-        if (mounted)
+        if (!controller.signal.aborted)
           setError(
             cause instanceof Error ? cause.message : "Không thể tải sản phẩm.",
           );
       })
       .finally(() => {
-        if (mounted) setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       });
-    return () => {
-      mounted = false;
-    };
-  }, [refresh]);
+    return () => controller.abort();
+  }, [page, debouncedSearch, searchPending, categoryId, refresh]);
 
-  const filtered = products.filter(
-    (product) =>
-      (!categoryId || product.categoryId === Number(categoryId)) &&
-      `${product.name} ${product.title} ${product.description}`
-        .toLowerCase()
-        .includes(debouncedSearch),
-  );
-  const pageSize = 10;
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
-  const visibleProducts = filtered.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
+  const visibleProducts = products;
 
-  async function handleDelete(product: ProductItem) {
+  async function openEdit(id: number) {
+    setLoadingProductId(id);
+    setError("");
+    setMessage("");
+    try {
+      const response = await fetch(`/api/products/${id}`, { cache: "no-store" });
+      if (!response.ok) throw new Error(await responseError(response));
+      const product = await response.json() as ProductItem;
+      if (product?.id !== id) throw new Error("Dữ liệu sản phẩm không hợp lệ.");
+      setEditingProduct(product);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Không thể tải sản phẩm.");
+    } finally {
+      setLoadingProductId(null);
+    }
+  }
+
+  async function handleDelete(product: ProductListItem) {
     if (
       !window.confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${product.name}"?`)
     )
@@ -469,9 +490,9 @@ export function AdminProductDataTab({
       }
       setMessage(`Đã xóa sản phẩm "${product.name}" thành công.`);
       setLoading(true);
-      if (visibleProducts.length === 1 && currentPage > 1)
-        setPage(currentPage - 1);
-      setRefresh((value) => value + 1);
+      if (visibleProducts.length === 1 && page > 1)
+        setPage(page - 1);
+      else setRefresh((value) => value + 1);
     } catch (cause) {
       setError(
         cause instanceof Error ? cause.message : "Không thể xóa sản phẩm.",
@@ -518,7 +539,7 @@ export function AdminProductDataTab({
           {cleanupWarning}
         </p>
       )}
-      {filterHost &&
+      {active && filterHost &&
         createPortal(
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:gap-3">
             <div className="relative min-w-0">
@@ -528,6 +549,7 @@ export function AdminProductDataTab({
                 onChange={(event) => {
                   setSearch(event.target.value);
                   setPage(1);
+                  if (event.target.value.trim().toLowerCase() !== debouncedSearch) setLoading(true);
                 }}
                 placeholder="Tìm sản phẩm theo tên, tiêu đề, mô tả..."
                 className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm focus:border-[#a21f1f] focus:outline-none sm:py-2.5"
@@ -541,17 +563,18 @@ export function AdminProductDataTab({
               onChange={(value) => {
                 setCategoryId(value);
                 setPage(1);
+                setLoading(true);
               }}
             />
           </div>,
           filterHost,
         )}
       <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
-        {loading ? (
+        {loading || searchPending ? (
           <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
             <Loader2 className="h-5 w-5 animate-spin" /> Đang tải sản phẩm...
           </div>
-        ) : filtered.length === 0 ? (
+        ) : visibleProducts.length === 0 ? (
           <p className="py-16 text-center text-sm text-stone-500">
             Chưa có sản phẩm phù hợp. Bấm nút &quot;Tạo sản phẩm mới&quot; ở
             trên để thêm sản phẩm.
@@ -618,19 +641,20 @@ export function AdminProductDataTab({
                     <div className="grid grid-cols-2 gap-1">
                       <button
                         type="button"
-                        disabled={deletingId === product.id}
-                        onClick={() => {
-                          setEditingProduct(product);
-                          setMessage("");
-                        }}
+                        disabled={deletingId === product.id || loadingProductId === product.id}
+                        onClick={() => void openEdit(product.id)}
                         className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC] disabled:opacity-50"
                         aria-label={`Sửa sản phẩm ${product.name}`}
                       >
-                        <Edit className="h-4 w-4" /> Sửa
+                        {loadingProductId === product.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Edit className="h-4 w-4" />
+                        )} Sửa
                       </button>
                       <button
                         type="button"
-                        disabled={deletingId === product.id}
+                        disabled={deletingId === product.id || loadingProductId === product.id}
                         onClick={() => handleDelete(product)}
                         className="inline-flex items-center justify-center gap-1.5 rounded-lg px-2 py-2 font-semibold text-red-700 hover:bg-red-50 disabled:opacity-50"
                         aria-label={`Xóa sản phẩm ${product.name}`}
@@ -651,10 +675,13 @@ export function AdminProductDataTab({
         )}
       </div>
       <PagePagination
-        page={currentPage}
+        page={page}
         totalPages={totalPages}
-        disabled={loading}
-        onPageChange={setPage}
+        disabled={loading || searchPending}
+        onPageChange={(nextPage) => {
+          setPage(nextPage);
+          setLoading(true);
+        }}
       />
       {(createOpen || editingProduct) && (
         <ProductFormModal

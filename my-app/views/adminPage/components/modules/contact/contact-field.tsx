@@ -74,7 +74,7 @@ export function ContactListHeader({
       <button
         type="button"
         onClick={onAdd}
-        className="inline-flex items-center gap-1 text-xs font-bold text-[#9A1C1F]"
+        className="inline-flex cursor-pointer items-center gap-1 rounded-lg px-2 py-1 text-xs font-bold text-[#9A1C1F] transition-colors hover:bg-[#FAF1EC] hover:text-[#7A1518]"
       >
         <Plus className="h-4 w-4" /> {addLabel}
       </button>

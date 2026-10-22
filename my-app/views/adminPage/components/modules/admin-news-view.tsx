@@ -5,7 +5,6 @@ import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import type { PageNewPropsType } from "@/views/newPages/types/pagenew.type";
 import { DEFAULT_PAGE_NEW_PROPS } from "@/views/newPages/types/pagenew.type";
 import {
-  NewsMainNav,
   NewsMainTab,
   NewsHeaderActions,
   NewsTabNav,
@@ -27,8 +26,6 @@ interface AdminNewsViewProps {
 
 export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps) {
   const [activeMainTab, setActiveMainTab] = useState<NewsMainTab>(initialMainTab);
-  const [articlesCount, setArticlesCount] = useState<number | undefined>(undefined);
-  const [categoriesCount, setCategoriesCount] = useState<number | undefined>(undefined);
 
   // States dành cho Tab "Nội dung Website (CMS)"
   const [activeSectionTab, setActiveSectionTab] = useState<SectionTab>("header");
@@ -56,16 +53,6 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
     window.addEventListener("popstate", parseUrlTab);
     return () => window.removeEventListener("popstate", parseUrlTab);
   }, []);
-
-  // Chuyển tab chính và cập nhật query URL
-  const handleSelectMainTab = (tab: NewsMainTab) => {
-    setActiveMainTab(tab);
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      url.searchParams.set("tab", tab);
-      window.history.pushState(null, "", url.toString());
-    }
-  };
 
   // 1. Tải cấu trúc trang từ API
   useEffect(() => {
@@ -168,15 +155,7 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
 
   return (
     <div className="space-y-6">
-      {/* 1. THANH ĐIỀU HƯỚNG CHÍNH (PRIMARY NAV) DÀNH CHO TOÀN BỘ PHÂN HỆ TIN TỨC */}
-      <NewsMainNav
-        activeTab={activeMainTab}
-        onSelectTab={handleSelectMainTab}
-        articlesCount={articlesCount}
-        categoriesCount={categoriesCount}
-      />
-
-      {/* 2. TAB: NỘI DUNG WEBSITE (PAGE CMS 6 SECTIONS) */}
+      {/* NỘI DUNG WEBSITE (PAGE CMS 6 SECTIONS) */}
       {activeMainTab === "content" && (
         <div className="space-y-6">
           {/* Alert Banner */}
@@ -281,19 +260,14 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
         </div>
       )}
 
-      {/* 3. TAB: BÀI VIẾT TIN TỨC (NEWS ARTICLES MANAGEMENT) */}
+      {/* BÀI VIẾT TIN TỨC (NEWS ARTICLES MANAGEMENT) */}
       {activeMainTab === "articles" && (
-        <NewsArticlesManagement
-          onArticlesCountChange={setArticlesCount}
-          onCategoriesCountChange={setCategoriesCount}
-        />
+        <NewsArticlesManagement />
       )}
 
-      {/* 4. TAB: CHUYÊN MỤC TIN TỨC (CATEGORY-NEWS MANAGEMENT) */}
+      {/* CHUYÊN MỤC TIN TỨC (CATEGORY-NEWS MANAGEMENT) */}
       {activeMainTab === "categories" && (
-        <NewsCategoriesManagement
-          onCategoriesCountChange={setCategoriesCount}
-        />
+        <NewsCategoriesManagement />
       )}
     </div>
   );

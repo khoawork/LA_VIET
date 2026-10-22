@@ -551,15 +551,7 @@ async function seedPages(
   seededNews: Awaited<ReturnType<typeof seedNews>>,
 ) {
   const homeProps = structuredClone(DEFAULT_PAGE_HOME_PROPS);
-  homeProps.newsSection.articles = seededNews.slice(0, 3).map((article) => ({
-    id: article.id,
-    tag: article.category.name,
-    tagColor: "bg-[#9A221A] text-white",
-    img: article.image,
-    date: article.date.toLocaleDateString("vi-VN"),
-    title: article.name,
-    desc: article.description,
-  }));
+  homeProps.newsSection.articleIds = seededNews.slice(0, 3).map((article) => article.id);
   await ensurePage("Trang Chủ", "home", homeProps);
 
   await ensurePage(

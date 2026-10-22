@@ -19,6 +19,23 @@ import { ContactCtaTab } from "./contact-cta-tab";
 import { ContactExperienceTab } from "./contact-experience-tab";
 import { ContactSectionPreview } from "./contact-section-preview";
 
+function oneContactPerChannel(props: PageContactProps): PageContactProps {
+  return {
+    ...props,
+    contactInfo: {
+      ...props.contactInfo,
+      channels: props.contactInfo.channels.flatMap((channel) =>
+        channel.contacts.length > 1
+          ? channel.contacts.map((contact, index) => ({
+              title: index === 0 ? channel.title : `${channel.title} ${index + 1}`,
+              contacts: [contact],
+            }))
+          : [channel],
+      ),
+    },
+  };
+}
+
 export function PageContactContent() {
   const [page, setPage] = useState<PageContactData | null>(null);
   const [draft, setDraft] = useState<PageContactProps | null>(null);
@@ -34,7 +51,7 @@ export function PageContactContent() {
       .then((data) => {
         if (!mounted) return;
         setPage(data);
-        setDraft(data.props);
+        setDraft(oneContactPerChannel(data.props));
       })
       .catch((err: Error) => {
         if (mounted) setError(err.message);
@@ -121,7 +138,7 @@ export function PageContactContent() {
           type="button"
           disabled={saving}
           onClick={saveSection}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#5A0B0E] px-5 py-2.5 text-xs font-bold text-white disabled:opacity-50"
+          className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#5A0B0E] px-5 py-2.5 text-xs font-bold text-white transition-colors enabled:hover:bg-[#7A1518] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin" />

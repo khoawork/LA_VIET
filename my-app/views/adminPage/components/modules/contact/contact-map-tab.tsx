@@ -95,8 +95,9 @@ export function ContactMapTab({
           />
           <div className="sm:col-span-2">
             <ContactField
-              label="Google Maps embed URL"
+              label="URL hoặc mã nhúng iframe Google Maps"
               value={item.embedUrl}
+              multiline
               onChange={(embedUrl) => updateLocation(index, { embedUrl })}
             />
           </div>

@@ -10,6 +10,11 @@ type Info = PageContactProps["contactInfo"];
 type Office = Info["offices"][number];
 type Channel = Info["channels"][number];
 
+const createChannel = (): Channel => ({
+  title: "",
+  contacts: [{ value: "", description: "" }],
+});
+
 export function ContactInfoTab({
   data,
   onChange,
@@ -108,19 +113,19 @@ export function ContactInfoTab({
         </ContactListItem>
       ))}
       <ContactListHeader
-        title={`Kênh liên hệ (${data.channels.length})`}
-        addLabel="Thêm kênh"
+        title={`Liên hệ (${data.channels.length})`}
+        addLabel="Thêm liên hệ"
         onAdd={() =>
           onChange({
             ...data,
-            channels: [...data.channels, { title: "", contacts: [] }],
+            channels: [...data.channels, createChannel()],
           })
         }
       />
       {data.channels.map((channel, index) => (
         <ContactListItem
           key={index}
-          label={channel.title || "kênh liên hệ mới"}
+          label={`liên hệ ${index + 1}`}
           onRemove={() =>
             onChange({
               ...data,
@@ -128,65 +133,35 @@ export function ContactInfoTab({
             })
           }
         >
-          <ContactField
-            label="Tiêu đề"
-            value={channel.title}
-            onChange={(title) => updateChannel(index, { title })}
-          />
-          <div className="sm:col-span-2 space-y-3">
-            <ContactListHeader
-              title="Dòng liên hệ"
-              addLabel="Thêm dòng"
-              onAdd={() =>
-                updateChannel(index, {
-                  contacts: [
-                    ...channel.contacts,
-                    { value: "", description: "" },
-                  ],
-                })
-              }
+          <div className="sm:col-span-2">
+            <ContactField
+              label="Tiêu đề"
+              value={channel.title}
+              onChange={(title) => updateChannel(index, { title })}
             />
-            {channel.contacts.map((contact, contactIndex) => (
-              <ContactListItem
-                key={contactIndex}
-                label={contact.value || "dòng liên hệ mới"}
-                onRemove={() =>
-                  updateChannel(index, {
-                    contacts: channel.contacts.filter(
-                      (_, i) => i !== contactIndex,
-                    ),
-                  })
-                }
-              >
-                <ContactField
-                  label="Giá trị"
-                  value={contact.value}
-                  onChange={(value) =>
-                    updateChannel(index, {
-                      contacts: channel.contacts.map((item, i) =>
-                        i === contactIndex ? { ...item, value } : item,
-                      ),
-                    })
-                  }
-                />
-                <ContactField
-                  label="Mô tả"
-                  value={contact.description ?? ""}
-                  onChange={(description) =>
-                    updateChannel(index, {
-                      contacts: channel.contacts.map((item, i) =>
-                        i === contactIndex ? { ...item, description } : item,
-                      ),
-                    })
-                  }
-                />
-              </ContactListItem>
-            ))}
           </div>
+          <ContactField
+            label="Nội dung chính"
+            value={channel.contacts[0]?.value ?? ""}
+            onChange={(value) =>
+              updateChannel(index, {
+                contacts: [{ value, description: channel.contacts[0]?.description ?? "" }],
+              })
+            }
+          />
+          <ContactField
+            label="Dòng phụ"
+            value={channel.contacts[0]?.description ?? ""}
+            onChange={(description) =>
+              updateChannel(index, {
+                contacts: [{ value: channel.contacts[0]?.value ?? "", description }],
+              })
+            }
+          />
         </ContactListItem>
       ))}
       <ContactField
-        label="Tiêu đề mạng xã hội"
+        label="TIÊU ĐỀ MẠNG XÃ HỘI"
         value={data.social.title}
         onChange={(title) =>
           onChange({ ...data, social: { ...data.social, title } })
@@ -236,7 +211,7 @@ export function ContactInfoTab({
             }
           />
           <ContactField
-            label="URL"
+            label="URL (không bắt buộc)"
             value={link.href}
             onChange={(href) =>
               onChange({

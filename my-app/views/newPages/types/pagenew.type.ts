@@ -79,10 +79,7 @@ export const DEFAULT_PAGE_NEW_PROPS: PageNewPropsType = {
   articlesSection: {
     eyebrow: "DÒNG SỰ KIỆN & HỒ SƠ KỸ THUẬT",
     title: "CÁC BÀI VIẾT VÀ BÁO CÁO MỚI NHẤT",
-    sortLabel: "Sắp xếp theo:",
-    defaultSort: "Mới nhất",
-    emptyText: "Hiện chưa có bài viết nào trong chuyên mục này.",
-    itemsPerPage: 6,
+    filterGroups: [{ name: "TẤT CẢ BẢN TIN", categories: [] }],
   },
   stats: {
     items: [

@@ -7,7 +7,6 @@ import {
   HomeSpotlightSectionSchema,
   HomeSpotlightInfoBoxSchema,
   HomeNewsSectionSchema,
-  HomeNewsArticleSchema,
   HomePartnersSectionSchema,
   HomeCtaSectionSchema,
   HomeSeoSectionSchema,
@@ -26,7 +25,16 @@ export type HomeStatItemType = z.infer<typeof HomeStatItemSchema>;
 export type HomeSpotlightSectionType = z.infer<typeof HomeSpotlightSectionSchema>;
 export type HomeSpotlightInfoBoxType = z.infer<typeof HomeSpotlightInfoBoxSchema>;
 export type HomeNewsSectionType = z.infer<typeof HomeNewsSectionSchema>;
-export type HomeNewsArticleType = z.infer<typeof HomeNewsArticleSchema>;
+export interface HomeNewsArticleType {
+  id: number;
+  name: string;
+  image: string;
+  date: string;
+  description: string;
+  preside: string;
+  slug: string;
+  category?: { id: number; name: string };
+}
 export type HomePartnersSectionType = z.infer<typeof HomePartnersSectionSchema>;
 export type HomeCtaSectionType = z.infer<typeof HomeCtaSectionSchema>;
 export type HomeSeoSectionType = z.infer<typeof HomeSeoSectionSchema>;

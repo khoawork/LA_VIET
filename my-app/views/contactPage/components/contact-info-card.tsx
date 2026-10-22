@@ -28,14 +28,16 @@ export function ContactInfoCard({ data }: { data: PageContactProps["contactInfo"
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {data.channels.map((channel, index) => (
-          <div key={index} className="flex flex-col justify-between rounded-xl border border-[#EFE2D0]/60 bg-[#FAF3E8] p-4">
-            <span className="block text-[10px] font-bold uppercase tracking-wider text-[#695D56]">{channel.title}</span>
-            {channel.contacts.map((contact, contactIndex) => (
-              <div key={contactIndex}>
-                <span className={`my-1 block break-all text-sm font-bold ${index === 0 || index === 2 ? "text-[#9A1C1F]" : "text-[#1E1917]"}`}>{contact.value}</span>
-                {contact.description && <span className="block text-[11px] text-[#695D56]">{contact.description}</span>}
-              </div>
-            ))}
+          <div key={index} className="flex flex-col rounded-md bg-[#F7EDDD] px-4 py-2.5 sm:px-5 sm:py-3">
+            <span className="block text-xs font-bold uppercase leading-tight tracking-wide text-[#695D56] lg:text-sm">{channel.title}</span>
+            <div className="mt-1 space-y-1">
+              {channel.contacts.map((contact, contactIndex) => (
+                <div key={contactIndex}>
+                  <span title={contact.value} className={`block font-bold leading-tight ${contact.value.includes("@") ? "max-w-full overflow-x-auto whitespace-nowrap text-xs lg:text-sm" : "break-words text-sm lg:text-base"} ${index === 0 || index === 2 ? "text-[#9A1C1F]" : "text-[#1E1917]"}`}>{contact.value}</span>
+                  {contact.description && <span title={contact.description} className={`block text-xs font-semibold leading-tight text-[#695D56] lg:text-sm ${contact.description.includes("@") ? "max-w-full overflow-x-auto whitespace-nowrap" : ""}`}>{contact.description}</span>}
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>
@@ -44,11 +46,19 @@ export function ContactInfoCard({ data }: { data: PageContactProps["contactInfo"
           <IonIcon name="share-social-outline" className="h-4 w-4 text-[#9A1C1F]" /> {data.social.title}
         </div>
         <div className="flex items-center gap-2">
-          {data.social.links.map((link, index) => (
-            <a key={index} href={link.href} aria-label={link.icon} className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8DC] text-[#423A35] transition-colors hover:bg-[#9A1C1F] hover:text-white">
-              <IonIcon name={link.icon} />
-            </a>
-          ))}
+          {data.social.links.map((link, index) => {
+            const icon = <IonIcon name={link.icon} />;
+            const className = "flex h-8 w-8 items-center justify-center rounded bg-[#EFE8DC] text-[#423A35]";
+            return link.href.trim() ? (
+              <a key={index} href={link.href} aria-label={link.icon} className={`${className} transition-colors hover:bg-[#9A1C1F] hover:text-white`}>
+                {icon}
+              </a>
+            ) : (
+              <span key={index} role="img" aria-label={link.icon} className={className}>
+                {icon}
+              </span>
+            );
+          })}
         </div>
       </div>
     </article>

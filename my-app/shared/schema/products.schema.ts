@@ -1,4 +1,9 @@
 import z from "zod";
+import { PaginationQuerySchema } from "./pagination.schema";
+
+export const ProductsQuerySchema = PaginationQuerySchema.extend({
+  categoryId: z.coerce.number().int().positive().optional(),
+});
 
 export const ProductsRequestSchema = z.object({
   name: z
@@ -35,4 +40,13 @@ export const ProductsResponseSchema = z.object({
   description: z.string(),
   props: z.json(),
   slug: z.string(),
+});
+
+export const ProductsListItemResponseSchema = ProductsResponseSchema.pick({
+  id: true,
+  name: true,
+  image: true,
+  slug: true,
+  description: true,
+  category: true,
 });

@@ -12,6 +12,7 @@ import {
   HomeStatisticsTab,
   HomeSpotlightTab,
   HomeNewsTab,
+  HomeNewsArticlesCard,
   HomePartnersTab,
   HomeCtaTab,
   HomeSeoTab,
@@ -201,7 +202,7 @@ export function AdminHomeView() {
             <HomeNewsTab
               data={formData.newsSection}
               onChange={(newsSection) =>
-                setFormData({ ...formData, newsSection })
+                setFormData((current) => ({ ...current, newsSection }))
               }
             />
           )}
@@ -235,6 +236,15 @@ export function AdminHomeView() {
           <HomeSectionPreview activeTab={activeTab} data={formData} />
         </div>
       </div>
+
+      {activeTab === "news" && (
+        <HomeNewsArticlesCard
+          data={formData.newsSection}
+          onChange={(newsSection) =>
+            setFormData((current) => ({ ...current, newsSection }))
+          }
+        />
+      )}
     </div>
   );
 }

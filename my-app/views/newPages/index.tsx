@@ -42,10 +42,10 @@ export default function NewsPage() {
       <NewsHeader data={props.header} />
 
       {/* Section 3: Bài viết Tiêu điểm Nghiên cứu (#42) */}
-      <NewsFeatured data={props.featured as any} />
+      <NewsFeatured data={props.featured} />
 
       {/* Section 4: Lưới Bài viết Mới nhất & Bộ lọc Danh mục */}
-      <NewsGrid />
+      <NewsGrid data={props.articlesSection} />
 
       {/* Section 5: Thống kê Khảo cứu & Kiểm nghiệm Vật liệu */}
       <NewsStats data={props.stats} />

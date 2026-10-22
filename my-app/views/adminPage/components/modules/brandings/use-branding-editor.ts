@@ -33,7 +33,7 @@ function tabPayload(tab: BrandingTab, draft: SiteSettingsDraft) {
     case "brand":
       return { logo: draft.logo, company: draft.company, tagline: draft.tagline };
     case "footer":
-      return { description: draft.footer.description, copyright: draft.footer.copyright, logo: draft.logo };
+      return { description: draft.footer.description, copyright: draft.footer.copyright };
     case "details":
       return {
         office: draft.footer.office,

@@ -1,6 +1,15 @@
 import { productService } from "@/modules/product/product.service";
-import { HttpStatus, validateBody, withErrorHandler } from "@/shared";
 import {
+  createPaginationMeta,
+  HttpStatus,
+  sendPaginated,
+  validateBody,
+  validateQuery,
+  withErrorHandler,
+} from "@/shared";
+import {
+  ProductsListItemResponseSchema,
+  ProductsQuerySchema,
   ProductsRequestSchema,
   ProductsResponseSchema,
 } from "@/shared/schema/products.schema";
@@ -17,20 +26,11 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 });
 
 export const GET = withErrorHandler(async (request: NextRequest) => {
-  const categoryId = request.nextUrl.searchParams.get("categoryId");
-  const id = categoryId ? Number(categoryId) : undefined;
-
-  if (categoryId && isNaN(id!)) {
-    return NextResponse.json(
-      { message: "ID danh mục không hợp lệ" },
-      { status: HttpStatus.BAD_REQUEST },
-    );
-  }
-
-  const products = await productService.getAllProducts(id);
-  return NextResponse.json(
-    ProductsResponseSchema.array().parse(products),
-    { status: HttpStatus.OK },
+  const query = validateQuery(ProductsQuerySchema, request.nextUrl.searchParams);
+  const { products, totalItems } = await productService.getAllProducts(query);
+  return sendPaginated(
+    ProductsListItemResponseSchema.array().parse(products),
+    createPaginationMeta(totalItems, query.page, query.limit),
   );
 });
 
