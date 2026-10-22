@@ -1,7 +1,8 @@
 "use client";
 
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Plus, Trash2 } from "lucide-react";
 import type { HomeStatisticsSectionType } from "@/views/homePage/types/pagehome.type";
+import { STAT_ICON_OPTIONS, StatIcon } from "@/views/homePage/components/home-statistics";
 
 interface HomeStatisticsTabProps {
   data: HomeStatisticsSectionType;
@@ -11,7 +12,7 @@ interface HomeStatisticsTabProps {
 export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
   const handleStatChange = (
     index: number,
-    field: "num" | "label" | "desc" | "tag",
+    field: "num" | "label" | "desc" | "tag" | "icon",
     value: string,
   ) => {
     const updatedStats = [...data.stats];
@@ -77,18 +78,59 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
           />
         </div>
 
-        {/* 4 Thẻ chỉ số */}
+        {/* Thẻ chỉ số */}
         <div className="space-y-3 pt-2">
-          <span className="text-xs font-bold text-[#1E1917] block">
-            4 Thẻ chỉ số thành tựu
-          </span>
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-xs font-bold text-[#1E1917]">
+              Thẻ chỉ số thành tựu
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                onChange({
+                  ...data,
+                  stats: [
+                    ...data.stats,
+                    { num: "", label: "", desc: "", tag: "", icon: "calendar" },
+                  ],
+                })
+              }
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#a21f1f] text-white text-[11px] font-bold hover:bg-[#821B14]"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Thêm thẻ
+            </button>
+          </div>
+
+          {data.stats.length === 0 && (
+            <p className="text-xs text-stone-500">Chưa có thẻ chỉ số nào.</p>
+          )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {data.stats?.map((stat, idx) => (
+            {data.stats.map((stat, idx) => (
               <div
                 key={idx}
                 className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2.5"
               >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-[#a21f1f]">
+                    Vị trí #{idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onChange({
+                        ...data,
+                        stats: data.stats.filter((_, index) => index !== idx),
+                      })
+                    }
+                    aria-label={`Xóa thẻ chỉ số vị trí ${idx + 1}`}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a21f1f] hover:underline"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Xóa
+                  </button>
+                </div>
                 <div className="flex items-center justify-between gap-3">
                   <div className="space-y-1 flex-1">
                     <label className="text-[10px] font-bold text-stone-500 uppercase">
@@ -106,7 +148,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
 
                   <div className="space-y-1 flex-1">
                     <label className="text-[10px] font-bold text-stone-500 uppercase">
-                      Huy hiệu (Tag)
+                      Tag phía bên trái
                     </label>
                     <input
                       type="text"
@@ -116,6 +158,31 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                       }
                       className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-bold bg-white"
                     />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-stone-500 uppercase">
+                    Icon hiển thị
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <select
+                      aria-label={`Icon thẻ chỉ số vị trí ${idx + 1}`}
+                      value={stat.icon ?? STAT_ICON_OPTIONS[idx % 4].value}
+                      onChange={(e) =>
+                        handleStatChange(idx, "icon", e.target.value)
+                      }
+                      className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs bg-white"
+                    >
+                      {STAT_ICON_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="w-8 h-8 shrink-0 flex items-center justify-center border border-[#EEDCA9] bg-[#FFF8E8] text-[#B91C1C]">
+                      <StatIcon value={stat.icon} index={idx} className="w-4 h-4" />
+                    </span>
                   </div>
                 </div>
 
@@ -138,7 +205,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                     Mô tả chi tiết
                   </label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={stat.desc}
                     onChange={(e) =>
                       handleStatChange(idx, "desc", e.target.value)

@@ -4,10 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Building2, Calendar, ArrowRight, Clock, Maximize2 } from "lucide-react";
 import { FEATURED_NEWS } from "../services/news.services";
+import type { NewsFeaturedSectionType } from "../types/pagenew.type";
 import { NewsFeaturedModal } from "./news-featured-modal";
 
 interface NewsFeaturedProps {
-  data?: typeof FEATURED_NEWS;
+  data?: NewsFeaturedSectionType;
 }
 
 export function NewsFeatured({ data }: NewsFeaturedProps) {

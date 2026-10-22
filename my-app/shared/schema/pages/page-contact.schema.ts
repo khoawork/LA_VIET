@@ -4,6 +4,18 @@ import { PagesRequestSchema } from "../pages.schema";
 const required = (label: string) => z.string().trim().min(1, `${label} is required`);
 const optionalText = z.string().optional();
 
+const mapEmbedUrl = z.string().trim().transform((value) => {
+  if (!/^<iframe\b/i.test(value)) return value;
+  const iframe = value.match(/^<iframe\b[\s\S]*?<\/iframe\s*>$/i);
+  const src = iframe?.[0].match(/\ssrc\s*=\s*(["'])(.*?)\1/i)?.[2];
+  return src?.replace(/&amp;/gi, "&") ?? value;
+}).pipe(z.url("Embed URL must be valid")).refine((value) => {
+  const url = new URL(value);
+  const isGoogleEmbed = ["www.google.com", "maps.google.com"].includes(url.hostname) &&
+    url.pathname === "/maps/embed" && Boolean(url.searchParams.get("pb"));
+  return Boolean(url.searchParams.get("q")) || isGoogleEmbed;
+}, "Embed URL must contain q or be a Google Maps iframe URL");
+
 export const PageContactHeaderSchema = z.object({
   breadcrumb: z.object({
     homeLabel: required("Home label"),
@@ -41,7 +53,7 @@ export const PageContactInfoSchema = z.object({
     title: required("Social title"),
     links: z.array(z.object({
       icon: required("Social icon"),
-      href: required("Social URL"),
+      href: z.string().trim().optional().default(""),
     })),
   }),
 });
@@ -54,13 +66,7 @@ export const PageContactMapSchema = z.object({
     tabLabel: required("Tab label"),
     title: required("Location title"),
     distanceNote: required("Distance note"),
-    embedUrl: z.url("Embed URL must be valid").refine((value) => {
-      try {
-        return Boolean(new URL(value).searchParams.get("q"));
-      } catch {
-        return false;
-      }
-    }, "Embed URL must contain a q parameter for directions"),
+    embedUrl: mapEmbedUrl,
   })),
 });
 

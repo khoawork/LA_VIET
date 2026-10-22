@@ -35,9 +35,6 @@ export function BrandingContent() {
   const footerProps = {
     data: editor.draft.footer,
     onChange: updateFooter,
-    logo: editor.draft.logo,
-    onLogoChange: (logo: string) =>
-      editor.setDraft((current) => ({ ...current, logo })),
   };
 
   return (

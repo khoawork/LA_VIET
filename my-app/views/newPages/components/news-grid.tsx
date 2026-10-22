@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { PagePagination } from "@/shared/components/page-pagination";
 import { NewsItem } from "../types/news.type";
-import { NewsFilters, type FilterCategoryItem } from "./news-filters";
+import type { NewsArticlesSectionType } from "../types/pagenew.type";
+import { NewsFilters } from "./news-filters";
 import { NewsCard } from "./news-card";
 
 interface NewsApiItem {
@@ -20,47 +21,26 @@ interface NewsApiItem {
   image: string;
 }
 
-export function NewsGrid() {
-  const [selectedCategory, setSelectedCategory] = useState<string | number>("all");
+export function NewsGrid({ data }: { data: NewsArticlesSectionType }) {
+  const [selectedFilter, setSelectedFilter] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [categories, setCategories] = useState<FilterCategoryItem[]>([
-    { id: "all", label: "TẤT CẢ BẢN TIN" },
-  ]);
   const [articles, setArticles] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [totalPages, setTotalPages] = useState<number>(1);
-
-  // 1. Tải danh mục chuyên mục động từ API
-  useEffect(() => {
-    async function loadCategories() {
-      try {
-        const res = await fetch("/api/news/cates");
-        const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
-          const dynamicCats: FilterCategoryItem[] = [
-            { id: "all", label: "TẤT CẢ BẢN TIN" },
-            ...json.data.map((c: { id: number; name: string }) => ({
-              id: c.id,
-              label: c.name.toUpperCase(),
-            })),
-          ];
-          setCategories(dynamicCats);
-        }
-      } catch (err) {
-        console.error("Lỗi tải danh mục tin tức:", err);
-      }
-    }
-    loadCategories();
-  }, []);
+  const groups = data.filterGroups.length > 0
+    ? data.filterGroups
+    : [{ name: "TẤT CẢ BẢN TIN", categories: [] }];
+  const selectedGroup = groups[selectedFilter] ?? groups[0];
+  const categoryIds = selectedGroup.categories.join(",");
 
   // 2. Tải danh sách bài viết từ database qua API
   useEffect(() => {
     async function loadNews() {
       try {
         setLoading(true);
-        let url = `/api/news?page=${currentPage}&limit=6`;
-        if (selectedCategory && selectedCategory !== "all") {
-          url += `&categoryId=${selectedCategory}`;
+        let url = `/api/news?page=${currentPage}&limit=10`;
+        if (categoryIds) {
+          url += `&categoryIds=${categoryIds}`;
         }
         const res = await fetch(url);
         const json = await res.json();
@@ -93,40 +73,29 @@ export function NewsGrid() {
     }
 
     loadNews();
-  }, [currentPage, selectedCategory]);
+  }, [currentPage, categoryIds]);
 
   return (
     <section className="mb-14 sm:mb-16">
       {/* Category Filter Tabs */}
       <NewsFilters
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
+        categories={groups.map((group, index) => ({ id: index, label: group.name }))}
+        selectedCategory={selectedFilter}
+        onSelectCategory={(index) => {
+          setSelectedFilter(Number(index));
           setCurrentPage(1);
         }}
       />
 
-      {/* Grid Header: Eyebrow + Title + Sort Dropdown */}
+      {/* Grid Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
           <span className="text-[11px] font-bold tracking-[0.25em] text-[#9A1C1F] uppercase block mb-1">
-            DÒNG SỰ KIỆN &amp; HỒ SƠ KỸ THUẬT
+            {data.eyebrow}
           </span>
           <h2 className="font-bold text-xl sm:text-2xl text-[#1E1917] tracking-tight uppercase">
-            CÁC BÀI VIẾT VÀ BÁO CÁO MỚI NHẤT
+            {data.title}
           </h2>
-        </div>
-
-        <div className="flex items-center gap-2 text-xs text-[#695D56] self-start sm:self-auto">
-          <span>Sắp xếp theo:</span>
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 font-bold text-[#9A1C1F] bg-[#FAF3E8] px-3 py-1.5 rounded-lg border border-[#EFE2D0] cursor-pointer"
-          >
-            <span>Mới nhất</span>
-            <ChevronDown className="w-3.5 h-3.5" />
-          </button>
         </div>
       </div>
 

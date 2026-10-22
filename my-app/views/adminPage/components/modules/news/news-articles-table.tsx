@@ -92,7 +92,7 @@ export function NewsArticlesTable({
                   <th className="py-3.5 px-5">Bài viết</th>
                   <th className="py-3.5 px-4">Chuyên mục</th>
                   <th className="py-3.5 px-4">Tác giả / Ban chủ trì</th>
-                  <th className="py-3.5 px-4">Ngày đăng</th>
+                  <th className="py-3.5 px-4">Ngày xuất bản</th>
                   <th className="py-3.5 px-5 text-right">Thao tác</th>
                 </tr>
               </thead>

@@ -2,6 +2,7 @@ import { ConflictException, NotFoundException } from "@/shared/common/app-error"
 import { PageContactPropsSchema } from "@/shared/schema/pages/page-contact.schema";
 import { PageContactRepository, pageContactRepository } from "./page-contact.repository";
 import type { PageContactPropsType, PageContactRequestType } from "./page-contact.type";
+import { CloudinaryService } from "@/shared/services/cloudinary.service";
 
 export class PageContactService {
   constructor(private readonly repository: PageContactRepository) {}
@@ -34,6 +35,14 @@ export class PageContactService {
   ) {
     const page = await this.getPageContact();
     const props = PageContactPropsSchema.parse({ ...page.props, [section]: value });
+    if (section === "experience") {
+      for (const space of props.experience.spaces) {
+        if (space.imageUrl.startsWith("data:image/")) {
+          const uploaded = await CloudinaryService.uploadString(space.imageUrl);
+          space.imageUrl = uploaded.url;
+        }
+      }
+    }
     await this.repository.updateProps(page.id, props);
   }
 }

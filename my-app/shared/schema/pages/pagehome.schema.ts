@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 /**
- * 1. Schema Section Hero (Biểu ngữ chính & 4 bộ sưu tập)
+ * 1. Schema Section Hero (Biểu ngữ chính & dải thông tin)
  */
 export const HomeHeroCollectionSchema = z.object({
-  idx: z.string().default("BỘ SƯU TẬP 01"),
-  title: z.string().default("Sơn Ta Phố Trúc"),
-  desc: z.string().default("Kỹ thuật vóc truyền thống"),
+  title: z.string().default("Sơn Ta Phú Thọ"),
+  // Giữ tên trường cũ để các nhãn đã lưu trong JSON tiếp tục hiển thị đúng.
+  desc: z.string().default("CHẤT LIỆU GỐC"),
 });
 
 export const HomeHeroSectionSchema = z.object({
@@ -32,10 +32,6 @@ export const HomeHeroSectionSchema = z.object({
       .default(
         "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
       ),
-    tag: z.string().default("Không gian trưng bày"),
-    caption: z
-      .string()
-      .min(1, "Chú thích hình ảnh không được để trống"),
   }),
   collections: z.array(HomeHeroCollectionSchema).default([]),
 });
@@ -48,10 +44,11 @@ export const HomeStatItemSchema = z.object({
   label: z.string(),
   desc: z.string(),
   tag: z.string(),
+  icon: z.string().optional(),
 });
 
 export const HomeStatisticsSectionSchema = z.object({
-  tagline: z.string().default("Thành tựu phát triển"),
+  tagline: z.string().default("Năng lực thực chứng"),
   title: z.string().default("NHỮNG CON SỐ ẤN TƯỢNG"),
   description: z
     .string()
@@ -83,7 +80,7 @@ export const HomeSpotlightSectionSchema = z.object({
       "https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1000&q=80",
     ),
   seal: z.object({
-    initials: z.string().default("LV"),
+    logo: z.string().default(""),
     line1: z.string().default("Xưởng sơn mài"),
     line2: z.string().default("Là Việt"),
   }),
@@ -97,29 +94,30 @@ export const HomeSpotlightSectionSchema = z.object({
 /**
  * 4. Schema Section Tin tức mới nhất trên Trang chủ
  */
-export const HomeNewsArticleSchema = z.object({
-  id: z.number(),
-  tag: z.string(),
-  tagColor: z.string().default("bg-[#9A221A] text-white"),
-  img: z.string(),
-  date: z.string(),
-  title: z.string(),
-  desc: z.string(),
-});
-
 export const HomeNewsSectionSchema = z.object({
   tagline: z.string().default("Góc nhìn di sản"),
   title: z.string().default("TIN TỨC MỚI NHẤT"),
+  description: z.string().default(""),
   link: z.object({
     text: z.string().default("Xem tất cả tin tức"),
     href: z.string().default("/news"),
   }),
-  articles: z.array(HomeNewsArticleSchema).default([]),
+  articleIds: z.array(z.number().int().positive()).default([]).transform((ids) => [...new Set(ids)]),
 });
 
 /**
  * 5. Schema Section Đối tác chiến lược & Khách hàng
  */
+export const HomePartnerItemSchema = z.union([
+  z.string(),
+  z.object({
+    name: z.string(),
+    subtitle: z.string().default(""),
+  }),
+]).transform((partner) =>
+  typeof partner === "string" ? { name: partner, subtitle: "" } : partner,
+);
+
 export const HomePartnersSectionSchema = z.object({
   tagline: z.string().default("Mạng lưới đối tác"),
   title: z.string().default("ĐỐI TÁC CHIẾN LƯỢC & DOANH NGHIỆP ĐỒNG HÀNH"),
@@ -128,7 +126,7 @@ export const HomePartnersSectionSchema = z.object({
     .default(
       "Được tín nhiệm bởi các tổ chức nghệ thuật, tập đoàn bất động sản và khách sạn nghỉ dưỡng hàng đầu.",
     ),
-  partners: z.array(z.string()).default([]),
+  partners: z.array(HomePartnerItemSchema).default([]),
   testimonial: z.object({
     quote: z
       .string()
@@ -242,34 +240,28 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     },
     image: {
       src: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
-      tag: "Không gian trưng bày",
-      caption: "Đại sảnh Nhà Hát Đương Đại & Bích Họa Sơn Mài",
     },
     collections: [
       {
-        idx: "BỘ SƯU TẬP 01",
-        title: "Sơn Ta Phố Trúc",
-        desc: "Kỹ thuật vóc truyền thống",
+        title: "Sơn Ta Phú Thọ",
+        desc: "CHẤT LIỆU GỐC",
       },
       {
-        idx: "BỘ SƯU TẬP 02",
-        title: "Nhịp Điệu Đương Đại",
-        desc: "Vàng quỳ & Bạc dát đa tầng",
+        title: "Mài đa tầng & Dát quỳ",
+        desc: "KỸ THUẬT TẠO TÁC",
       },
       {
-        idx: "BỘ SƯU TẬP 03",
-        title: "Đại Ngàn & Sương Mù",
-        desc: "Chất liệu vỏ trai & Vỏ trứng",
+        title: "Đại sảnh & Resort 5*",
+        desc: "ỨNG DỤNG TIÊU BIỂU",
       },
       {
-        idx: "BỘ SƯU TẬP 04",
-        title: "Quyến Rũ Biển",
-        desc: "Sắc son then kinh điển",
+        title: "Di sản Độc bản",
+        desc: "CHỨNG NHẬN KIỂM ĐỊNH",
       },
     ],
   },
   statistics: {
-    tagline: "Thành tựu phát triển",
+    tagline: "NĂNG LỰC THỰC CHỨNG",
     title: "NHỮNG CON SỐ ẤN TƯỢNG",
     description:
       "Mỗi tác phẩm là sự kết tinh của hàng chục công đoạn tỉ mỉ kéo dài nhiều tháng, hội tụ tinh hoa bàn tay nghệ nhân và niềm tự hào di sản văn hóa Việt Nam.",
@@ -279,24 +271,28 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
         label: "Năm kiến tạo & gìn giữ",
         desc: "Hành trình phục dựng và ứng dụng sơn mài vào đời sống kiến trúc đương đại.",
         tag: "Kinh nghiệm",
+        icon: "calendar",
       },
       {
         num: "120+",
         label: "Tác phẩm & Công trình",
         desc: "Hiện diện tại các khách sạn 5 sao, trung tâm văn hóa và tư dinh thượng lưu.",
         tag: "Dự án lớn",
+        icon: "landmark",
       },
       {
         num: "45+",
         label: "Đối tác chiến lược",
         desc: "Các tập đoàn bất động sản, viện kiến trúc và bảo tàng nghệ thuật uy tín.",
         tag: "Hợp tác",
+        icon: "building",
       },
       {
         num: "98%",
         label: "Đánh giá xuất sắc",
         desc: "Mức độ hài lòng tuyệt đối từ các chuyên gia phê bình nghệ thuật và chủ đầu tư.",
         tag: "Chất lượng",
+        icon: "badge-check",
       },
     ],
   },
@@ -308,7 +304,7 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     image:
       "https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=1000&q=80",
     seal: {
-      initials: "LV",
+      logo: "",
       line1: "Xưởng sơn mài",
       line2: "Là Việt",
     },
@@ -326,39 +322,12 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
   newsSection: {
     tagline: "Góc nhìn di sản",
     title: "TIN TỨC MỚI NHẤT",
+    description: "",
     link: {
       text: "Xem tất cả tin tức",
       href: "/news",
     },
-    articles: [
-      {
-        id: 1,
-        tag: "Triển lãm & Sự kiện",
-        tagColor: "bg-[#9A221A] text-white",
-        img: "https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=800&q=80",
-        date: "12 Tháng 10, 2026",
-        title: "Không gian triển lãm ứng dụng sơn mài trong kiến trúc hiện đại",
-        desc: "Triển lãm chuyên đề quy tụ hơn 50 tác phẩm cỡ lớn, mở ra góc nhìn đa chiều về khả năng thích ứng của chất liệu truyền thống.",
-      },
-      {
-        id: 2,
-        tag: "Kỹ thuật nghệ thuật",
-        tagColor: "bg-[#C49B3E] text-white",
-        img: "https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=800&q=80",
-        date: "05 Tháng 10, 2026",
-        title: "Kỹ thuật mài đa tầng và chất liệu vàng bạc trong sơn mài",
-        desc: "Tìm hiểu bí quyết làm nên độ sâu hun hút của từng thớ sơn khi kết hợp lá vàng quỳ kiên nhẫn qua từng công đoạn mài nước.",
-      },
-      {
-        id: 3,
-        tag: "Dự án tiêu biểu",
-        tagColor: "bg-[#9A221A] text-white",
-        img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80",
-        date: "28 Tháng 09, 2026",
-        title: "Bàn giao tác phẩm sơn mài lớn ngành tài chính tập đoàn đa quốc gia",
-        desc: "Công trình bích họa sơn mài trải rộng 3 tầng sảnh chính, khẳng định bản sắc văn hóa doanh nghiệp giao hòa cùng tinh thần hiện đại.",
-      },
-    ],
+    articleIds: [],
   },
   partners: {
     tagline: "Mạng lưới đối tác",
@@ -366,11 +335,11 @@ export const DEFAULT_PAGE_HOME_PROPS: PageHomePropsType = {
     description:
       "Được tín nhiệm bởi các tổ chức nghệ thuật, tập đoàn bất động sản và khách sạn nghỉ dưỡng hàng đầu.",
     partners: [
-      "TẬP ĐOÀN BẤT ĐỘNG SẢN A",
-      "TỔ HỢP NGHỈ DƯỠNG B",
-      "BẢO TÀNG MỸ THUẬT C",
-      "KHÁCH SẠN 5 SAO D",
-      "VIỆN THIẾT KẾ KIẾN TRÚC E",
+      { name: "DOANH NGHIỆP A", subtitle: "TẬP ĐOÀN BẤT ĐỘNG SẢN" },
+      { name: "TẬP ĐOÀN B", subtitle: "KHÁCH SẠN NGHỈ DƯỠNG" },
+      { name: "BẢO TÀNG C", subtitle: "DI SẢN MỸ THUẬT" },
+      { name: "KHÁCH SẠN 5 SAO D", subtitle: "CHUỖI BOUTIQUE QUỐC TẾ" },
+      { name: "VIỆN THIẾT KẾ E", subtitle: "KIẾN TRÚC & NỘI THẤT" },
     ],
     testimonial: {
       quote:

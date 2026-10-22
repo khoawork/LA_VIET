@@ -73,7 +73,6 @@ export const SiteSettingsBrandPatchSchema = z.strictObject({
 export const SiteSettingsFooterContentPatchSchema = z.strictObject({
   description: FooterSchema.shape.description,
   copyright: FooterSchema.shape.copyright,
-  logo: LogoSchema.optional(),
 });
 
 export const SiteSettingsDetailsPatchSchema = z.strictObject({

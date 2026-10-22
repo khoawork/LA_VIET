@@ -1,8 +1,7 @@
 "use client";
 
-import { Sparkles, Layers, Image as ImageIcon } from "lucide-react";
+import { Sparkles, Layers, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
 import type { HomeHeroSectionType } from "@/views/homePage/types/pagehome.type";
-import { ColorHighlightInput } from "../color-highlight-input";
 
 interface HomeHeroTabProps {
   data: HomeHeroSectionType;
@@ -12,7 +11,7 @@ interface HomeHeroTabProps {
 export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
   const handleCollectionChange = (
     index: number,
-    field: "idx" | "title" | "desc",
+    field: "title" | "desc",
     value: string,
   ) => {
     const updatedCollections = [...data.collections];
@@ -33,7 +32,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
               Biểu ngữ chính (Hero Section)
             </h2>
             <p className="text-xs text-stone-500">
-              Khối tiêu điểm đầu trang giới thiệu tuyên ngôn thương hiệu và 4 bộ sưu tập nổi bật
+              Khối tiêu điểm đầu trang giới thiệu tuyên ngôn thương hiệu và dải thông tin nổi bật
             </p>
           </div>
         </div>
@@ -57,15 +56,15 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
         </div>
 
         {/* Tiêu đề chính */}
-        <div>
-          <ColorHighlightInput
-            label="Tiêu đề chính Hero (Heading 1)"
-            placeholder="Nhập tiêu đề chính... (bôi đen chữ để chọn màu, in nghiêng, gạch chân)"
-            multiline
+        <div className="space-y-1.5">
+          <label className="text-xs font-bold text-[#1E1917]">
+            Tiêu đề chính Hero
+          </label>
+          <textarea
             rows={3}
             value={data.title}
-            onChange={(newTitle) => onChange({ ...data, title: newTitle })}
-            className="font-bold text-sm"
+            onChange={(e) => onChange({ ...data, title: e.target.value })}
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -166,41 +165,6 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-stone-600">
-                Nhãn không gian
-              </label>
-              <input
-                type="text"
-                value={data.image?.tag}
-                onChange={(e) =>
-                  onChange({
-                    ...data,
-                    image: { ...data.image, tag: e.target.value },
-                  })
-                }
-                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs bg-white"
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[11px] font-semibold text-stone-600">
-                Chú thích công trình
-              </label>
-              <input
-                type="text"
-                value={data.image?.caption}
-                onChange={(e) =>
-                  onChange({
-                    ...data,
-                    image: { ...data.image, caption: e.target.value },
-                  })
-                }
-                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs bg-white"
-              />
-            </div>
-          </div>
-
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-semibold text-stone-600">
@@ -222,7 +186,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                         if (base64) {
                           onChange({
                             ...data,
-                            image: { ...data.image, src: base64 },
+                            image: { src: base64 },
                           });
                         }
                       };
@@ -238,7 +202,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
               onChange={(e) =>
                 onChange({
                   ...data,
-                  image: { ...data.image, src: e.target.value },
+                  image: { src: e.target.value },
                 })
               }
               placeholder="https://... hoặc chọn file từ máy"
@@ -247,17 +211,37 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
           </div>
         </div>
 
-        {/* 4 Dải Bộ Sưu Tập (Collections Ribbon) */}
+        {/* Dải thông tin nổi bật */}
         <div className="space-y-3 pt-2">
-          <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#a21f1f]" />
-            <span className="text-xs font-bold text-[#1E1917]">
-              Dải 4 Bộ Sưu Tập (Collections Ribbon)
-            </span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Layers className="w-4 h-4 text-[#a21f1f]" />
+              <span className="text-xs font-bold text-[#1E1917]">
+                Dải thông tin nổi bật
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                onChange({
+                  ...data,
+                  collections: [...data.collections, { title: "", desc: "" }],
+                })
+              }
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#a21f1f] text-white text-[11px] font-bold hover:bg-[#821B14]"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Thêm mục
+            </button>
           </div>
 
+          {data.collections.length === 0 && (
+            <p className="text-xs text-stone-500">
+              Chưa có mục nào trong dải thông tin.
+            </p>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {data.collections?.map((col, idx) => (
+            {data.collections.map((col, idx) => (
               <div
                 key={idx}
                 className="p-3.5 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2"
@@ -266,33 +250,51 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   <span className="text-[10px] font-bold text-[#a21f1f]">
                     Vị trí #{idx + 1}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onChange({
+                        ...data,
+                        collections: data.collections.filter(
+                          (_, index) => index !== idx,
+                        ),
+                      })
+                    }
+                    aria-label={`Xóa mục vị trí ${idx + 1}`}
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a21f1f] hover:underline"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Xóa
+                  </button>
+                </div>
+                <label className="block space-y-1">
+                  <span className="text-[11px] font-semibold text-stone-600">
+                    Nhãn phía trên
+                  </span>
                   <input
                     type="text"
-                    value={col.idx}
+                    placeholder="Ví dụ: CHẤT LIỆU GỐC"
+                    value={col.desc}
                     onChange={(e) =>
-                      handleCollectionChange(idx, "idx", e.target.value)
+                      handleCollectionChange(idx, "desc", e.target.value)
                     }
-                    className="w-28 px-2 py-1 rounded border border-[#f3e9db] text-[10px] font-mono font-bold bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-600 bg-white"
                   />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Tên bộ sưu tập..."
-                  value={col.title}
-                  onChange={(e) =>
-                    handleCollectionChange(idx, "title", e.target.value)
-                  }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-bold bg-white"
-                />
-                <input
-                  type="text"
-                  placeholder="Mô tả kỹ thuật..."
-                  value={col.desc}
-                  onChange={(e) =>
-                    handleCollectionChange(idx, "desc", e.target.value)
-                  }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-600 bg-white"
-                />
+                </label>
+                <label className="block space-y-1">
+                  <span className="text-[11px] font-semibold text-stone-600">
+                    Nội dung phía dưới
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Ví dụ: Sơn Ta Phú Thọ"
+                    value={col.title}
+                    onChange={(e) =>
+                      handleCollectionChange(idx, "title", e.target.value)
+                    }
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-bold bg-white"
+                  />
+                </label>
               </div>
             ))}
           </div>

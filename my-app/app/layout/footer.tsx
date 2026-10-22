@@ -59,8 +59,8 @@ export default async function Footer() {
   const logoHref = safeHref(logo);
   const policies = footer.policies
     .map((item) => ({ label: item.label, href: safeHref(item.href) }))
-    .filter((item): item is { label: string; href: string } =>
-      Boolean(item.label && item.href),
+    .filter((item): item is { label: string; href: string | null } =>
+      Boolean(item.label?.trim()),
     );
 
   return (
@@ -102,18 +102,17 @@ export default async function Footer() {
               <div className="flex flex-wrap items-center gap-2.5">
                 {footer.social.links.map((item, index) => {
                   const href = safeHref(item.href);
-                  if (!href) return null;
-                  return (
-                    <a
-                      key={index}
-                      href={href}
-                      aria-label={item.icon || "Mạng xã hội"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex h-8 w-8 items-center justify-center rounded bg-[#EFE8DC] text-[#423A35] transition-colors hover:bg-[#9A1C1F] hover:text-white"
-                    >
-                      <IonIcon name={item.icon} fallback="linkOutline" />
+                  if (!item.icon?.trim() && !href) return null;
+                  const icon = <IonIcon name={item.icon} fallback="linkOutline" />;
+                  const className = "flex h-8 w-8 items-center justify-center rounded bg-[#EFE8DC] text-[#423A35]";
+                  return href ? (
+                    <a key={index} href={href} aria-label={item.icon || "Mạng xã hội"} target="_blank" rel="noopener noreferrer" className={`${className} transition-colors hover:bg-[#9A1C1F] hover:text-white`}>
+                      {icon}
                     </a>
+                  ) : (
+                    <span key={index} role="img" aria-label={item.icon || "Mạng xã hội"} className={className}>
+                      {icon}
+                    </span>
                   );
                 })}
               </div>
@@ -177,14 +176,12 @@ export default async function Footer() {
             aria-label="Chính sách"
             className="flex flex-wrap items-center gap-6"
           >
-            {policies.map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className="transition-colors hover:text-[#9A1C1F]"
-              >
+            {policies.map((item, index) => item.href ? (
+              <a key={index} href={item.href} className="transition-colors hover:text-[#9A1C1F]">
                 {item.label}
               </a>
+            ) : (
+              <span key={index}>{item.label}</span>
             ))}
           </nav>
         </div>

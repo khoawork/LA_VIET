@@ -1,3 +1,4 @@
+import { ImagePlus } from "lucide-react";
 import type { PageContactProps } from "../../../types/contact/page-contact.type";
 import {
   ContactField,
@@ -44,16 +45,6 @@ export function ContactExperienceTab({
           value={data.suffix}
           onChange={(suffix) => onChange({ ...data, suffix })}
         />
-        <ContactField
-          label="Ghi chú tham quan"
-          value={data.visitNote}
-          onChange={(visitNote) => onChange({ ...data, visitNote })}
-        />
-        <ContactField
-          label="Lưu ý đặt hẹn"
-          value={data.bookingNote}
-          onChange={(bookingNote) => onChange({ ...data, bookingNote })}
-        />
       </div>
       <ContactListHeader
         title={`Không gian (${data.spaces.length})`}
@@ -98,14 +89,58 @@ export function ContactExperienceTab({
             />
           </div>
           <div className="sm:col-span-2">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs font-semibold text-[#1E1917]">Ảnh không gian</span>
+              <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-[#FAF1EC] px-3 py-2 text-xs font-bold text-[#9A1C1F] transition-colors hover:bg-[#F0DCD6]">
+                <ImagePlus className="h-4 w-4" /> Chọn ảnh từ máy
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      if (typeof reader.result === "string") {
+                        updateSpace(index, { imageUrl: reader.result });
+                      }
+                    };
+                    reader.readAsDataURL(file);
+                    event.target.value = "";
+                  }}
+                />
+              </label>
+            </div>
             <ContactField
               label="URL ảnh"
               value={space.imageUrl}
               onChange={(imageUrl) => updateSpace(index, { imageUrl })}
             />
+            {space.imageUrl.trim() && (
+              // Ảnh tạm từ máy và URL đang chỉnh sửa không cần bộ tối ưu Next.js.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={space.imageUrl.trim()}
+                alt={`Xem trước ${space.title || `không gian ${index + 1}`}`}
+                className="mt-3 aspect-video w-full max-w-xs rounded-lg border border-[#EAE2D5] object-cover"
+              />
+            )}
           </div>
         </ContactListItem>
       ))}
+      <div className="grid gap-4 border-t border-[#EAE2D5] pt-5 sm:grid-cols-2">
+        <ContactField
+          label="Ghi chú tham quan"
+          value={data.visitNote}
+          onChange={(visitNote) => onChange({ ...data, visitNote })}
+        />
+        <ContactField
+          label="Lưu ý đặt hẹn"
+          value={data.bookingNote}
+          onChange={(bookingNote) => onChange({ ...data, bookingNote })}
+        />
+      </div>
     </ContactPanel>
   );
 }

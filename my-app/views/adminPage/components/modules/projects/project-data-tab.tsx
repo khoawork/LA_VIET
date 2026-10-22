@@ -20,13 +20,14 @@ import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
 import { deleteManagedImageByUrl } from "../../../services/image-upload.service";
 
 interface ProjectDataTabProps {
+  active: boolean;
   categories: ProjectCategory[];
   filterHost: HTMLDivElement | null;
   createOpen: boolean;
   onCloseCreate: () => void;
 }
 
-export function ProjectDataTab({ categories, filterHost, createOpen, onCloseCreate }: ProjectDataTabProps) {
+export function ProjectDataTab({ active, categories, filterHost, createOpen, onCloseCreate }: ProjectDataTabProps) {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -143,7 +144,7 @@ export function ProjectDataTab({ categories, filterHost, createOpen, onCloseCrea
         </p>
       )}
 
-      {filterHost && createPortal(<div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:gap-3">
+      {active && filterHost && createPortal(<div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] sm:gap-3">
         <div className="relative min-w-0">
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
           <input

@@ -49,7 +49,7 @@ export function HomeTabNav({ activeTab, onSelectTab }: HomeTabNavProps) {
               onClick={() => onSelectTab(tab.id)}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isActive
-                  ? "bg-[#a21f1f] text-white shadow-xs"
+                  ? "bg-[#a21f1f] hover:bg-[#851619] text-white shadow-xs"
                   : "text-stone-700 hover:bg-[#FAF8F5] hover:text-[#a21f1f]"
               }`}
             >

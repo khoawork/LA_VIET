@@ -11,12 +11,34 @@ import {
   UpdatePageNewType,
 } from "../types/pagenew.type";
 import { NotFoundException } from "@/shared/common/app-error";
+import { CloudinaryService } from "@/shared/services/cloudinary.service";
 
 export class PageNewService {
   private readonly defaultSlug = "news";
   private readonly defaultPageName = "Trang Tin Tức & Nghiên Cứu";
 
   constructor(private readonly repo: PageNewRepository) {}
+
+  private async uploadFeaturedImage(props: PageNewPropsType): Promise<PageNewPropsType> {
+    const imageUrl = props.featured.imageUrl.trim();
+    if (!imageUrl.startsWith("data:image/")) {
+      return {
+        ...props,
+        featured: { ...props.featured, imageUrl },
+      };
+    }
+
+    try {
+      const uploaded = await CloudinaryService.uploadString(imageUrl);
+      return {
+        ...props,
+        featured: { ...props.featured, imageUrl: uploaded.url },
+      };
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Upload ảnh bài viết tiêu điểm thất bại: ${message}`);
+    }
+  }
 
   /**
    * Lấy cấu trúc toàn bộ Section của trang Tin tức.
@@ -45,6 +67,8 @@ export class PageNewService {
             ? (page.props as Record<string, unknown>)
             : {}),
         };
+
+    safeProps.featured.imageUrl = safeProps.featured.imageUrl.trim();
 
     return {
       id: page.id,
@@ -108,7 +132,9 @@ export class PageNewService {
     };
 
     // Validate toàn bộ cấu trúc trước khi lưu vào DB
-    const validatedProps = PageNewPropsSchema.parse(mergedProps);
+    const validatedProps = await this.uploadFeaturedImage(
+      PageNewPropsSchema.parse(mergedProps),
+    );
 
     const updated = await this.repo.upsert(slug, {
       name: data.name ?? current.name,
@@ -138,7 +164,9 @@ export class PageNewService {
       [sectionKey]: sectionData,
     };
 
-    const validatedProps = PageNewPropsSchema.parse(updatedProps);
+    const validatedProps = await this.uploadFeaturedImage(
+      PageNewPropsSchema.parse(updatedProps),
+    );
 
     const updated = await this.repo.upsert(slug, {
       name: current.name,

@@ -45,7 +45,9 @@ export class NewsService {
       ];
     }
 
-    if (query.categoryId) {
+    if (query.categoryIds?.length) {
+      where.categoryId = { in: query.categoryIds };
+    } else if (query.categoryId) {
       where.categoryId = query.categoryId;
     }
 

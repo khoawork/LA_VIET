@@ -10,14 +10,13 @@ import {
   HomeCta,
 } from "./components";
 import type { PageHomePropsType } from "./types/pagehome.type";
-import { DEFAULT_PAGE_HOME_PROPS } from "./types/pagehome.type";
 
 interface HomePageProps {
   initialData?: PageHomePropsType;
 }
 
-export default function HomePage({ initialData = DEFAULT_PAGE_HOME_PROPS }: HomePageProps) {
-  const [pageData, setPageData] = useState<PageHomePropsType>(initialData);
+export default function HomePage({ initialData }: HomePageProps) {
+  const [pageData, setPageData] = useState<PageHomePropsType | null>(initialData ?? null);
 
   useEffect(() => {
     async function loadHomeContent() {
@@ -34,6 +33,8 @@ export default function HomePage({ initialData = DEFAULT_PAGE_HOME_PROPS }: Home
 
     loadHomeContent();
   }, []);
+
+  if (!pageData) return null;
 
   return (
     <div className="w-full flex flex-col">

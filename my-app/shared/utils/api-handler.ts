@@ -84,7 +84,7 @@ export function withErrorHandler<TContext = RouteContext>(
       return sendError(
         message,
         HttpStatus.INTERNAL_SERVER_ERROR,
-        isDev && error instanceof Error ? error.stack : undefined,
+        undefined,
         "INTERNAL_SERVER_ERROR",
       );
     }

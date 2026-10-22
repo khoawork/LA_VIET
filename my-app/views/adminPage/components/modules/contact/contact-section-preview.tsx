@@ -144,6 +144,19 @@ export function ContactSectionPreview({
                   </div>
                 ))}
               </div>
+              <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-3">
+                {data.contactInfo?.channels?.map((channel, index) => (
+                  <div key={index} className="min-w-0 rounded-lg bg-[#F7EDDD] p-2.5">
+                    <strong className="block text-[10px] uppercase text-[#695D56]">{channel.title || `Card ${index + 1}`}</strong>
+                    {channel.contacts.map((contact, contactIndex) => (
+                      <div key={contactIndex} className="mt-1 break-all text-[10px]">
+                        <span className={`block font-bold ${index === 0 || index === 2 ? "text-[#9A1C1F]" : "text-[#1E1917]"}`}>{contact.value}</span>
+                        {contact.description && <span className="block text-[#695D56]">{contact.description}</span>}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
