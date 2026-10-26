@@ -1,12 +1,13 @@
 import type { NewsStatsSectionType } from "../types/pagenew.type";
-import { DEFAULT_PAGE_NEW_PROPS } from "../types/pagenew.type";
 
 interface NewsStatsProps {
-  data?: NewsStatsSectionType;
+  data: NewsStatsSectionType;
 }
 
-export function NewsStats({ data }: NewsStatsProps = {}) {
-  const stats = data?.items || DEFAULT_PAGE_NEW_PROPS.stats.items;
+export function NewsStats({ data }: NewsStatsProps) {
+  const stats = data.items;
+
+  if (stats.length === 0) return null;
 
   return (
     <section className="mb-14 sm:mb-16">

@@ -65,7 +65,7 @@ export function ProjectCard({ project }: { project: ProjectRecord }) {
             href={`#du-an-${project.id}`}
             className="font-bold text-[#9A1C1F] hover:underline"
           >
-            {project.button || "Xem hồ sơ"} →
+            {project.button} →
           </Link>
         </div>
       </div>

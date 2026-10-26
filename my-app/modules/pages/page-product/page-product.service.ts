@@ -4,9 +4,10 @@ import {
 } from "./page-product.repository";
 import {
   CreatePageProductType,
-  DEFAULT_PRODUCTS_PAGE_CONFIG,
   UpdatePageProductType,
 } from "./page-product.type";
+import { ProductsPagePropsSchema } from "@/shared/schema/pages/page-product.schema";
+import { NotFoundException } from "@/shared/common/app-error";
 
 export class PageProductService {
   constructor(
@@ -16,12 +17,7 @@ export class PageProductService {
   async getPageBySlug(slug: string = "products") {
     const page = await this.pageProductRepository.getPageBySlug(slug);
     if (!page) {
-      return {
-        id: 0,
-        name: DEFAULT_PRODUCTS_PAGE_CONFIG.name,
-        slug: DEFAULT_PRODUCTS_PAGE_CONFIG.slug,
-        props: DEFAULT_PRODUCTS_PAGE_CONFIG.props as any,
-      };
+      throw new NotFoundException("Page products not found");
     }
     return page;
   }
@@ -32,7 +28,7 @@ export class PageProductService {
 
   async getProductPageData(slug: string = "products") {
     const [page, products] = await Promise.all([
-      this.getPageBySlug(slug),
+      this.pageProductRepository.getPageBySlug(slug),
       this.getAllProducts(),
     ]);
 
@@ -40,6 +36,16 @@ export class PageProductService {
       page,
       products,
     };
+  }
+
+  async getProductPageSummary(slug: string = "products") {
+    const page = await this.getPageBySlug(slug);
+    const props = ProductsPagePropsSchema.pick({
+      displayedProductIds: true,
+    }).safeParse(page.props);
+    const ids = props.success ? props.data.displayedProductIds : [];
+    const categories = await this.pageProductRepository.getProductCategoryNames(ids);
+    return { page, categories };
   }
 
   async createPage(data: CreatePageProductType) {

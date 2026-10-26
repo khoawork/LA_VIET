@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PagePaginationProps {
@@ -11,6 +10,17 @@ interface PagePaginationProps {
   className?: string;
 }
 
+function visiblePages(page: number, totalPages: number): Array<number | "ellipsis"> {
+  if (totalPages <= 6) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+  if (page <= 3) return [1, 2, 3, "ellipsis", totalPages];
+  if (page >= totalPages - 2) {
+    return [1, "ellipsis", totalPages - 2, totalPages - 1, totalPages];
+  }
+  return [1, "ellipsis", page - 1, page, page + 1, "ellipsis", totalPages];
+}
+
 export function PagePagination({
   page,
   totalPages,
@@ -18,67 +28,64 @@ export function PagePagination({
   disabled = false,
   className = "",
 }: PagePaginationProps) {
-  const [draft, setDraft] = useState<string | null>(null);
   const lastPage = Math.max(1, totalPages);
   const currentPage = Math.min(Math.max(1, page), lastPage);
-
-  function commitPage() {
-    if (draft === null) return;
-    const requestedPage = Number(draft);
-    setDraft(null);
-    if (!draft || !Number.isSafeInteger(requestedPage)) return;
-    const nextPage = Math.min(Math.max(1, requestedPage), lastPage);
-    if (nextPage !== currentPage) onPageChange(nextPage);
-  }
+  const items = visiblePages(currentPage, lastPage);
+  const buttonClass =
+    "flex h-7 w-7 shrink-0 items-center justify-center rounded-sm text-[11px] font-semibold transition-colors disabled:cursor-not-allowed sm:h-9 sm:w-9";
+  const inactiveClass = "bg-[#F3EADB] text-[#251E1A] hover:bg-[#E8DAC4] disabled:opacity-40";
 
   return (
-    <nav aria-label="Phân trang" className={`flex shrink-0 items-center justify-center gap-2 sm:gap-3 ${className}`}>
+    <nav
+      aria-label="Phân trang"
+      className={`flex flex-wrap items-center justify-center gap-1 sm:gap-[5px] ${className}`}
+    >
       <button
         type="button"
         aria-label="Trang trước"
         disabled={disabled || currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#EAE2D5] bg-white text-[#1E1917] transition-colors hover:border-[#a21f1f] hover:bg-[#FAF1EC] hover:text-[#a21f1f] disabled:cursor-not-allowed disabled:opacity-40 sm:h-10 sm:w-10"
+        className={`${buttonClass} ${inactiveClass}`}
       >
-        <ChevronLeft className="h-5 w-5" />
+        <ChevronLeft className="h-3.5 w-3.5" />
       </button>
 
-      <div className="flex h-9 items-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white px-2 text-sm font-semibold text-[#1E1917] sm:h-10 sm:px-2.5">
-        <input
-          aria-label={`Nhập số trang từ 1 đến ${lastPage}`}
-          type="text"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          disabled={disabled}
-          value={draft ?? String(currentPage)}
-          onFocus={(event) => event.currentTarget.select()}
-          onChange={(event) => {
-            const value = event.target.value;
-            if (/^\d{0,6}$/.test(value)) setDraft(value);
-          }}
-          onBlur={commitPage}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              event.currentTarget.blur();
-            } else if (event.key === "Escape") {
-              setDraft(null);
-            }
-          }}
-          className="h-6 w-12 rounded-lg border border-[#EAE2D5] bg-white text-center font-bold text-[#a21f1f] outline-none focus:border-[#a21f1f] disabled:opacity-50 sm:h-7"
-        />
-        <span aria-hidden="true" className="text-stone-400">/</span>
-        <span aria-label={`Tổng ${lastPage} trang`} className="min-w-5 text-center">{lastPage}</span>
-      </div>
+      {items.map((item, index) =>
+        item === "ellipsis" ? (
+          <span
+            key={`ellipsis-${index}`}
+            aria-hidden="true"
+            className="flex h-7 w-7 items-center justify-center text-[11px] text-[#907B69] sm:h-9 sm:w-9"
+          >
+            …
+          </span>
+        ) : (
+          <button
+            key={item}
+            type="button"
+            aria-label={`Trang ${item}`}
+            aria-current={item === currentPage ? "page" : undefined}
+            disabled={disabled || item === currentPage}
+            onClick={() => onPageChange(item)}
+            className={`${buttonClass} ${
+              item === currentPage
+                ? "bg-[#B71C1C] text-white hover:bg-[#9A1C1F]"
+                : inactiveClass
+            }`}
+          >
+            {item}
+          </button>
+        ),
+      )}
 
       <button
         type="button"
         aria-label="Trang sau"
         disabled={disabled || currentPage >= lastPage}
         onClick={() => onPageChange(currentPage + 1)}
-        className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[#EAE2D5] bg-white text-[#1E1917] transition-colors hover:border-[#a21f1f] hover:bg-[#FAF1EC] hover:text-[#a21f1f] disabled:cursor-not-allowed disabled:opacity-40 sm:h-10 sm:w-10"
+        className={`${buttonClass} ${inactiveClass}`}
       >
-        <ChevronRight className="h-5 w-5" />
+        <ChevronRight className="h-3.5 w-3.5" />
       </button>
     </nav>
   );

@@ -1,13 +1,14 @@
 import { ArrowUpRight, CheckCircle2, Globe, Sparkles, ShieldCheck } from "lucide-react";
-import { ABOUT_VALUES } from "../services/about.services";
 import type { AboutValuesSectionType } from "@/shared/schema/pages/about-product.schema";
 
 interface AboutValuesProps {
-  data?: AboutValuesSectionType;
+  data: AboutValuesSectionType;
 }
 
 export function AboutValues({ data }: AboutValuesProps) {
-  const items = data?.items && data.items.length > 0 ? data.items : ABOUT_VALUES;
+  const items = data.items ?? [];
+
+  if (items.length === 0) return null;
 
   const getIcon = (id: string) => {
     switch (id) {

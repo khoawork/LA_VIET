@@ -116,7 +116,7 @@ export function AdminCategoriesView() {
 
   // State bài viết tin tức
   const [newsList, setNewsList] = useState<NewsItemData[]>([]);
-  const [newsLoading, setNewsLoading] = useState<boolean>(false);
+  const [newsLoading, setNewsLoading] = useState<boolean>(true);
   const [newsPage, setNewsPage] = useState(1);
   const [newsTotalPages, setNewsTotalPages] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
@@ -704,9 +704,8 @@ export function AdminCategoriesView() {
           {/* Bảng danh sách bài viết */}
           <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
             {newsLoading || searchPending ? (
-              <div className="py-16 text-center text-sm font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
-                <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
-                <span>Đang tải danh sách bài viết...</span>
+              <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
+                <Loader2 className="h-5 w-5 animate-spin" /> Đang tải danh sách bài viết...
               </div>
             ) : newsList.length === 0 ? (
               <div className="py-16 text-center text-sm text-stone-500">
@@ -795,6 +794,7 @@ export function AdminCategoriesView() {
             totalPages={newsTotalPages}
             disabled={newsLoading || searchPending}
             onPageChange={(nextPage) => {
+              if (nextPage === newsPage) return;
               setNewsPage(nextPage);
               setNewsLoading(true);
             }}

@@ -46,6 +46,16 @@ export class PageProductRepository {
     });
   }
 
+  async getProductCategoryNames(ids: number[] = []) {
+    const products = await prisma.product.findMany({
+      where: ids.length ? { id: { in: ids } } : {},
+      distinct: ["categoryId"],
+      orderBy: { categoryId: "asc" },
+      select: { category: { select: { name: true } } },
+    });
+    return [...new Set(products.map((product) => product.category.name))];
+  }
+
   async deletePage(slug: string = "products") {
     return await prisma.page.delete({
       where: { slug },

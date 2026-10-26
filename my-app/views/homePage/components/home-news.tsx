@@ -114,7 +114,7 @@ export function HomeNews({ data }: HomeNewsProps) {
         {articlesList.map((art) => (
           <article
             key={art.id}
-            className="group flex flex-col bg-[#FAF7F2] rounded-2xl overflow-hidden border border-[#E8E2D5] hover:border-[#9A221A]/40 transition-all shadow-sm hover:shadow-md"
+            className="group flex flex-col bg-[#FAF7F2] rounded-md overflow-hidden border border-[#E8E2D5] hover:border-[#9A221A]/40 transition-all shadow-sm hover:shadow-md"
           >
             <div className="relative aspect-[16/10] overflow-hidden w-full">
               {art.image && (

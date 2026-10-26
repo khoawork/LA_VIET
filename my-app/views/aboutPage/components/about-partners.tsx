@@ -1,17 +1,16 @@
 import Image from "next/image";
 import { Beaker, Hotel, Landmark, Building, Building2, Factory, Quote } from "lucide-react";
-import { ABOUT_PARTNERS, ABOUT_TESTIMONIAL } from "../services/about.services";
 import type { AboutPartnersSectionType } from "@/shared/schema/pages/about-product.schema";
 
 interface AboutPartnersProps {
-  data?: AboutPartnersSectionType;
+  data: AboutPartnersSectionType;
 }
 
 export function AboutPartners({ data }: AboutPartnersProps) {
-  const badge = data?.badge || "HỢP TÁC & BẢO CHỨNG";
-  const heading = data?.heading || "ĐỐI TÁC CHIẾN LƯỢC & KHÁCH HÀNG DOANH NGHIỆP";
-  const partners = data?.items && data.items.length > 0 ? data.items : ABOUT_PARTNERS;
-  const testimonial = data?.testimonial?.quote ? data.testimonial : ABOUT_TESTIMONIAL;
+  const { badge, heading, testimonial } = data;
+  const partners = data.items ?? [];
+
+  if (partners.length === 0 && !testimonial?.quote) return null;
 
   const getPartnerIcon = (category: string) => {
     switch (category) {
@@ -73,7 +72,7 @@ export function AboutPartners({ data }: AboutPartnersProps) {
         </div>
 
         {/* Quote Testimonial Card */}
-        {testimonial && (
+        {testimonial?.quote && (
           <div className="p-6 sm:p-8 bg-white rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.02)] border border-[#EAE2D5] flex flex-col sm:flex-row items-center sm:items-start gap-6 relative">
             <Quote className="w-12 h-12 text-[#9A1C1F]/10 absolute right-6 top-6 pointer-events-none hidden sm:block" />
 

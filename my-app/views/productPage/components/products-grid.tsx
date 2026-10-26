@@ -1,11 +1,15 @@
 import Image from "next/image";
-import { Sparkles, ArrowUpRight, PackageOpen } from "lucide-react";
+import { ArrowUpRight, PackageOpen, Loader2 } from "lucide-react";
+import { PagePagination } from "@/shared/components/page-pagination";
 import { ProductItem } from "../types";
 
 interface ProductsGridProps {
-  products?: ProductItem[];
-  activeCategory: string;
-  displayedProductIds?: number[];
+  products: ProductItem[];
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  loading: boolean;
+  error: string;
 }
 
 function hasLightBackground(hex: string): boolean {
@@ -16,54 +20,36 @@ function hasLightBackground(hex: string): boolean {
 }
 
 export function ProductsGrid({
-  products = [],
-  activeCategory,
-  displayedProductIds,
+  products,
+  page,
+  totalPages,
+  onPageChange,
+  loading,
+  error,
 }: ProductsGridProps) {
-  // Lọc các sản phẩm được admin bật hiển thị trong database
-  const baseProducts =
-    displayedProductIds && displayedProductIds.length > 0
-      ? products.filter((item) => displayedProductIds.includes(Number(item.id)))
-      : products;
-
-  // Lọc theo danh mục được chọn
-  const filteredProducts =
-    activeCategory === "ALL"
-      ? baseProducts
-      : baseProducts.filter((item) => {
-          const catName = item.category?.name || "";
-          return catName === activeCategory;
-        });
-
   return (
     <section className="w-full bg-[#F7F5F0] py-10">
       <div className="w-full max-w-[1280px] mx-auto px-6 space-y-8">
-        {/* Sub-header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-[#E5DCD0]/50">
-          <span className="text-[#78665E] text-[12px] font-medium uppercase tracking-[1.2px]">
-            HIỂN THỊ {filteredProducts.length} TÁC PHẨM &amp; DÒNG SƠN TIÊU BIỂU GIÁM TUYỂN
-          </span>
-          <div className="flex items-center gap-2 text-[#B71C1C] text-[12px] font-semibold uppercase tracking-[1.2px]">
-            <Sparkles className="w-3.5 h-3.5 text-[#B71C1C] shrink-0" />
-            <span>PHÂN LOẠI THEO VẬT LIỆU &amp; CÔNG NGHỆ LIÊN NGÀNH</span>
-          </div>
-        </div>
-
         {/* 3-Column Responsive Grid */}
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center gap-2 py-16 text-sm text-[#78665E]">
+            <Loader2 className="h-5 w-5 animate-spin" /> Đang tải sản phẩm...
+          </div>
+        ) : error ? (
+          <div role="alert" className="py-16 text-center text-sm text-red-700">{error}</div>
+        ) : products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((item) => {
-              const badge = item.props?.badge || "ĐỘC BẢN LÀ VIỆT";
+            {products.map((item) => {
+              const badge = item.props?.badge;
               const badgeColor = item.props?.badgeColor || "red";
               const customBadgeColor = /^#[0-9a-fA-F]{6}$/.test(badgeColor)
                 ? badgeColor
                 : null;
               const dimension = item.props?.dimension;
-              const material = item.props?.material || "Sơn ta truyền thống";
-              const yearOrSpec = item.props?.yearOrSpec || "2024";
-              const categoryName = item.category?.name || item.title || "Sơn mài Là Việt";
-              const buttonLabel = item.props?.buttonLabel?.trim() ||
-                (item.props?.isTechnicalSpec ? "XEM THÔNG SỐ KỸ THUẬT" : "CHI TIẾT TÁC PHẨM");
+              const material = item.props?.material;
+              const yearOrSpec = item.props?.yearOrSpec;
+              const categoryName = item.category?.name || item.title;
+              const buttonLabel = item.props?.buttonLabel?.trim();
 
               return (
                 <article
@@ -81,7 +67,7 @@ export function ProductsGrid({
                     />
 
                     {/* Top-Left Badge */}
-                    <div
+                    {badge && <div
                       style={customBadgeColor ? { backgroundColor: customBadgeColor } : undefined}
                       className={`absolute top-2 left-2 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[1px] shadow-sm ${
                         customBadgeColor
@@ -92,7 +78,7 @@ export function ProductsGrid({
                       } ${customBadgeColor && hasLightBackground(customBadgeColor) ? "text-[#1E1917]" : "text-white"}`}
                     >
                       {badge}
-                    </div>
+                    </div>}
 
                     {/* Bottom-Right Dimension Badge */}
                     {dimension && (
@@ -105,9 +91,9 @@ export function ProductsGrid({
                   {/* Card Body */}
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-1.5">
-                      <span className="text-[#B71C1C] text-[11px] font-bold uppercase tracking-[1.1px] block">
+                      {categoryName && <span className="text-[#B71C1C] text-[11px] font-bold uppercase tracking-[1.1px] block">
                         {categoryName}
-                      </span>
+                      </span>}
                       <h3 className="text-[#2B1F1A] text-[20px] font-bold leading-7 group-hover:text-[#B71C1C] transition-colors">
                         {item.name}
                       </h3>
@@ -117,19 +103,19 @@ export function ProductsGrid({
                     </div>
 
                     {/* Specs & Action Buttons */}
-                    <div className="pt-3 border-t border-[#E5DCD0]/60 space-y-3">
+                    {(material || yearOrSpec || buttonLabel) && <div className="pt-3 border-t border-[#E5DCD0]/60 space-y-3">
                       {/* Specs Row */}
-                      <div className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wider">
-                        <span className="text-[#78665E] font-medium truncate max-w-[65%]">
+                      {(material || yearOrSpec) && <div className="flex items-center justify-between gap-2 text-[11px] uppercase tracking-wider">
+                        {material && <span className="text-[#78665E] font-medium truncate max-w-[65%]">
                           {material}
-                        </span>
-                        <span className="text-[#947816] font-semibold shrink-0">
+                        </span>}
+                        {yearOrSpec && <span className="text-[#947816] font-semibold shrink-0">
                           {yearOrSpec}
-                        </span>
-                      </div>
+                        </span>}
+                      </div>}
 
                       {/* Actions Row */}
-                      <div className="flex items-stretch gap-1 pt-1">
+                      {buttonLabel && <div className="flex items-stretch gap-1 pt-1">
                         <button
                           type="button"
                           className="flex-1 py-2.5 px-4 bg-[linear-gradient(180deg,#FAF6EE_0%,#F1E5D5_100%)] outline outline-1 outline-[#D9CEBE] -outline-offset-1 text-[#2B1F1A] text-[12px] font-semibold tracking-[0.6px] hover:bg-[#FAF6EE] transition-colors cursor-pointer text-center"
@@ -143,8 +129,8 @@ export function ProductsGrid({
                         >
                           <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
                         </button>
-                      </div>
-                    </div>
+                      </div>}
+                    </div>}
                   </div>
                 </article>
               );
@@ -162,6 +148,15 @@ export function ProductsGrid({
               Không có tác phẩm nào thuộc danh mục này hoặc toàn bộ tác phẩm đang được cài đặt ẩn từ trang quản trị.
             </p>
           </div>
+        )}
+
+        {!loading && !error && products.length > 0 && (
+          <PagePagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            className="pt-4"
+          />
         )}
       </div>
     </section>

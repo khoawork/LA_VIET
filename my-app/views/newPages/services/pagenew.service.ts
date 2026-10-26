@@ -12,6 +12,7 @@ import {
 } from "../types/pagenew.type";
 import { NotFoundException } from "@/shared/common/app-error";
 import { CloudinaryService } from "@/shared/services/cloudinary.service";
+import { withoutMissingDefaults } from "@/shared/utils/without-missing-defaults";
 
 export class PageNewService {
   private readonly defaultSlug = "news";
@@ -42,39 +43,23 @@ export class PageNewService {
 
   /**
    * Lấy cấu trúc toàn bộ Section của trang Tin tức.
-   * Nếu chưa có bản ghi trong DB, tự động khởi tạo với DEFAULT_PAGE_NEW_PROPS.
+   * Chỉ trả về nội dung đã lưu trong DB.
    */
   async getPageNewContent(slug: string = this.defaultSlug) {
-    let page = await this.repo.findBySlug(slug);
+    const page = await this.repo.findBySlug(slug);
+    if (!page) throw new NotFoundException("Page news not found");
 
-    if (!page) {
-      // Auto-seed trang lần đầu truy cập
-      page = await this.repo.create({
-        name: this.defaultPageName,
-        slug,
-        props: DEFAULT_PAGE_NEW_PROPS,
-      });
-    }
-
-    // Đảm bảo dữ liệu props trả ra luôn tuân thủ đúng PageNewPropsSchema
-    const parsedProps = PageNewPropsSchema.safeParse(page.props);
-
-    const safeProps: PageNewPropsType = parsedProps.success
-      ? parsedProps.data
-      : {
-          ...DEFAULT_PAGE_NEW_PROPS,
-          ...(typeof page.props === "object" && page.props !== null
-            ? (page.props as Record<string, unknown>)
-            : {}),
-        };
-
-    safeProps.featured.imageUrl = safeProps.featured.imageUrl.trim();
+    const props = withoutMissingDefaults(
+      page.props,
+      PageNewPropsSchema.parse(page.props),
+    );
+    props.featured.imageUrl = props.featured.imageUrl.trim();
 
     return {
       id: page.id,
       name: page.name,
       slug: page.slug,
-      props: safeProps,
+      props,
     };
   }
 
@@ -85,6 +70,21 @@ export class PageNewService {
     slug: string = this.defaultSlug,
     data: UpdatePageNewType,
   ) {
+    const existing = await this.repo.findBySlug(slug);
+    if (!existing) {
+      const props = await this.uploadFeaturedImage(PageNewPropsSchema.parse(data.props));
+      const created = await this.repo.create({
+        name: data.name ?? this.defaultPageName,
+        slug,
+        props,
+      });
+      return {
+        id: created.id,
+        name: created.name,
+        slug: created.slug,
+        props,
+      };
+    }
     const current = await this.getPageNewContent(slug);
 
     // Merge các section được cập nhật vào props hiện tại
@@ -114,17 +114,14 @@ export class PageNewService {
             metaTitle:
               data.props.seo.metaTitle ??
               current.props.seo?.metaTitle ??
-              DEFAULT_PAGE_NEW_PROPS.seo?.metaTitle ??
               "",
             metaDescription:
               data.props.seo.metaDescription ??
               current.props.seo?.metaDescription ??
-              DEFAULT_PAGE_NEW_PROPS.seo?.metaDescription ??
               "",
             keywords:
               data.props.seo.keywords ??
               current.props.seo?.keywords ??
-              DEFAULT_PAGE_NEW_PROPS.seo?.keywords ??
               "",
             ogImage: data.props.seo.ogImage ?? current.props.seo?.ogImage,
           }

@@ -64,6 +64,10 @@ export const ProjectsListResponseSchema = z.array(ProjectsResponseSchema);
 export const ProjectPatchSchema = ProjectRequestSchema.partial();
 
 export const ProjectQuerySchema = PaginationQuerySchema.extend({
+  categoryIds: z.string()
+    .regex(/^[1-9]\d*(,[1-9]\d*)*$/)
+    .transform((value) => [...new Set(value.split(",").map(Number))])
+    .optional(),
   ids: z
     .string()
     .regex(/^\d+(,\d+)*$/, {

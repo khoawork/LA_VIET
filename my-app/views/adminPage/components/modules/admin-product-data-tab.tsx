@@ -679,6 +679,7 @@ export function AdminProductDataTab({
         totalPages={totalPages}
         disabled={loading || searchPending}
         onPageChange={(nextPage) => {
+          if (nextPage === page) return;
           setPage(nextPage);
           setLoading(true);
         }}

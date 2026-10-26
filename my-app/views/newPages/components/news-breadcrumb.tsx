@@ -1,32 +1,30 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { NewsHeaderSectionType } from "../types/pagenew.type";
-import { DEFAULT_PAGE_NEW_PROPS } from "../types/pagenew.type";
 
 interface NewsBreadcrumbProps {
-  data?: NewsHeaderSectionType["breadcrumb"];
+  data: NewsHeaderSectionType["breadcrumb"];
 }
 
-export function NewsBreadcrumb({ data }: NewsBreadcrumbProps = {}) {
-  const breadcrumb = data || DEFAULT_PAGE_NEW_PROPS.header.breadcrumb;
-
+export function NewsBreadcrumb({ data }: NewsBreadcrumbProps) {
+  if (!data.homeText && !data.currentPageText) return null;
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
       <ol className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#695D56]">
-        <li>
+        {data.homeText && data.homeLink && <li>
           <Link
-            href={breadcrumb.homeLink || "/"}
+            href={data.homeLink}
             className="hover:text-[#a21f1f] transition-colors"
           >
-            {breadcrumb.homeText || "Trang chủ"}
+            {data.homeText}
           </Link>
-        </li>
-        <li>
+        </li>}
+        {data.homeText && data.homeLink && data.currentPageText && <li>
           <ChevronRight className="w-3.5 h-3.5 text-[#A89F95]" />
-        </li>
-        <li className="text-[#a21f1f] font-semibold">
-          {breadcrumb.currentPageText || "Tin tức & Nghiên cứu"}
-        </li>
+        </li>}
+        {data.currentPageText && <li className="text-[#a21f1f] font-semibold">
+          {data.currentPageText}
+        </li>}
       </ol>
     </nav>
   );

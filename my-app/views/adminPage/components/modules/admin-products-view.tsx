@@ -330,7 +330,7 @@ export function AdminProductsView() {
             </div>
             <p className="text-xs text-stone-600 mt-1 max-w-2xl">
               Tùy chỉnh nội dung khối giới thiệu (Hero Section), các chỉ số nghệ
-              thuật và thiết lập bật/tắt hiển thị từng tác phẩm sơn mài trên trang
+              thuật và thiết lập bật/tắt hiển thị từng tác phẩm trên trang
               công khai.
             </p>
           </div>

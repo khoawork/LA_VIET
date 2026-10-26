@@ -3,6 +3,11 @@ import { PaginationQuerySchema } from "./pagination.schema";
 
 export const ProductsQuerySchema = PaginationQuerySchema.extend({
   categoryId: z.coerce.number().int().positive().optional(),
+  categoryName: z.string().trim().min(1).optional(),
+  ids: z.string()
+    .regex(/^[1-9]\d*(,[1-9]\d*)*$/)
+    .transform((value) => [...new Set(value.split(",").map(Number))])
+    .optional(),
 });
 
 export const ProductsRequestSchema = z.object({
@@ -49,4 +54,7 @@ export const ProductsListItemResponseSchema = ProductsResponseSchema.pick({
   slug: true,
   description: true,
   category: true,
+  categoryId: true,
+  title: true,
+  props: true,
 });

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Eye,
   Sparkles,
@@ -14,10 +13,8 @@ import {
   BookOpenCheck,
   Mail,
   User,
-  Maximize2,
 } from "lucide-react";
 import type { PageNewPropsType } from "@/views/newPages/types/pagenew.type";
-import { NewsFeaturedModal } from "@/views/newPages/components/news-featured-modal";
 import type { SectionTab } from "./news-tab-nav";
 
 interface NewsSectionPreviewProps {
@@ -26,7 +23,6 @@ interface NewsSectionPreviewProps {
 }
 
 export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="bg-white rounded-2xl border border-[#EAE2D5] shadow-xs overflow-hidden flex flex-col sticky top-6">
@@ -83,14 +79,9 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
         {/* PREVIEW: FEATURED ARTICLE */}
         {activeTab === "featured" && (
           <div className="bg-white rounded-xl overflow-hidden border border-[#EAE2D5] shadow-xs">
-            {/* Top Image Box với tính năng Click xem Modal (Loading 3s + Giựt hù) */}
+            {/* Top Image Box */}
             <div
-              role="button"
-              tabIndex={0}
-              onClick={() => setIsModalOpen(true)}
-              onKeyDown={(e) => e.key === "Enter" && setIsModalOpen(true)}
-              className="relative aspect-[16/9] w-full overflow-hidden bg-[#EAE2D5] cursor-pointer group/previewImg"
-              title="Nhấp thử Modal Loading 3s + Giựt hù user"
+              className="relative aspect-[16/9] w-full overflow-hidden bg-[#EAE2D5]"
             >
               <img
                 src={
@@ -98,16 +89,8 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
                   "https://placehold.co/800x450?text=Preview+Image"
                 }
                 alt={data.featured.title}
-                className="w-full h-full object-cover group-hover/previewImg:scale-105 transition-transform duration-500"
+                className="w-full h-full object-cover"
               />
-
-              {/* Hover Badge gợi ý */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/previewImg:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 text-white text-[11px] font-bold backdrop-blur-md border border-white/20 shadow-lg">
-                  <Maximize2 className="w-3.5 h-3.5 text-[#ff6b6e]" />
-                  <span>Thử nghiệm Modal 3s</span>
-                </span>
-              </div>
 
               <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
                 <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#9A1C1F] text-white">
@@ -336,13 +319,6 @@ export function NewsSectionPreview({ activeTab, data }: NewsSectionPreviewProps)
         <span className="font-semibold text-[#9A1C1F]">Là Việt CMS</span>
       </div>
 
-      {/* Modal Loading 3s + Giựt hù user toàn màn hình */}
-      <NewsFeaturedModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        imageUrl={data.featured.imageUrl}
-        title={data.featured.title}
-      />
     </div>
   );
 }

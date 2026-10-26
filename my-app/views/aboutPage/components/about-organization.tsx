@@ -1,21 +1,17 @@
 import Image from "next/image";
 import { Crown, Building2, Palette, FlaskConical, Compass, ShieldCheck } from "lucide-react";
-import { ORG_LEADERS, ORG_DIVISIONS } from "../services/about.services";
 import type { AboutOrganizationSectionType } from "@/shared/schema/pages/about-product.schema";
 
 interface AboutOrganizationProps {
-  data?: AboutOrganizationSectionType;
+  data: AboutOrganizationSectionType;
 }
 
 export function AboutOrganization({ data }: AboutOrganizationProps) {
-  const badge = data?.badge || "CẤU TRÚC TỔ CHỨC";
-  const heading = data?.heading || "SƠ ĐỒ BỘ MÁY QUẢN TRỊ & SÁNG TÁC";
-  const description =
-    data?.description ||
-    "Mô hình kết hợp nhuần nhuyễn giữa Viện thẩm mỹ giám tuyển nghệ thuật, nhà xưởng nghệ nhân truyền thống và phòng thí nghiệm vật liệu ứng dụng.";
+  const { badge, heading, description } = data;
+  const leaders = data.leaders ?? [];
+  const divisions = data.divisions ?? [];
 
-  const leaders = data?.leaders && data.leaders.length > 0 ? data.leaders : ORG_LEADERS;
-  const divisions = data?.divisions && data.divisions.length > 0 ? data.divisions : ORG_DIVISIONS;
+  if (leaders.length === 0 && divisions.length === 0) return null;
 
   const getDivisionIcon = (code: string) => {
     switch (code) {
@@ -84,7 +80,7 @@ export function AboutOrganization({ data }: AboutOrganizationProps) {
           )}
 
           {/* Vertical Connecting Line 1 */}
-          <div className="w-0.5 h-7 bg-[#EAE2D5]" />
+          {leaders.length > 1 && <div className="w-0.5 h-7 bg-[#EAE2D5]" />}
 
           {/* Level 2: Tổng Giám Đốc */}
           {leaders[1] && (
@@ -120,7 +116,7 @@ export function AboutOrganization({ data }: AboutOrganizationProps) {
           )}
 
           {/* Vertical Connecting Line 2 */}
-          <div className="w-0.5 h-7 bg-[#EAE2D5]" />
+          {leaders.length > 0 && divisions.length > 0 && <div className="w-0.5 h-7 bg-[#EAE2D5]" />}
 
           {/* Level 3: 4 Khối chức năng */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full pt-2">

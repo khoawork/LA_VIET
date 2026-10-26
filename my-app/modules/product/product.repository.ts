@@ -32,6 +32,8 @@ export class ProductRepository {
     async getAllProducts(query: ProductQueryType) {
         const where: Prisma.ProductWhereInput = {
             ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+            ...(query.categoryName ? { category: { name: query.categoryName } } : {}),
+            ...(query.ids?.length ? { id: { in: query.ids } } : {}),
             ...(query.search ? {
                 OR: [
                     { name: { contains: query.search } },
@@ -51,6 +53,9 @@ export class ProductRepository {
                     image: true,
                     slug: true,
                     description: true,
+                    title: true,
+                    props: true,
+                    categoryId: true,
                     category: {
                         select: {
                             name: true,

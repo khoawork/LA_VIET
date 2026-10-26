@@ -4,21 +4,19 @@ import type { AboutCtaSectionType } from "@/shared/schema/pages/about-product.sc
 import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface AboutCtaProps {
-  data?: AboutCtaSectionType;
+  data: AboutCtaSectionType;
 }
 
 export function AboutCta({ data }: AboutCtaProps) {
-  const badge = data?.badge || "KHỞI TẠO TÁC PHẨM ĐỘC BẢN";
-  const heading = data?.heading || "ĐỒNG HÀNH KIẾN TẠO DỰ ÁN CÙNG LÀ VIỆT";
-  const description =
-    data?.description ||
-    "Hãy liên hệ với đội ngũ giám tuyển và kỹ sư chuyên môn của chúng tôi để đưa tinh hoa sơn mài hội hoạ vào không gian kiến trúc của bạn.";
+  const badge = data.badge;
+  const heading = data.heading ?? "";
+  const description = data.description ?? "";
+  const primaryLabel = data.primaryButton?.label;
+  const primaryLink = data.primaryButton?.link;
+  const secondaryLabel = data.secondaryButton?.label;
+  const secondaryLink = data.secondaryButton?.link;
 
-  const primaryLabel = data?.primaryButton?.label || "ĐẶT LỊCH TƯ VẤN CHUYÊN GIA";
-  const primaryLink = data?.primaryButton?.link || "/contact";
-
-  const secondaryLabel = data?.secondaryButton?.label || "XEM CATALOGUE DỰ ÁN";
-  const secondaryLink = data?.secondaryButton?.link || "/products";
+  if (!badge && !heading && !description && !primaryLabel && !secondaryLabel) return null;
 
   return (
     <section className="mb-8">
@@ -46,23 +44,23 @@ export function AboutCta({ data }: AboutCtaProps) {
           </div>
 
           {/* Right action buttons column */}
-          <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
-            <Link
+          {((primaryLabel && primaryLink) || (secondaryLabel && secondaryLink)) && <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
+            {primaryLabel && primaryLink && <Link
               href={primaryLink}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white hover:bg-rose-50 text-[#851619] font-bold text-xs uppercase tracking-wider shadow-lg transition-transform active:scale-[0.98]"
             >
               <span>{primaryLabel}</span>
               <ArrowRight className="w-4 h-4 text-[#851619]" />
-            </Link>
+            </Link>}
 
-            <Link
+            {secondaryLabel && secondaryLink && <Link
               href={secondaryLink}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs uppercase tracking-wider transition-colors active:scale-[0.98]"
             >
               <BookOpen className="w-4 h-4 text-white" />
               <span>{secondaryLabel}</span>
-            </Link>
-          </div>
+            </Link>}
+          </div>}
         </div>
       </div>
     </section>

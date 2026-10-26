@@ -1,15 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, BookOpenCheck, Mail } from "lucide-react";
 import type { NewsCtaSectionType } from "../types/pagenew.type";
-import { DEFAULT_PAGE_NEW_PROPS } from "../types/pagenew.type";
 
 interface NewsCtaProps {
-  data?: NewsCtaSectionType;
+  data: NewsCtaSectionType;
 }
 
-export function NewsCta({ data }: NewsCtaProps = {}) {
-  const cta = data || DEFAULT_PAGE_NEW_PROPS.cta;
-
+export function NewsCta({ data: cta }: NewsCtaProps) {
   return (
     <section className="mb-10">
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#690E12] via-[#851619] to-[#600C10] text-white p-8 sm:p-10 lg:p-12 shadow-2xl">
@@ -34,23 +31,23 @@ export function NewsCta({ data }: NewsCtaProps = {}) {
           </div>
 
           {/* Right action buttons column */}
-          <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
-            <Link
-              href={cta.primaryButton.link || "/contact"}
+          {((cta.primaryButton.text && cta.primaryButton.link) || (cta.secondaryButton.text && cta.secondaryButton.link)) && <div className="w-full lg:w-auto flex flex-col sm:flex-row lg:flex-col gap-3.5 shrink-0">
+            {cta.primaryButton.text && cta.primaryButton.link && <Link
+              href={cta.primaryButton.link}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white hover:bg-rose-50 text-[#851619] font-bold text-xs uppercase tracking-wider shadow-lg transition-transform active:scale-[0.98]"
             >
               <span>{cta.primaryButton.text}</span>
               <ArrowRight className="w-4 h-4 text-[#851619]" />
-            </Link>
+            </Link>}
 
-            <Link
-              href={cta.secondaryButton.link || "#newsletter"}
+            {cta.secondaryButton.text && cta.secondaryButton.link && <Link
+              href={cta.secondaryButton.link}
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs uppercase tracking-wider transition-colors active:scale-[0.98]"
             >
               <Mail className="w-4 h-4 text-white" />
               <span>{cta.secondaryButton.text}</span>
-            </Link>
-          </div>
+            </Link>}
+          </div>}
         </div>
       </div>
     </section>

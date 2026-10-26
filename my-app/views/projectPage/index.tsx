@@ -9,23 +9,21 @@ import {
   ProjectProcess,
   ProjectCta,
 } from "./components";
-import { getProjectPage, getProjectRecords } from "./services/project.service";
-import type { ProjectPageData, ProjectRecord } from "./types/project.type";
+import { getProjectPage } from "./services/project.service";
+import type { ProjectPageData } from "./types/project.type";
 
 export default function ProjectPage() {
   const [page, setPage] = useState<ProjectPageData | null>(null);
-  const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     let mounted = true;
 
-    Promise.all([getProjectPage(), getProjectRecords()])
-      .then(([pageData, projectData]) => {
+    getProjectPage()
+      .then((pageData) => {
         if (!mounted) return;
         setPage(pageData);
-        setProjects(projectData);
       })
       .catch((err: Error) => {
         if (mounted) setError(err.message);
@@ -51,7 +49,7 @@ export default function ProjectPage() {
     <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-2 px-4 py-2 sm:px-6 lg:px-8">
       <ProjectBreadcrumb breadcrumb={page.props.header.breadcrumb} />
       <ProjectStats stats={page.props.header.stats ?? []} />
-      <ProjectList projects={projects} filter={page.props.filter} />
+      <ProjectList filter={page.props.filter} />
       <ProjectProcess procedure={page.props.procedure} />
       <ProjectCta cta={page.props.cta} />
     </div>

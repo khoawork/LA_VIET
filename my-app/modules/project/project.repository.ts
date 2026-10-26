@@ -38,11 +38,11 @@ export class ProjectRepository {
             },
           }
         : {}),
-      ...(query.categoryId !== undefined
-        ? {
-            categoryId: query.categoryId,
-          }
-        : {}),
+      ...(query.categoryIds?.length
+        ? { categoryId: { in: query.categoryIds } }
+        : query.categoryId !== undefined
+          ? { categoryId: query.categoryId }
+          : {}),
     };
     const [projects, totalItems] = await prisma.$transaction([
       prisma.project.findMany({

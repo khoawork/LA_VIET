@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Home, ChevronRight, ShieldCheck } from "lucide-react";
 import { ProductCategory } from "../types";
-import { PRODUCT_CATEGORIES } from "../data/products.data";
 
 export interface HeroSectionData {
   badge?: string;
@@ -15,8 +14,8 @@ export interface HeroSectionData {
 interface ProductsHeroProps {
   activeCategory: ProductCategory;
   onSelectCategory: (cat: ProductCategory) => void;
-  heroData?: HeroSectionData;
-  categories?: Array<{ id: string; label: string }>;
+  heroData: HeroSectionData;
+  categories: Array<{ id: string; label: string }>;
 }
 
 export function ProductsHero({
@@ -25,20 +24,7 @@ export function ProductsHero({
   heroData,
   categories,
 }: ProductsHeroProps) {
-  const categoryList = categories && categories.length > 0 ? categories : PRODUCT_CATEGORIES;
-  const badge = heroData?.badge || "GIÁM TUYỂN ĐỘC QUYỀN";
-  const heading = heroData?.heading || "DANH MỤC TÁC PHẨM & ỨNG DỤNG SƠN MÀI";
-  const description =
-    heroData?.description ||
-    "Tại xưởng hội hoạ Là Việt, chất liệu sơn ta nguyên bản từ cây sơn Phú Thọ giao thoa cùng tư duy không gian đương đại. Từng nét dát vàng quỳ, cẩn ốc xà cừ hay mài quang kỳ công được chuyển hoá thành các đại hoạ phẩm vách ốp, bàn trà điêu khắc và tác phẩm độc bản – bảo lưu trọn vẹn khí chất phương Đông.";
-  const metrics =
-    heroData?.metrics && heroData.metrics.length > 0
-      ? heroData.metrics
-      : [
-          { value: "100%", label: "SƠN TA TỰ NHIÊN" },
-          { value: "06+", label: "THÁNG CHẾ TÁC" },
-          { value: "ĐỘC BẢN", label: "KHÔNG BẢN SAO" },
-        ];
+  const { badge, heading, description, metrics = [] } = heroData;
   return (
     <section className="w-full bg-[#F3E9DA] border-b border-[#E5DCD0] py-10">
       <div className="w-full max-w-[1280px] mx-auto px-6 space-y-8">
@@ -58,10 +44,10 @@ export function ProductsHero({
           </div>
 
           {/* Curator Tag */}
-          <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.6px] text-[#B71C1C]">
+          {badge && <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.6px] text-[#B71C1C]">
             <ShieldCheck className="w-4 h-4 text-[#B71C1C]" />
             <span>{badge}</span>
-          </div>
+          </div>}
         </div>
 
         {/* Title, Description & Dynamic Metrics */}
@@ -76,7 +62,7 @@ export function ProductsHero({
             </p>
 
             {/* Dynamic Metrics */}
-            <div className="flex items-center gap-6 shrink-0 pt-2 lg:pt-0">
+            {metrics.length > 0 && <div className="flex items-center gap-6 shrink-0 pt-2 lg:pt-0">
               {metrics.map((metric, idx) => (
                 <div key={idx} className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
@@ -92,13 +78,13 @@ export function ProductsHero({
                   )}
                 </div>
               ))}
-            </div>
+            </div>}
           </div>
         </div>
 
         {/* Filter Categories Tabs */}
         <div className="flex flex-wrap items-center gap-2.5 pt-2">
-          {categoryList.map((cat) => {
+          {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
               <button

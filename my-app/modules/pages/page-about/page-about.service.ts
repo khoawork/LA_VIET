@@ -4,9 +4,9 @@ import {
 } from "./page-about.repository";
 import {
   CreatePageAboutType,
-  DEFAULT_ABOUT_PAGE_CONFIG,
   UpdatePageAboutType,
 } from "./page-about.type";
+import { NotFoundException } from "@/shared/common/app-error";
 
 export class PageAboutService {
   constructor(
@@ -16,18 +16,13 @@ export class PageAboutService {
   async getPageBySlug(slug: string = "about") {
     const page = await this.pageAboutRepository.getPageBySlug(slug);
     if (!page) {
-      return {
-        id: 0,
-        name: DEFAULT_ABOUT_PAGE_CONFIG.name,
-        slug: DEFAULT_ABOUT_PAGE_CONFIG.slug,
-        props: DEFAULT_ABOUT_PAGE_CONFIG.props as any,
-      };
+      throw new NotFoundException("Page about not found");
     }
     return page;
   }
 
   async getAboutPageData(slug: string = "about") {
-    const page = await this.getPageBySlug(slug);
+    const page = await this.pageAboutRepository.getPageBySlug(slug);
     return {
       page,
     };

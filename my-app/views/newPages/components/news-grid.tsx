@@ -26,53 +26,59 @@ export function NewsGrid({ data }: { data: NewsArticlesSectionType }) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [articles, setArticles] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState("");
   const [totalPages, setTotalPages] = useState<number>(1);
-  const groups = data.filterGroups.length > 0
-    ? data.filterGroups
-    : [{ name: "TẤT CẢ BẢN TIN", categories: [] }];
-  const selectedGroup = groups[selectedFilter] ?? groups[0];
-  const categoryIds = selectedGroup.categories.join(",");
+  const groups = data.filterGroups;
+  const selectedGroup = groups[selectedFilter];
+  const categoryIds = selectedGroup?.categories.join(",") ?? "";
 
   // 2. Tải danh sách bài viết từ database qua API
   useEffect(() => {
+    const controller = new AbortController();
     async function loadNews() {
       try {
         setLoading(true);
-        let url = `/api/news?page=${currentPage}&limit=10`;
+        setError("");
+        let url = `/api/news?page=${currentPage}`;
         if (categoryIds) {
           url += `&categoryIds=${categoryIds}`;
         }
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) throw new Error("Không thể tải danh sách tin tức.");
         const json = await res.json();
-        if (json.success && Array.isArray(json.data)) {
+        if (!json.success || !Array.isArray(json.data)) {
+          throw new Error("Dữ liệu tin tức không hợp lệ.");
+        }
+        if (!controller.signal.aborted) {
           const mapped: NewsItem[] = json.data.map((item: NewsApiItem) => ({
             id: String(item.id),
             title: item.name,
             slug: item.slug,
             category: String(item.categoryId) as `${number}`,
-            categoryLabel: item.category?.name || "Tin tức",
-            tagBadge: item.category?.name?.toUpperCase() || "TIN TỨC",
-            author: item.preside || "Là Việt",
+            categoryLabel: item.category?.name ?? "",
+            tagBadge: item.category?.name?.toUpperCase() ?? "",
+            author: item.preside ?? "",
             publishedDate: item.date
               ? new Date(item.date).toLocaleDateString("vi-VN")
-              : "15/10/2025",
-            readTime: item.reading || "5 phút đọc",
+              : "",
+            readTime: item.reading ?? "",
             description: item.description,
             imageUrl: item.image,
           }));
           setArticles(mapped);
-          if (json.meta?.totalPages) {
-            setTotalPages(json.meta.totalPages);
-          }
+          setTotalPages(json.meta?.totalPages ?? 1);
         }
       } catch (err) {
-        console.error("Lỗi tải bài viết tin tức:", err);
+        if (!controller.signal.aborted) {
+          setError(err instanceof Error ? err.message : "Không thể tải danh sách tin tức.");
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     }
 
     loadNews();
+    return () => controller.abort();
   }, [currentPage, categoryIds]);
 
   return (
@@ -107,6 +113,10 @@ export function NewsGrid({ data }: { data: NewsArticlesSectionType }) {
             Đang tải dữ liệu bài viết mới nhất...
           </p>
         </div>
+      ) : error ? (
+        <div role="alert" className="text-center py-16 text-sm text-red-700">
+          {error}
+        </div>
       ) : articles.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-[#EAE2D5] text-[#695D56]">
           <p className="text-sm">Hiện chưa có bài viết nào trong chuyên mục này.</p>
@@ -121,7 +131,7 @@ export function NewsGrid({ data }: { data: NewsArticlesSectionType }) {
       )}
 
       {/* Pagination Bar */}
-      {!loading && totalPages > 1 && (
+      {!loading && !error && articles.length > 0 && (
         <PagePagination
           page={currentPage}
           totalPages={totalPages}

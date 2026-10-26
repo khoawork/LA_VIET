@@ -6,4 +6,3 @@ export * from "./news-stats";
 export * from "./news-card";
 export * from "./news-grid";
 export * from "./news-cta";
-export * from "./news-featured-modal";

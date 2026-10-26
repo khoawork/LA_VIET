@@ -11,6 +11,8 @@ import {
   UpdatePageHomeType,
 } from "../types/pagehome.type";
 import { CloudinaryService } from "@/shared/services/cloudinary.service";
+import { NotFoundException } from "@/shared/common/app-error";
+import { withoutMissingDefaults } from "@/shared/utils/without-missing-defaults";
 
 export class PageHomeService {
   private readonly defaultSlug = "home";
@@ -81,35 +83,22 @@ export class PageHomeService {
 
   /**
    * Lấy cấu trúc toàn bộ Section của trang Trang chủ.
-   * Nếu chưa có bản ghi trong DB, tự động khởi tạo với DEFAULT_PAGE_HOME_PROPS.
+   * Chỉ trả về nội dung đã lưu trong DB.
    */
   async getPageHomeContent(slug: string = this.defaultSlug) {
-    let page = await this.repo.findBySlug(slug);
+    const page = await this.repo.findBySlug(slug);
+    if (!page) throw new NotFoundException("Page home not found");
 
-    if (!page) {
-      page = await this.repo.create({
-        name: this.defaultPageName,
-        slug,
-        props: DEFAULT_PAGE_HOME_PROPS,
-      });
-    }
-
-    const parsedProps = PageHomePropsSchema.safeParse(page.props);
-
-    const safeProps: PageHomePropsType = parsedProps.success
-      ? parsedProps.data
-      : {
-          ...DEFAULT_PAGE_HOME_PROPS,
-          ...(typeof page.props === "object" && page.props !== null
-            ? (page.props as Record<string, unknown>)
-            : {}),
-        };
+    const props = withoutMissingDefaults(
+      page.props,
+      PageHomePropsSchema.parse(page.props),
+    );
 
     return {
       id: page.id,
       name: page.name,
       slug: page.slug,
-      props: safeProps,
+      props,
     };
   }
 

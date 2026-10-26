@@ -3,19 +3,16 @@ import type { AboutHeroSectionType } from "@/shared/schema/pages/about-product.s
 import { FormattedColorText } from "@/shared/components/formatted-color-text";
 
 interface AboutHeroProps {
-  data?: AboutHeroSectionType;
+  data: AboutHeroSectionType;
 }
 
 export function AboutHero({ data }: AboutHeroProps) {
-  const badge = data?.badge || "SƠN MÀI HỘI HOẠ LIÊN NGÀNH";
-  const heading =
-    data?.heading ||
-    "HÀNH TRÌNH TÔN VINH DI SẢN SƠN MÀI TRONG KHÔNG GIAN ĐƯƠNG ĐẠI";
-  const description =
-    data?.description ||
-    "Công ty TNHH Ứng dụng Liên ngành Sơn mài Hội hoạ Là Việt kết hợp nền tảng nhựa mủ sơn ta Phú Thọ nguyên bản cùng các thành tựu vật liệu mới, tạo lập cầu nối giữa di sản hội hoạ hàn lâm và thực tiễn kiến trúc quy mô lớn.";
-  const sealSubtitle = data?.imageSubtitle || "ẤN TRIỆN LÀ VIỆT";
-  const sealTitle = data?.imageTitle || "LÀ VIỆT";
+  const { badge, imageSubtitle: sealSubtitle } = data;
+  const heading = data.heading ?? "";
+  const description = data.description ?? "";
+  const sealTitle = data.imageTitle ?? "";
+
+  if (!badge && !heading && !description && !sealTitle && !sealSubtitle) return null;
 
   return (
     <section className="relative overflow-hidden bg-white rounded-2xl border border-[#EAE2D5]/90 p-8 sm:p-10 lg:p-12 shadow-[0_2px_8px_rgba(0,0,0,0.02)] mb-8 sm:mb-10">
@@ -25,7 +22,7 @@ export function AboutHero({ data }: AboutHeroProps) {
 
       <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
         {/* Left Column: Heading & Mission Narrative */}
-        <div className="lg:col-span-8 space-y-6">
+        <div className={`${sealTitle || sealSubtitle ? "lg:col-span-8" : "lg:col-span-12"} space-y-6`}>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF1EC] border border-[#F2C2BB]/40 text-[#9A1C1F] text-xs font-bold uppercase tracking-wider">
             <Award className="w-4 h-4" />
             <span>{badge}</span>
@@ -47,7 +44,7 @@ export function AboutHero({ data }: AboutHeroProps) {
         </div>
 
         {/* Right Column: Seal Stamp Card */}
-        <div className="lg:col-span-4 flex justify-center lg:justify-end">
+        {(sealTitle || sealSubtitle) && <div className="lg:col-span-4 flex justify-center lg:justify-end">
           <div className="w-full max-w-xs p-5 bg-[#FAF7F2] rounded-2xl shadow-sm border border-[#EAE2D5] relative group">
             <div className="relative aspect-square w-full bg-[#FAF0D9]/80 rounded-xl p-5 flex flex-col justify-center items-center overflow-hidden border border-[#E5DAC9]/80">
               {/* Traditional Lacquer Seal Stamp Graphic */}
@@ -68,7 +65,7 @@ export function AboutHero({ data }: AboutHeroProps) {
               </div>
             </div>
           </div>
-        </div>
+        </div>}
       </div>
     </section>
   );
