@@ -14,7 +14,6 @@ import {
   CreatePageHomeRequestSchema,
   UpdatePageHomeRequestSchema,
   PageHomeResponseSchema,
-  DEFAULT_PAGE_HOME_PROPS,
 } from "@/shared/schema/pages/pagehome.schema";
 
 // Types cho từng Section của Trang chủ
@@ -46,6 +45,4 @@ export type PageHomePropsType = z.infer<typeof PageHomePropsSchema>;
 export type CreatePageHomeType = z.infer<typeof CreatePageHomeRequestSchema>;
 export type UpdatePageHomeType = z.infer<typeof UpdatePageHomeRequestSchema>;
 export type PageHomeResponseType = z.infer<typeof PageHomeResponseSchema>;
-
-export { DEFAULT_PAGE_HOME_PROPS };
 

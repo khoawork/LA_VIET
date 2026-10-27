@@ -1,14 +1,8 @@
 import "dotenv/config";
 import { Prisma } from "./generated/prisma/client";
 import { prisma } from "./prisma.service";
-import { DEFAULT_ABOUT_PAGE_CONFIG } from "../modules/pages/page-about/page-about.type";
-import { DEFAULT_PRODUCTS_PAGE_CONFIG } from "../modules/pages/page-product/page-product.type";
-import { DEFAULT_PAGE_HOME_PROPS } from "../views/homePage/types/pagehome.type";
-import { DEFAULT_PAGE_NEW_PROPS } from "../views/newPages/types/pagenew.type";
 import { PageContactRequestSchema } from "../shared/schema/pages/page-contact.schema";
 import { PageProjectPropsSchema } from "../shared/schema/pages/page-project.schema";
-import { ProductsPagePropsSchema } from "../shared/schema/pages/page-product.schema";
-import { DEFAULT_MENU_ITEMS } from "../shared/schema/menu.schema";
 
 const productCategories = [
   "Tranh Sơn Mài Khổ Lớn",
@@ -546,26 +540,7 @@ async function seedSiteSettings() {
   console.log("  + Đã tạo cấu hình thương hiệu và footer.");
 }
 
-async function seedPages(
-  productIds: number[],
-  seededNews: Awaited<ReturnType<typeof seedNews>>,
-) {
-  const homeProps = structuredClone(DEFAULT_PAGE_HOME_PROPS);
-  homeProps.newsSection.articleIds = seededNews.slice(0, 3).map((article) => article.id);
-  await ensurePage("Trang Chủ", "home", homeProps);
-
-  await ensurePage(
-    DEFAULT_ABOUT_PAGE_CONFIG.name,
-    DEFAULT_ABOUT_PAGE_CONFIG.slug,
-    DEFAULT_ABOUT_PAGE_CONFIG.props,
-  );
-
-  const productPageProps = ProductsPagePropsSchema.parse({
-    ...DEFAULT_PRODUCTS_PAGE_CONFIG.props,
-    displayedProductIds: productIds,
-  });
-  await ensurePage("Trang Sản Phẩm", "products", productPageProps);
-
+async function seedPages() {
   const categories = await prisma.projectCategory.findMany({
     where: { name: { in: projectCategories } },
     orderBy: { id: "asc" },
@@ -645,31 +620,7 @@ async function seedPages(
   });
   await ensurePage("Trang Dự Án", "projects", projectPageProps);
 
-  await ensurePage(
-    "Tin tức, Nghiên cứu & Hoạt động",
-    "news",
-    {
-      ...structuredClone(DEFAULT_PAGE_NEW_PROPS),
-      featured: {
-        ...DEFAULT_PAGE_NEW_PROPS.featured,
-        title: seededNews[0]?.name ?? DEFAULT_PAGE_NEW_PROPS.featured.title,
-        slug: seededNews[0]?.slug ?? DEFAULT_PAGE_NEW_PROPS.featured.slug,
-        author: seededNews[0]?.preside ?? DEFAULT_PAGE_NEW_PROPS.featured.author,
-        publishedDate:
-          seededNews[0]?.date.toLocaleDateString("vi-VN") ??
-          DEFAULT_PAGE_NEW_PROPS.featured.publishedDate,
-        readTime:
-          seededNews[0]?.reading ?? DEFAULT_PAGE_NEW_PROPS.featured.readTime,
-        description:
-          seededNews[0]?.description ??
-          DEFAULT_PAGE_NEW_PROPS.featured.description,
-        imageUrl:
-          seededNews[0]?.image ?? DEFAULT_PAGE_NEW_PROPS.featured.imageUrl,
-      },
-    },
-  );
   await ensurePage(contactPage.name, "contact", contactPage.props);
-  await ensurePage("Menu & Điều Hướng Website", "menu", { items: DEFAULT_MENU_ITEMS });
 }
 
 async function seedUsers() {
@@ -730,12 +681,12 @@ async function main() {
   console.log("🌱 Bắt đầu khởi tạo dữ liệu mẫu cho website Là Việt...");
 
   await seedUsers();
-  const productIds = await seedProducts();
+  await seedProducts();
   await seedProjects();
-  const seededNews = await seedNews();
+  await seedNews();
   await seedSiteSettings();
 
-  await seedPages(productIds, seededNews);
+  await seedPages();
   console.log("🎉 Hoàn tất seed dữ liệu website Là Việt.");
 }
 

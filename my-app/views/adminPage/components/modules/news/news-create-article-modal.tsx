@@ -2,6 +2,7 @@
 
 import { Newspaper, Loader2, Plus, X, AlertCircle } from "lucide-react";
 import type { NewsCategoryData } from "./news-categories-management";
+import { ImageUrlUploadField } from "../image-url-upload-field";
 
 interface NewsCreateArticleModalProps {
   isOpen: boolean;
@@ -73,7 +74,7 @@ export function NewsCreateArticleModal({
               placeholder="Ví dụ: Kỹ thuật dát vàng quỳ trên tranh sơn mài..."
               value={formData.name}
               onChange={(e) => onChange({ ...formData, name: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
 
@@ -87,7 +88,7 @@ export function NewsCreateArticleModal({
                 onChange={(e) =>
                   onChange({ ...formData, categoryId: Number(e.target.value) })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] bg-white focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] bg-white focus:outline-none focus:border-[#a21f1f]"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -132,15 +133,11 @@ export function NewsCreateArticleModal({
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-[#1E1917]">URL Hình ảnh bài viết</label>
-            <input
-              type="text"
-              value={formData.image}
-              onChange={(e) => onChange({ ...formData, image: e.target.value })}
-              className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
-            />
-          </div>
+          <ImageUrlUploadField
+            label="Hình ảnh bài viết"
+            value={formData.image}
+            onChange={(image) => onChange({ ...formData, image })}
+          />
 
           <div className="space-y-1">
             <label className="text-xs font-bold text-[#1E1917]">

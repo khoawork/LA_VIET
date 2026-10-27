@@ -1,12 +1,11 @@
 import { LayoutTemplate, Loader2, Save } from "lucide-react";
 
 interface Props {
-  hasSettings: boolean;
   saving: boolean;
   onSave: () => void;
 }
 
-export function BrandingHeader({ hasSettings, saving, onSave }: Props) {
+export function BrandingHeader({ saving, onSave }: Props) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#EAE2D5] bg-white p-6 shadow-xs">
       <div className="flex items-center gap-3.5">
@@ -28,7 +27,7 @@ export function BrandingHeader({ hasSettings, saving, onSave }: Props) {
           className="inline-flex items-center gap-2 rounded-xl bg-[#9A1C1F] px-5 py-2.5 text-xs font-bold text-white hover:bg-[#7D1619] disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-          {saving ? "Đang lưu..." : hasSettings ? "Lưu tab đang chọn" : "Tạo cấu hình"}
+          {saving ? "Đang lưu..." : "Lưu thay đổi"}
         </button>
       </div>
     </header>

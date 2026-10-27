@@ -77,7 +77,7 @@ export function ProjectCtaTab({ data, onChange }: Props) {
             label={`Xóa liên hệ ${index + 1}`}
             onClick={() => onChange({ ...data, contacts: contacts.filter((_, i) => i !== index) })}
           />
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             <IconSelect
               label="Icon"
               value={contact.icon}
@@ -102,18 +102,20 @@ export function ProjectCtaTab({ data, onChange }: Props) {
                 })
               }
             />
-            <ProjectTextField
-              label="Giá trị"
-              value={contact.value}
-              onChange={(value) =>
-                onChange({
-                  ...data,
-                  contacts: contacts.map((item, i) =>
-                    i === index ? { ...item, value } : item,
-                  ),
-                })
-              }
-            />
+            <div className="md:col-span-2 lg:col-span-1">
+              <ProjectTextField
+                label="Giá trị"
+                value={contact.value}
+                onChange={(value) =>
+                  onChange({
+                    ...data,
+                    contacts: contacts.map((item, i) =>
+                      i === index ? { ...item, value } : item,
+                    ),
+                  })
+                }
+              />
+            </div>
           </div>
         </div>
       ))}

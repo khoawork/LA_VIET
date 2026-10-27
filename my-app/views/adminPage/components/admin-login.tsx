@@ -111,7 +111,7 @@ export function AdminLogin() {
   return (
     <div
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#a21f1f] p-4 sm:p-6 overflow-y-auto"
+      className="admin-form-values fixed inset-0 z-50 flex items-center justify-center bg-[#a21f1f] p-4 sm:p-6 overflow-y-auto"
     >
       {/* Ambient background glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d1a25b]/20 rounded-full blur-3xl pointer-events-none" />
@@ -212,7 +212,7 @@ export function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="admin@laviet.vn"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
                 />
               </div>
             </div>
@@ -250,7 +250,7 @@ export function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-medium"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
                 />
                 <button
                   type="button"

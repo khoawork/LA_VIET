@@ -26,7 +26,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
             type="text"
             value={data.badge}
             onChange={(e) => onChange({ ...data, badge: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-bold"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-normal"
           />
         </div>
 
@@ -38,7 +38,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-bold text-[#1E1917]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917]"
           />
         </div>
 
@@ -73,7 +73,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-bold"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-normal"
             />
           </div>
           <div className="space-y-1">
@@ -114,7 +114,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-semibold"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-normal"
             />
           </div>
           <div className="space-y-1">

@@ -2,6 +2,7 @@
 
 import { Globe } from "lucide-react";
 import type { HomeSeoSectionType } from "@/views/homePage/types/pagehome.type";
+import { ImageUrlUploadField } from "../image-url-upload-field";
 
 interface HomeSeoTabProps {
   data: HomeSeoSectionType;
@@ -34,7 +35,7 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
           <span className="text-[10px] text-stone-400">
             Khuyến nghị từ 50-60 ký tự. Hiện tại: {data.title?.length || 0} ký tự.
@@ -69,17 +70,11 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
           />
         </div>
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-[#1E1917]">
-            Ảnh chia sẻ mạng xã hội (OG Image URL)
-          </label>
-          <input
-            type="text"
-            value={data.ogImage}
-            onChange={(e) => onChange({ ...data, ogImage: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-mono text-stone-600 focus:outline-none focus:border-[#a21f1f]"
-          />
-        </div>
+        <ImageUrlUploadField
+          label="Ảnh chia sẻ mạng xã hội (OG Image)"
+          value={data.ogImage ?? ""}
+          onChange={(ogImage) => onChange({ ...data, ogImage })}
+        />
       </div>
     </div>
   );

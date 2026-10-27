@@ -30,7 +30,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
               <span className="text-[10px] text-[#A89F95]">ID: {stat.id}</span>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)_minmax(0,1.4fr)] sm:items-start">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1fr)_minmax(0,1.4fr)] lg:items-start">
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-[#695D56] block">
                   Con số ấn tượng
@@ -43,7 +43,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
                     newItems[idx] = { ...newItems[idx], value: e.target.value };
                     onChange({ items: newItems });
                   }}
-                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-sm font-black text-[#9A1C1F] bg-white"
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-sm font-normal text-[#9A1C1F] bg-white"
                 />
               </div>
 
@@ -59,11 +59,11 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
                     newItems[idx] = { ...newItems[idx], label: e.target.value };
                     onChange({ items: newItems });
                   }}
-                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-bold text-[#1E1917] bg-white"
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal text-[#1E1917] bg-white"
                 />
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-1 md:col-span-2 lg:col-span-1">
                 <label className="text-[11px] font-bold text-[#695D56] block">
                   Đoạn mô tả ngắn
                 </label>

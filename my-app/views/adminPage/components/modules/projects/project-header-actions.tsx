@@ -38,7 +38,7 @@ export function ProjectHeaderActions({ slug, saving, onSave }: Props) {
         ) : (
           <Save className="h-4 w-4" />
         )}
-        {saving ? "Đang lưu..." : "Lưu section đang chọn"}
+        {saving ? "Đang lưu..." : "Lưu thay đổi"}
       </button>
     </div>
   );

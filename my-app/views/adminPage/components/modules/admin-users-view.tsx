@@ -531,7 +531,7 @@ export function AdminUsersView() {
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="bg-transparent font-bold text-[#1E1917] outline-none cursor-pointer text-xs"
+              className="bg-transparent font-normal text-[#1E1917] outline-none cursor-pointer text-xs"
             >
               <option value="ALL">Tất cả vai trò</option>
               <option value="ADMIN">ADMIN (Quản trị viên)</option>
@@ -546,7 +546,7 @@ export function AdminUsersView() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-transparent font-bold text-[#1E1917] outline-none cursor-pointer text-xs"
+              className="bg-transparent font-normal text-[#1E1917] outline-none cursor-pointer text-xs"
             >
               <option value="ALL">Tất cả</option>
               <option value="ACTIVE">Đang hoạt động</option>

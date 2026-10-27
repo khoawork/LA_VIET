@@ -57,7 +57,7 @@ export function HomePartnersTab({ data, onChange }: HomePartnersTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
 
@@ -69,7 +69,7 @@ export function HomePartnersTab({ data, onChange }: HomePartnersTabProps) {
               type="text"
               value={data.title}
               onChange={(e) => onChange({ ...data, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
         </div>
@@ -123,7 +123,7 @@ export function HomePartnersTab({ data, onChange }: HomePartnersTabProps) {
                     type="text"
                     value={partner.name}
                     onChange={(e) => handlePartnerChange(idx, "name", e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-bold text-stone-700 bg-white"
+                    className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal text-stone-700 bg-white"
                   />
                 </label>
                 <label className="block space-y-1">
@@ -182,7 +182,7 @@ export function HomePartnersTab({ data, onChange }: HomePartnersTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-bold text-[#1E1917] bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
             />
           </div>
         </div>

@@ -19,7 +19,6 @@ import { ProjectHeaderTab } from "./project-header-tab";
 import { ProjectFilterTab } from "./project-filter-tab";
 import { ProjectProcedureTab } from "./project-procedure-tab";
 import { ProjectCtaTab } from "./project-cta-tab";
-import { ProjectSectionPreview } from "./project-section-preview";
 
 export function PageProjectContent() {
   const [page, setPage] = useState<PageProjectData | null>(null);
@@ -113,8 +112,8 @@ export function PageProjectContent() {
   if (loading) {
     return (
       <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
-        <Loader2 className="h-5 w-5 animate-spin" /> Đang tải nội dung trang Dự
-        án...
+        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+        <span>Đang tải trang Dự án...</span>
       </div>
     );
   }
@@ -131,7 +130,7 @@ export function PageProjectContent() {
   }
 
   return (
-    <section className="space-y-6">
+    <section className="admin-content-editor space-y-6">
       {error && (
         <p
           role="alert"
@@ -163,60 +162,55 @@ export function PageProjectContent() {
         }}
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-12">
-        <div className="space-y-6 lg:col-span-7">
-          {activeTab === "header" && (
-            <ProjectHeaderTab
-              data={draft.header}
-              onChange={(header) =>
-                setDraft((current) =>
-                  current ? { ...current, header } : current,
-                )
+      <div className="mx-auto w-full max-w-6xl space-y-6">
+        {activeTab === "header" && (
+          <ProjectHeaderTab
+            data={draft.header}
+            onChange={(header) =>
+              setDraft((current) =>
+                current ? { ...current, header } : current,
+              )
+            }
+          />
+        )}
+        {activeTab === "filter" && (
+          <ProjectFilterTab
+            data={draft.filter ?? { key: [] }}
+            categories={categories}
+            onChange={(filter) =>
+              setDraft((current) =>
+                current ? { ...current, filter } : current,
+              )
+            }
+          />
+        )}
+        {activeTab === "procedure" && (
+          <ProjectProcedureTab
+            data={draft.procedure ?? { eyebrow: "", title: "", description: "", steps: [] }}
+            onChange={(procedure) =>
+              setDraft((current) =>
+                current ? { ...current, procedure } : current,
+              )
+            }
+          />
+        )}
+        {activeTab === "cta" && (
+          <ProjectCtaTab
+            data={
+              draft.cta ?? {
+                eyebrow: "",
+                eyebrow_icon: "",
+                title: "",
+                description: "",
+                contacts: [],
+                actions: [],
               }
-            />
-          )}
-          {activeTab === "filter" && (
-            <ProjectFilterTab
-              data={draft.filter ?? { key: [] }}
-              categories={categories}
-              onChange={(filter) =>
-                setDraft((current) =>
-                  current ? { ...current, filter } : current,
-                )
-              }
-            />
-          )}
-          {activeTab === "procedure" && (
-            <ProjectProcedureTab
-              data={draft.procedure ?? { eyebrow: "", title: "", description: "", steps: [] }}
-              onChange={(procedure) =>
-                setDraft((current) =>
-                  current ? { ...current, procedure } : current,
-                )
-              }
-            />
-          )}
-          {activeTab === "cta" && (
-            <ProjectCtaTab
-              data={
-                draft.cta ?? {
-                  eyebrow: "",
-                  eyebrow_icon: "",
-                  title: "",
-                  description: "",
-                  contacts: [],
-                  actions: [],
-                }
-              }
-              onChange={(cta) =>
-                setDraft((current) => (current ? { ...current, cta } : current))
-              }
-            />
-          )}
-        </div>
-        <div className="lg:col-span-5">
-          <ProjectSectionPreview activeTab={activeTab} data={draft} />
-        </div>
+            }
+            onChange={(cta) =>
+              setDraft((current) => (current ? { ...current, cta } : current))
+            }
+          />
+        )}
       </div>
     </section>
   );

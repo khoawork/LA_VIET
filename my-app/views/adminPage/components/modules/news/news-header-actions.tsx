@@ -1,21 +1,17 @@
 import {
   Newspaper,
   Save,
-  RotateCcw,
-  ExternalLink,
   Loader2,
 } from "lucide-react";
 
 interface NewsHeaderActionsProps {
   saving: boolean;
   onSave: () => void;
-  onReset: () => void;
 }
 
 export function NewsHeaderActions({
   saving,
   onSave,
-  onReset,
 }: NewsHeaderActionsProps) {
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
@@ -40,27 +36,6 @@ export function NewsHeaderActions({
 
       {/* Action Buttons */}
       <div className="flex flex-wrap items-center gap-2.5">
-        <a
-          href="/news"
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] hover:bg-[#F3EFE9] text-[#423A35] text-xs font-bold transition-all"
-          title="Mở trang ngoài để xem giao diện thực tế"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          <span>Xem trang ngoài</span>
-        </a>
-
-        <button
-          type="button"
-          onClick={onReset}
-          disabled={saving}
-          className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-rose-200 text-rose-700 hover:bg-rose-50 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Khôi phục mặc định</span>
-        </button>
-
         <button
           type="button"
           onClick={onSave}

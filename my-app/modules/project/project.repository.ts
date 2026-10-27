@@ -100,11 +100,18 @@ export class ProjectRepository {
   }
 
   async updatePatchProject(id: number, data: ProjectPatchSchemaType) {
-    await prisma.project.update({
+    return await prisma.project.update({
       where: {
         id: id,
       },
       data,
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
   }
 }

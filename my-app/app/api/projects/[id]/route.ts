@@ -32,9 +32,9 @@ export const PATCH = withErrorHandler(
   async (_request, { params }: { params: Promise<{ id: string }> }) => {
     const { id } = await validateParams(ProjectParamSchema, params);
     const body = await validateBody(ProjectPatchSchema, _request);
-    await projectService.updatePatchProject(id, body);
-    return new NextResponse(null, {
-      status: HttpStatus.NO_CONTENT,
+    const updated = await projectService.updatePatchProject(id, body);
+    return NextResponse.json(ProjectsResponseSchema.parse(updated), {
+      status: HttpStatus.OK,
     });
   },
 );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Database,
   Plus,
@@ -125,6 +125,7 @@ export function AdminCategoriesView() {
   const searchPending = normalizedSearch !== debouncedSearch;
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<string>("");
   const [newsRefresh, setNewsRefresh] = useState(0);
+  const skipNextNewsLoading = useRef(false);
   const [newsListError, setNewsListError] = useState("");
 
   // Modal tạo và sửa bài viết
@@ -357,9 +358,11 @@ export function AdminCategoriesView() {
 
   useEffect(() => {
     if (searchPending) return;
+    const showLoading = !skipNextNewsLoading.current;
+    skipNextNewsLoading.current = false;
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
-      setNewsLoading(true);
+      if (showLoading) setNewsLoading(true);
       setNewsListError("");
       const params = new URLSearchParams({ page: String(newsPage), limit: "10" });
       if (debouncedSearch) params.set("search", debouncedSearch);
@@ -377,6 +380,7 @@ export function AdminCategoriesView() {
         if (controller.signal.aborted) return;
         const totalPages = result.meta?.totalPages ?? 1;
         if (newsPage > totalPages) {
+          if (!showLoading) skipNextNewsLoading.current = true;
           setNewsPage(totalPages);
           return;
         }
@@ -384,8 +388,10 @@ export function AdminCategoriesView() {
         setNewsTotalPages(totalPages);
       } catch (error) {
         if (controller.signal.aborted) return;
-        setNewsList([]);
-        setNewsTotalPages(1);
+        if (showLoading) {
+          setNewsList([]);
+          setNewsTotalPages(1);
+        }
         setNewsListError(error instanceof Error ? error.message : "Không thể tải danh sách tin tức.");
       } finally {
         if (!controller.signal.aborted) setNewsLoading(false);
@@ -459,6 +465,9 @@ export function AdminCategoriesView() {
 
     try {
       setNewsSubmitting(true);
+      const editedId = editingNewsId;
+      const original = newsList.find((item) => item.id === editedId);
+      let updatedNews: NewsItemData | null = null;
       const { cleanupWarning } = await saveWithImage({
         file: newsImageFile,
         currentUrl: editingNewsId === null ? undefined : editingNewsImage,
@@ -482,6 +491,9 @@ export function AdminCategoriesView() {
           });
           const json = await res.json();
           if (!res.ok || !json.success) throw new Error(newsApiError(json, "Không thể lưu bài viết."));
+          if (editedId !== null && json.data?.id === editedId) {
+            updatedNews = json.data as NewsItemData;
+          }
         },
       });
       setToast({
@@ -492,14 +504,60 @@ export function AdminCategoriesView() {
       });
       setIsNewsModalOpen(false);
       setNewsImageFile(null);
-      if (editingNewsId === null) {
+      const saved = updatedNews as NewsItemData | null;
+      if (editedId === null) {
         setSearchKeyword("");
         setSelectedFilterCategory("");
         setNewsPage(1);
+        setNewsRefresh((value) => value + 1);
+      } else {
+        if (saved) {
+          setNewsList((items) => {
+            let changed = false;
+            const next = items.map((item) => {
+              if (item.id !== saved.id) return item;
+              if (
+                item.name === saved.name &&
+                item.image === saved.image &&
+                item.slug === saved.slug &&
+                item.categoryId === saved.categoryId &&
+                item.category?.name === saved.category?.name &&
+                item.description === saved.description &&
+                item.date === saved.date
+              ) return item;
+              changed = true;
+              return {
+                ...item,
+                name: saved.name,
+                image: saved.image,
+                slug: saved.slug,
+                categoryId: saved.categoryId,
+                category: saved.category,
+                description: saved.description,
+                date: saved.date,
+              };
+            });
+            return changed ? next : items;
+          });
+        }
+        if (
+          !saved ||
+          !original ||
+          (selectedFilterCategory && saved.categoryId !== Number(selectedFilterCategory)) ||
+          (debouncedSearch && (
+            original.name !== saved.name ||
+            original.description !== saved.description ||
+            original.preside !== saved.preside
+          ))
+        ) {
+          skipNextNewsLoading.current = true;
+          setNewsRefresh((value) => value + 1);
+        }
       }
       setEditingNewsId(null);
-      setNewsRefresh((value) => value + 1);
-      await fetchCategories();
+      if (editedId === null || (saved && original && original.categoryId !== saved.categoryId)) {
+        await fetchCategories();
+      }
     } catch (error) {
       setNewsError(error instanceof Error ? error.message : "Lỗi kết nối máy chủ khi lưu bài viết.");
     } finally {
@@ -651,7 +709,7 @@ export function AdminCategoriesView() {
                   setNewsPage(1);
                 }}
                 placeholder="Tìm bài viết theo tiêu đề, mô tả, tác giả..."
-                className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f] sm:py-2.5"
+                className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f] sm:py-2.5"
               />
             </div>
             <CategoryFilterSelect
@@ -709,9 +767,7 @@ export function AdminCategoriesView() {
               </div>
             ) : newsList.length === 0 ? (
               <div className="py-16 text-center text-sm text-stone-500">
-                {searchKeyword.trim() || selectedFilterCategory
-                  ? "Không tìm thấy bài viết phù hợp."
-                  : "Chưa có bài viết nào. Hãy bấm nút \"Tạo bài viết mới\" ở trên để thêm bài viết đầu tiên."}
+                Chưa có bài viết phù hợp.
               </div>
             ) : (
               <table className="w-full min-w-[1050px] table-fixed border-collapse text-left text-sm">

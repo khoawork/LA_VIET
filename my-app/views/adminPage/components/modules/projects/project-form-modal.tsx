@@ -17,7 +17,7 @@ interface ProjectFormModalProps {
   categories: ProjectCategory[];
   project: ProjectDetail | null;
   onClose: () => void;
-  onSaved: (cleanupWarning?: string | null) => void;
+  onSaved: (updated: ProjectDetail | null, cleanupWarning?: string | null) => void;
 }
 
 const inputClass =
@@ -50,17 +50,18 @@ export function ProjectFormModal({
     setSaving(true);
     setError("");
     try {
+      let updatedProject: ProjectDetail | null = null;
       const { cleanupWarning } = await saveWithImage({
         file: imageFile,
         currentUrl: project?.image,
         imageUrl: form.image,
         save: async (image) => {
           const data = { ...form, image, name: form.name.trim(), slug: form.slug.trim() };
-          if (project) await updateProject(project.id, data);
+          if (project) updatedProject = await updateProject(project.id, data);
           else await createProject(data);
         },
       });
-      onSaved(cleanupWarning);
+      onSaved(updatedProject, cleanupWarning);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Không thể lưu dự án.");
     } finally {

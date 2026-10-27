@@ -7,7 +7,6 @@ import {
 } from "@/shared/schema/pages/pagehome.schema";
 import {
   PageHomePropsType,
-  DEFAULT_PAGE_HOME_PROPS,
   UpdatePageHomeType,
 } from "../types/pagehome.type";
 import { CloudinaryService } from "@/shared/services/cloudinary.service";
@@ -159,22 +158,6 @@ export class PageHomeService {
     return await this.updatePageHomeContent(slug, { props: updatedProps });
   }
 
-  /**
-   * Khôi phục toàn bộ cấu trúc trang Trang chủ về giá trị mặc định ban đầu
-   */
-  async resetToDefault(slug: string = this.defaultSlug) {
-    const updated = await this.repo.upsert(slug, {
-      name: this.defaultPageName,
-      props: DEFAULT_PAGE_HOME_PROPS,
-    });
-
-    return {
-      id: updated.id,
-      name: updated.name,
-      slug: updated.slug,
-      props: DEFAULT_PAGE_HOME_PROPS,
-    };
-  }
 }
 
 export const pageHomeService = new PageHomeService(pageHomeRepository);

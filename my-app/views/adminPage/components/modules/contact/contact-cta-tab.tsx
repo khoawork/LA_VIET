@@ -406,7 +406,7 @@ export function ContactCtaTab({
                 </div>
 
                 {/* Các ô cấu hình trường */}
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   <div className="space-y-1">
                     <label className="text-[11px] font-bold text-stone-700">
                       Nhãn hiển thị (Label) <span className="text-rose-600">*</span>
@@ -419,7 +419,7 @@ export function ContactCtaTab({
                         updateField(index, { label: newLabel });
                       }}
                       placeholder="Ví dụ: Họ và tên..."
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-semibold text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                     />
                   </div>
 
@@ -454,7 +454,7 @@ export function ContactCtaTab({
                             e.target.value === "textarea" ? "full" : field.width || "half",
                         })
                       }
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-semibold text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                     >
                       <option value="text">Văn bản ngắn (Text)</option>
                       <option value="tel">Số điện thoại (Tel)</option>
@@ -494,7 +494,7 @@ export function ContactCtaTab({
                           width: e.target.value as "half" | "full",
                         })
                       }
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-semibold text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                     >
                       <option value="half">50% — Nửa dòng (Half)</option>
                       <option value="full">100% — Toàn dòng (Full)</option>

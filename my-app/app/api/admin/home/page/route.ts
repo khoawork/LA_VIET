@@ -29,24 +29,9 @@ export const PUT = withErrorHandler(async (request: NextRequest) => {
 
 /**
  * POST /api/admin/home/page
- * Khôi phục về mặc định với { "action": "reset" } hoặc lưu mới
+ * Lưu mới cấu trúc trang
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-  let json: { action?: string } | null = null;
-  try {
-    json = await request.clone().json();
-  } catch {
-    // Không phải JSON
-  }
-
-  if (json?.action === "reset") {
-    const resetPage = await pageHomeService.resetToDefault("home");
-    return sendSuccess(
-      resetPage,
-      "Khôi phục cấu trúc Trang chủ về mặc định thành công",
-    );
-  }
-
   const body = await validateBody(CreatePageHomeRequestSchema, request);
   const result = await pageHomeService.updatePageHomeContent("home", body);
   return sendSuccess(

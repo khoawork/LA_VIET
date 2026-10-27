@@ -6,10 +6,7 @@ import {
   validateBody,
   withErrorHandler,
 } from "@/shared";
-import {
-  MenuPropsSchema,
-  DEFAULT_MENU_ITEMS,
-} from "@/shared/schema/menu.schema";
+import { MenuPropsSchema } from "@/shared/schema/menu.schema";
 
 export const GET = withErrorHandler(async () => {
   const items = await pageMenuService.getMenu();

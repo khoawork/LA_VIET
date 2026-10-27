@@ -2,6 +2,7 @@
 
 import { Sparkles, Layers, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
 import type { HomeHeroSectionType } from "@/views/homePage/types/pagehome.type";
+import { ImagePreview } from "../image-preview";
 
 interface HomeHeroTabProps {
   data: HomeHeroSectionType;
@@ -51,7 +52,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             type="text"
             value={data.highlightWord}
             onChange={(e) => onChange({ ...data, highlightWord: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -64,7 +65,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             rows={3}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -100,7 +101,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-semibold bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -136,7 +137,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-semibold bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -208,6 +209,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
               placeholder="https://... hoặc chọn file từ máy"
               className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-mono bg-white truncate"
             />
+            <ImagePreview src={data.image?.src ?? ""} alt="Xem trước ảnh Hero" />
           </div>
         </div>
 
@@ -292,7 +294,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                     onChange={(e) =>
                       handleCollectionChange(idx, "title", e.target.value)
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-bold bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
                   />
                 </label>
               </div>

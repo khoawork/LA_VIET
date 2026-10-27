@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import {
   Info,
   Save,
@@ -10,7 +8,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   AlertCircle,
-  ExternalLink,
   Layers,
   Building2,
   Handshake,
@@ -23,9 +20,9 @@ import {
   Loader2,
 } from "lucide-react";
 import type { AboutPagePropsType } from "@/shared/schema/pages/about-product.schema";
-import { DEFAULT_ABOUT_PAGE_CONFIG } from "@/modules/pages/page-about/page-about.type";
 import { ColorHighlightInput } from "./color-highlight-input";
 import { AboutImageUploader } from "./about-image-uploader";
+import { ImageUrlUploadField } from "./image-url-upload-field";
 
 type ActiveTab = "hero" | "technology" | "values" | "organization" | "partners" | "cta";
 
@@ -35,10 +32,9 @@ export function AdminAboutView() {
   const [activeTab, setActiveTab] = useState<ActiveTab>("hero");
 
   // Form State
-  const [pageName, setPageName] = useState("Trang Về Chúng Tôi");
-  const [pageProps, setPageProps] = useState<AboutPagePropsType>(
-    DEFAULT_ABOUT_PAGE_CONFIG.props as AboutPagePropsType,
-  );
+  const [pageName, setPageName] = useState("");
+  const [pageProps, setPageProps] = useState<AboutPagePropsType>({} as AboutPagePropsType);
+  const [hasPageData, setHasPageData] = useState(false);
 
   // Toast / Alert Notification
   const [uploadingPartnerIdx, setUploadingPartnerIdx] = useState<number | null>(null);
@@ -99,95 +95,26 @@ export function AdminAboutView() {
       const res = await fetch("/api/pages/about");
       const json = await res.json();
 
-      if (json.success && json.data?.page) {
+      if (res.ok && json.success && json.data?.page?.props) {
         const { page } = json.data;
-        if (page.name) setPageName(page.name);
-        if (page.props) {
-          const incoming = page.props as AboutPagePropsType;
-          setPageProps((prev) => ({
-            ...prev,
-            title: incoming.title || prev.title,
-            description: incoming.description || prev.description,
-            image: incoming.image ?? prev.image,
-            herosection: {
-              ...prev.herosection,
-              ...(incoming.herosection || {}),
-              metrics:
-                incoming.herosection?.metrics && incoming.herosection.metrics.length > 0
-                  ? incoming.herosection.metrics
-                  : prev.herosection.metrics,
-            },
-            technologySection: {
-              ...prev.technologySection,
-              ...(incoming.technologySection || {}),
-              description:
-                incoming.technologySection?.description ||
-                [
-                  incoming.technologySection?.description1,
-                  incoming.technologySection?.description2,
-                ]
-                  .filter(Boolean)
-                  .join("\n\n") ||
-                prev.technologySection.description,
-              stats:
-                incoming.technologySection?.stats && incoming.technologySection.stats.length > 0
-                  ? incoming.technologySection.stats
-                  : prev.technologySection.stats,
-              workshop: {
-                ...prev.technologySection.workshop,
-                ...(incoming.technologySection?.workshop || {}),
-                badge:
-                  incoming.technologySection?.workshop?.badge ||
-                  prev.technologySection.workshop.badge ||
-                  "XƯỞNG CHẾ TÁC HỘI HỌA",
-              },
-            },
-            valuesSection: {
-              ...prev.valuesSection,
-              ...(incoming.valuesSection || {}),
-              items:
-                incoming.valuesSection?.items && incoming.valuesSection.items.length > 0
-                  ? incoming.valuesSection.items
-                  : prev.valuesSection.items,
-            },
-            organizationSection: {
-              ...prev.organizationSection,
-              ...(incoming.organizationSection || {}),
-              leaders:
-                incoming.organizationSection?.leaders && incoming.organizationSection.leaders.length > 0
-                  ? incoming.organizationSection.leaders
-                  : prev.organizationSection.leaders,
-              divisions:
-                incoming.organizationSection?.divisions && incoming.organizationSection.divisions.length > 0
-                  ? incoming.organizationSection.divisions
-                  : prev.organizationSection.divisions,
-            },
-            partnersSection: {
-              ...prev.partnersSection,
-              ...(incoming.partnersSection || {}),
-              items:
-                incoming.partnersSection?.items && incoming.partnersSection.items.length > 0
-                  ? incoming.partnersSection.items
-                  : prev.partnersSection.items,
-              testimonial: {
-                ...prev.partnersSection.testimonial,
-                ...(incoming.partnersSection?.testimonial || {}),
-              },
-            },
-            ctaSection: {
-              ...prev.ctaSection,
-              ...(incoming.ctaSection || {}),
-              primaryButton: {
-                ...prev.ctaSection.primaryButton,
-                ...(incoming.ctaSection?.primaryButton || {}),
-              },
-              secondaryButton: {
-                ...prev.ctaSection.secondaryButton,
-                ...(incoming.ctaSection?.secondaryButton || {}),
-              },
-            },
-          }));
+        const props = page.props as AboutPagePropsType;
+        if (
+          !props.herosection || !Array.isArray(props.herosection.metrics) ||
+          !props.technologySection?.workshop || !Array.isArray(props.technologySection.stats) ||
+          !props.valuesSection || !Array.isArray(props.valuesSection.items) ||
+          !props.organizationSection || !Array.isArray(props.organizationSection.leaders) ||
+          !Array.isArray(props.organizationSection.divisions) ||
+          !props.partnersSection?.testimonial || !Array.isArray(props.partnersSection.items) ||
+          !props.ctaSection?.primaryButton || !props.ctaSection.secondaryButton
+        ) {
+          throw new Error("Dữ liệu trang Về chúng tôi chưa đầy đủ.");
         }
+        setPageName(page.name ?? "");
+        setPageProps(props);
+        setHasPageData(true);
+      } else {
+        setHasPageData(false);
+        setAlert({ type: "error", message: "Chưa có dữ liệu trang Về chúng tôi." });
       }
     } catch (err) {
       console.error("Failed to load about page configuration:", err);
@@ -206,6 +133,7 @@ export function AdminAboutView() {
 
   // Save changes to API
   const handleSave = async () => {
+    if (!hasPageData) return;
     setSaving(true);
     setAlert(null);
     try {
@@ -259,10 +187,10 @@ export function AdminAboutView() {
           ...prev.technologySection.stats,
           {
             id: `stat-${Date.now()}`,
-            label: "CHỈ SỐ MỚI",
-            value: "10",
-            unit: "+",
-            description: "Kế thừa và phát huy kỹ thuật sơn mài truyền thống.",
+            label: "",
+            value: "",
+            unit: "",
+            description: "",
             accentColor: "text-[#9A1C1F]",
           },
         ],
@@ -290,13 +218,13 @@ export function AdminAboutView() {
           ...prev.valuesSection.items,
           {
             id: `val-${Date.now()}`,
-            category: "DANH MỤC MỚI",
-            title: "TIÊU ĐỀ KHỐI GIÁ TRỊ MỚI",
-            description: "Nội dung diễn giải chi tiết về định hướng và chuẩn mực nghệ thuật.",
-            tag: "ĐỊNH VỊ MỚI",
+            category: "",
+            title: "",
+            description: "",
+            tag: "",
             gradient: "from-[#9A1C1F] via-[#9A1C1F]/80 to-transparent",
             accentColor: "text-[#9A1C1F]",
-            pillars: ["Trụ cột 01: Chuẩn mực tay nghề thủ công."],
+            pillars: [],
           },
         ],
       },
@@ -316,7 +244,7 @@ export function AdminAboutView() {
   const handleAddPillar = (valIndex: number) => {
     setPageProps((prev) => {
       const updated = [...prev.valuesSection.items];
-      const pillars = [...(updated[valIndex].pillars || []), "Trụ cột mới: Tiêu chuẩn chất lượng"];
+      const pillars = [...(updated[valIndex].pillars || []), ""];
       updated[valIndex] = { ...updated[valIndex], pillars };
       return {
         ...prev,
@@ -347,12 +275,12 @@ export function AdminAboutView() {
           ...prev.organizationSection.leaders,
           {
             id: `leader-${Date.now()}`,
-            name: "HỌ VÀ TÊN LÃNH ĐẠO",
-            role: "CHỨC VỤ / CHUYÊN MÔN",
-            tag: "BAN ĐIỀU HÀNH",
-            bio: "Tiểu sử tóm tắt về năng lực chuyên môn và đóng góp nghệ thuật.",
-            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
-            department: "Ban Điều Hành",
+            name: "",
+            role: "",
+            tag: "",
+            bio: "",
+            avatar: "",
+            department: "",
             accentColor: "border-[#9A1C1F] text-[#9A1C1F]",
           },
         ],
@@ -383,10 +311,10 @@ export function AdminAboutView() {
             ...prev.organizationSection.divisions,
             {
               code,
-              title: "TÊN KHỐI PHÒNG BAN MỚI",
-              subtitle: "Department Subtitle",
-              description: "Chức năng nhiệm vụ và phạm vi công tác của khối chuyên môn.",
-              focus: "Phạm vi thực thi",
+              title: "",
+              subtitle: "",
+              description: "",
+              focus: "",
               accentBorder: "border-t-[#9A1C1F]",
             },
           ],
@@ -414,8 +342,8 @@ export function AdminAboutView() {
         items: [
           ...prev.partnersSection.items,
           {
-            name: "TÊN ĐỐI TÁC MỚI",
-            role: "VAI TRÒ HỢP TÁC",
+            name: "",
+            role: "",
             category: "technology",
             logo: "",
           },
@@ -434,8 +362,25 @@ export function AdminAboutView() {
     }));
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+        <span>Đang tải trang Về chúng tôi...</span>
+      </div>
+    );
+  }
+
+  if (!hasPageData) {
+    return (
+      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+        Chưa có dữ liệu trang Về chúng tôi hoặc không thể tải dữ liệu.
+      </p>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="admin-content-editor space-y-6">
       {/* Alert Banner */}
       {alert && (
         <div
@@ -483,15 +428,6 @@ export function AdminAboutView() {
         </div>
 
         <div className="flex items-center gap-2.5 self-start sm:self-auto">
-          <Link
-            href="/about"
-            target="_blank"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#f3e9db] bg-[#f7f5f1] hover:bg-[#eae2d5] text-stone-700 text-xs font-bold transition-all cursor-pointer"
-          >
-            <ExternalLink className="w-4 h-4 text-stone-500" />
-            <span>Xem trang thực tế</span>
-          </Link>
-
           <button
             type="button"
             onClick={handleSave}
@@ -509,79 +445,79 @@ export function AdminAboutView() {
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "hero"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Award className="w-4 h-4" />
-          <span>1. Hero & giới thiệu</span>
+          <span>Giới thiệu</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("technology")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "technology"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>2. Khái Lược & Công Nghệ</span>
+          <span>Khái Lược & Công Nghệ</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("values")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "values"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <ShieldCheck className="w-4 h-4" />
-          <span>3. Tầm Nhìn & 4 Trụ Cột</span>
+          <span>Tầm Nhìn & Trụ Cột</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("organization")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "organization"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Building2 className="w-4 h-4" />
-          <span>4. Sơ Đồ Tổ Chức</span>
+          <span>Sơ Đồ Tổ Chức</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("partners")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "partners"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Handshake className="w-4 h-4" />
-          <span>5. Đối Tác & Đánh Giá</span>
+          <span>Đối Tác & Đánh Giá</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("cta")}
-          className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`flex items-center gap-2 px-4 py-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "cta"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Megaphone className="w-4 h-4" />
-          <span>6. Khối Kêu Gọi (CTA)</span>
+          <span>CTA</span>
         </button>
       </div>
 
@@ -609,7 +545,7 @@ export function AdminAboutView() {
                     herosection: { ...pageProps.herosection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -626,7 +562,7 @@ export function AdminAboutView() {
                     herosection: { ...pageProps.herosection, imageSubtitle: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -690,7 +626,7 @@ export function AdminAboutView() {
                     technologySection: { ...pageProps.technologySection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
               />
             </div>
 
@@ -790,7 +726,7 @@ export function AdminAboutView() {
                         });
                       }}
                       placeholder="Giá trị"
-                      className="w-2/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#a21f1f]"
+                      className="w-2/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
                     />
                     <input
                       type="text"
@@ -804,7 +740,7 @@ export function AdminAboutView() {
                         });
                       }}
                       placeholder="Đơn vị"
-                      className="w-1/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-stone-600"
+                      className="w-1/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-600"
                     />
                   </div>
                   <input
@@ -819,7 +755,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tiêu đề chỉ số"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-medium text-stone-800"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-800"
                   />
                   <textarea
                     rows={2}
@@ -878,7 +814,7 @@ export function AdminAboutView() {
                     })
                   }
                   placeholder="VD: XƯỞNG CHẾ TÁC HỘI HỌA"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
                 />
               </div>
 
@@ -899,7 +835,7 @@ export function AdminAboutView() {
                     })
                   }
                   placeholder="VD: Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-stone-800"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-stone-800"
                 />
               </div>
             </div>
@@ -960,7 +896,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#a21f1f]"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
                   />
                 </div>
 
@@ -977,7 +913,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
                   />
                 </div>
 
@@ -1011,7 +947,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-medium text-stone-700"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-700"
                   />
                 </div>
 
@@ -1111,7 +1047,8 @@ export function AdminAboutView() {
                   <div className="flex items-center gap-3 pr-6">
                     <div className="w-14 h-14 rounded-xl overflow-hidden relative border border-[#f3e9db] shrink-0 bg-stone-100">
                       {leader.avatar ? (
-                        <Image src={leader.avatar} alt={leader.name} fill className="object-cover" />
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={leader.avatar} alt={leader.name} className="h-full w-full object-cover" />
                       ) : null}
                     </div>
                     <div className="flex-1 space-y-1">
@@ -1127,7 +1064,7 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Họ và tên"
-                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
                       />
                       <input
                         type="text"
@@ -1141,27 +1078,24 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Chức danh"
-                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs text-[#a21f1f] font-medium"
+                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs text-[#a21f1f] font-normal"
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-stone-500 uppercase">URL Ảnh đại diện</label>
-                    <input
-                      type="text"
-                      value={leader.avatar}
-                      onChange={(e) => {
+                  <ImageUrlUploadField
+                    label="Ảnh đại diện"
+                    value={leader.avatar}
+                    fit="contain"
+                    onChange={(avatar) => {
                         const updated = [...pageProps.organizationSection.leaders];
-                        updated[idx].avatar = e.target.value;
+                        updated[idx].avatar = avatar;
                         setPageProps({
                           ...pageProps,
                           organizationSection: { ...pageProps.organizationSection, leaders: updated },
                         });
                       }}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
-                    />
-                  </div>
+                  />
 
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-stone-500 uppercase">Tiểu sử tóm tắt</label>
@@ -1214,7 +1148,7 @@ export function AdminAboutView() {
                           organizationSection: { ...pageProps.organizationSection, divisions: updated },
                         });
                       }}
-                      className="px-2 py-0.5 rounded bg-white border border-[#f3e9db] text-[10px] font-bold text-[#a21f1f] uppercase w-24"
+                      className="px-2 py-0.5 rounded bg-white border border-[#f3e9db] text-[10px] font-normal text-[#a21f1f] uppercase w-24"
                     />
 
                     <div className="flex items-center gap-2">
@@ -1258,7 +1192,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tên khối chức năng"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
                   />
 
                   <textarea
@@ -1350,7 +1284,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tên đối tác (VD: SƠN HOA VIỆT)"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
                   />
                   <input
                     type="text"
@@ -1485,7 +1419,7 @@ export function AdminAboutView() {
                         },
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#a21f1f]"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
                   />
                 </div>
 
@@ -1536,7 +1470,7 @@ export function AdminAboutView() {
                     ctaSection: { ...pageProps.ctaSection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
               />
             </div>
 
@@ -1568,7 +1502,7 @@ export function AdminAboutView() {
                     ctaSection: { ...pageProps.ctaSection, description: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-medium text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-normal text-[#1E1917]"
               />
             </div>
 
@@ -1590,7 +1524,7 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Nhãn nút"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
               />
               <input
                 type="text"
@@ -1627,7 +1561,7 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Nhãn nút"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#1E1917]"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
               />
               <input
                 type="text"

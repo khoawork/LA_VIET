@@ -83,14 +83,48 @@ export function ProjectDataTab({ active, categories, filterHost, createOpen, onC
     }
   }
 
-  function handleSaved(cleanupWarning?: string | null) {
+  function handleSaved(updated: ProjectDetail | null, cleanupWarning?: string | null) {
+    const original = editingProject;
     setModalOpen(false);
     onCloseCreate();
     setEditingProject(null);
     setMessage("Đã lưu dự án thành công.");
     setCleanupWarning(cleanupWarning ? `Đã lưu dự án nhưng chưa xóa được ảnh cũ: ${cleanupWarning}` : "");
-    setLoading(true);
-    setRefresh((value) => value + 1);
+    if (!updated) {
+      setLoading(true);
+      setRefresh((value) => value + 1);
+      return;
+    }
+
+    setProjects((items) => {
+      let changed = false;
+      const next = items.map((item) => {
+        if (item.id !== updated.id) return item;
+        if (
+          item.name === updated.name &&
+          item.description === updated.description &&
+          item.image === updated.image &&
+          item.category.name === updated.category.name
+        ) return item;
+        changed = true;
+        return {
+          ...item,
+          name: updated.name,
+          description: updated.description,
+          image: updated.image,
+          category: updated.category,
+        };
+      });
+      return changed ? next : items;
+    });
+
+    if (
+      !original ||
+      (categoryId && updated.categoryId !== Number(categoryId)) ||
+      (debouncedSearch && original.name !== updated.name)
+    ) {
+      setRefresh((value) => value + 1);
+    }
   }
 
   async function handleDelete(project: ProjectItem) {
@@ -276,6 +310,7 @@ export function ProjectDataTab({ active, categories, filterHost, createOpen, onC
           project={createOpen ? null : editingProject}
           onClose={() => {
             setModalOpen(false);
+            setEditingProject(null);
             onCloseCreate();
           }}
           onSaved={handleSaved}

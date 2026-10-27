@@ -137,7 +137,7 @@ function ProductFormModal({
   product: ProductItem | null;
   categories: ProductCategory[];
   onClose: () => void;
-  onSaved: (message: string, cleanupWarning?: string | null) => void;
+  onSaved: (message: string, cleanupWarning?: string | null, updated?: ProductItem | null) => void;
 }) {
   const [form, setForm] = useState<ProductForm>(() =>
     productForm(product, categories),
@@ -151,6 +151,7 @@ function ProductFormModal({
     setSaving(true);
     setError("");
     try {
+      let updatedProduct: ProductItem | null = null;
       const { cleanupWarning } = await saveWithImage({
         file: imageFile,
         currentUrl: product?.image,
@@ -183,6 +184,10 @@ function ProductFormModal({
             },
           );
           if (!response.ok) throw new Error(await responseError(response));
+          if (product) {
+            const result = await response.json().catch(() => null);
+            if (result?.id === product.id) updatedProduct = result as ProductItem;
+          }
         },
       });
       onSaved(
@@ -190,6 +195,7 @@ function ProductFormModal({
           ? "Đã cập nhật sản phẩm thành công."
           : "Đã tạo sản phẩm thành công.",
         cleanupWarning,
+        updatedProduct,
       );
     } catch (cause) {
       setError(
@@ -502,15 +508,59 @@ export function AdminProductDataTab({
     }
   }
 
-  function handleSaved(savedMessage: string, warning?: string | null) {
+  function handleSaved(savedMessage: string, warning?: string | null, updated?: ProductItem | null) {
+    const original = editingProduct;
     setEditingProduct(null);
     onCloseCreate();
     setMessage(savedMessage);
     setCleanupWarning(
       warning ? `Đã lưu sản phẩm nhưng chưa xóa được ảnh cũ: ${warning}` : "",
     );
-    setLoading(true);
-    setRefresh((value) => value + 1);
+    if (!original) {
+      setLoading(true);
+      setRefresh((value) => value + 1);
+      return;
+    }
+
+    if (!updated) {
+      setRefresh((value) => value + 1);
+      return;
+    }
+
+    setProducts((items) => {
+      let changed = false;
+      const next = items.map((item) => {
+        if (item.id !== updated.id) return item;
+        if (
+          item.name === updated.name &&
+          item.description === updated.description &&
+          item.image === updated.image &&
+          item.slug === updated.slug &&
+          item.category.name === updated.category.name
+        ) return item;
+        changed = true;
+        return {
+          ...item,
+          name: updated.name,
+          description: updated.description,
+          image: updated.image,
+          slug: updated.slug,
+          category: updated.category,
+        };
+      });
+      return changed ? next : items;
+    });
+
+    if (
+      (categoryId && updated.categoryId !== Number(categoryId)) ||
+      (debouncedSearch && (
+        original.name !== updated.name ||
+        original.title !== updated.title ||
+        original.description !== updated.description
+      ))
+    ) {
+      setRefresh((value) => value + 1);
+    }
   }
 
   return (
@@ -576,8 +626,7 @@ export function AdminProductDataTab({
           </div>
         ) : visibleProducts.length === 0 ? (
           <p className="py-16 text-center text-sm text-stone-500">
-            Chưa có sản phẩm phù hợp. Bấm nút &quot;Tạo sản phẩm mới&quot; ở
-            trên để thêm sản phẩm.
+            Chưa có sản phẩm phù hợp.
           </p>
         ) : (
           <table className="w-full min-w-[960px] table-fixed text-left text-sm">

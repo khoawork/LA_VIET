@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ImagePlus } from "lucide-react";
+import { ImagePreview } from "./image-preview";
 
 interface ImageUploadFieldProps {
   label: string;
@@ -30,6 +31,7 @@ export function ImageUploadField({
   }, [preview]);
 
   const previewUrl = preview?.file === file ? preview.url : null;
+  const displayUrl = file ? previewUrl ?? "" : value;
 
   return (
     <div className="space-y-1.5 text-sm font-semibold text-[#1E1917]">
@@ -73,18 +75,9 @@ export function ImageUploadField({
           />
         </label>
       </div>
+      <ImagePreview src={displayUrl} alt={`Xem trước ${label.toLowerCase()}`} fit="contain" />
       {file && (
         <div className="space-y-2">
-          {previewUrl && (
-            <div className="flex h-36 w-full max-w-56 items-center justify-center overflow-hidden rounded-xl border border-[#EAE2D5] bg-[#FAF8F5]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={previewUrl}
-                alt={`Xem trước ${label.toLowerCase()}`}
-                className="h-full w-full object-contain"
-              />
-            </div>
-          )}
           <p className="flex items-center gap-2 text-sm font-normal text-stone-600">
             <span className="min-w-0 truncate">
               Đã chọn: {file.name}. Ảnh sẽ tải lên khi lưu.

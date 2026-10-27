@@ -46,14 +46,14 @@ export function NewsArticlesTable({
             value={searchKeyword}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Tìm kiếm bài viết theo tiêu đề, tác giả, mô tả tóm tắt..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
         <select
           value={selectedCategoryId}
           onChange={(e) => onCategoryFilterChange(e.target.value)}
-          className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+          className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
         >
           <option value="">Tất cả chuyên mục</option>
           {categories.map((c) => (

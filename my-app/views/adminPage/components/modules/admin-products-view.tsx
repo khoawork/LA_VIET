@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Package,
   Save,
-  ExternalLink,
   CheckCircle2,
   AlertCircle,
   Eye,
@@ -20,6 +19,7 @@ import {
   SlidersHorizontal,
   RefreshCw,
   Info,
+  Loader2,
 } from "lucide-react";
 import type { ProductsPagePropsType } from "@/shared/schema/pages/page-product.schema";
 
@@ -47,26 +47,9 @@ export function AdminProductsView() {
   const [activeTab, setActiveTab] = useState<"hero" | "products">("hero");
 
   // Form State
-  const [pageName, setPageName] = useState("Trang Sản Phẩm");
-  const [pageProps, setPageProps] = useState<ProductsPagePropsType>({
-    title: "Bộ Sưu Tập Tác Phẩm Sơn Mài | Là Việt",
-    description:
-      "Tuyển tập những kiệt tác sơn mài hàn lâm, bình phong và vách nghệ thuật độc bản chế tác thủ công từ cây sơn Phú Thọ.",
-    herosection: {
-      badge: "GIÁM TUYỂN ĐỘC QUYỀN",
-      heading: "DANH MỤC TÁC PHẨM & ỨNG DỤNG SƠN MÀI",
-      subHeading: "BẢO TỒN VÀ KHAI MỞ DI SẢN HỘI HOẠ PHƯƠNG ĐÔNG",
-      description:
-        "Tại xưởng hội hoạ Là Việt, chất liệu sơn ta nguyên bản từ cây sơn Phú Thọ giao thoa cùng tư duy không gian đương đại. Từng nét dát vàng quỳ, cẩn ốc xà cừ hay mài quang kỳ công được chuyển hoá thành các đại hoạ phẩm vách ốp, bàn trà điêu khắc và tác phẩm độc bản – bảo lưu trọn vẹn khí chất phương Đông.",
-      metrics: [
-        { value: "100%", label: "SƠN TA TỰ NHIÊN" },
-        { value: "06+", label: "THÁNG CHẾ TÁC" },
-        { value: "ĐỘC BẢN", label: "KHÔNG BẢN SAO" },
-      ],
-      image: "",
-    },
-    displayedProductIds: [],
-  });
+  const [pageName, setPageName] = useState("");
+  const [pageProps, setPageProps] = useState<ProductsPagePropsType>({} as ProductsPagePropsType);
+  const [hasPageData, setHasPageData] = useState(false);
 
   // Products Data
   const [allProducts, setAllProducts] = useState<ProductItem[]>([]);
@@ -86,42 +69,27 @@ export function AdminProductsView() {
       const res = await fetch("/api/pages/products");
       const json = await res.json();
 
-      if (json.success && json.data) {
+      if (res.ok && json.success && json.data?.page?.props) {
         const { page, products } = json.data;
-        if (page?.name) setPageName(page.name);
-        if (page?.props) {
-          // Merge with defaults to guarantee all nested keys exist
-          setPageProps((prev) => ({
-            ...prev,
-            ...page.props,
-            herosection: {
-              ...prev.herosection,
-              ...(page.props.herosection || {}),
-              metrics:
-                page.props.herosection?.metrics &&
-                page.props.herosection.metrics.length > 0
-                  ? page.props.herosection.metrics
-                  : prev.herosection.metrics,
-            },
-            displayedProductIds: Array.isArray(page.props.displayedProductIds)
-              ? page.props.displayedProductIds
-              : prev.displayedProductIds,
-          }));
+        const props = page.props as ProductsPagePropsType;
+        if (!props.herosection || !Array.isArray(props.herosection.metrics)) {
+          throw new Error("Dữ liệu trang Sản phẩm chưa đầy đủ.");
         }
+        setPageName(page.name ?? "");
+        setPageProps({
+          ...props,
+          displayedProductIds: Array.isArray(props.displayedProductIds)
+            ? props.displayedProductIds
+            : [],
+        });
+        setHasPageData(true);
 
         if (Array.isArray(products)) {
           setAllProducts(products);
-          // If no displayed IDs were saved yet, default to all products active
-          if (
-            !page?.props?.displayedProductIds ||
-            page.props.displayedProductIds.length === 0
-          ) {
-            setPageProps((prev) => ({
-              ...prev,
-              displayedProductIds: products.map((p) => p.id),
-            }));
-          }
         }
+      } else {
+        setHasPageData(false);
+        setAlert({ type: "error", message: "Chưa có dữ liệu trang Sản phẩm." });
       }
     } catch (err) {
       console.error("Failed to load products page configuration:", err);
@@ -140,6 +108,7 @@ export function AdminProductsView() {
 
   // Save changes to API
   const handleSave = async () => {
+    if (!hasPageData) return;
     setSaving(true);
     setAlert(null);
     try {
@@ -239,7 +208,7 @@ export function AdminProductsView() {
         ...prev.herosection,
         metrics: [
           ...prev.herosection.metrics,
-          { value: "MỚI", label: "TIÊU CHÍ MỚI" },
+          { value: "", label: "" },
         ],
       },
     }));
@@ -281,10 +250,27 @@ export function AdminProductsView() {
   const displayedCount = pageProps.displayedProductIds?.length || 0;
   const totalCount = allProducts.length;
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+        <span>Đang tải trang Sản phẩm...</span>
+      </div>
+    );
+  }
+
+  if (!hasPageData) {
+    return (
+      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+        Chưa có dữ liệu trang Sản phẩm hoặc không thể tải dữ liệu.
+      </p>
+    );
+  }
+
   return (
     <div
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="space-y-6"
+      className="admin-content-editor space-y-6"
     >
       {/* Toast Alert Banner */}
       {alert && (
@@ -322,7 +308,7 @@ export function AdminProductsView() {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-black to-[#a21f1f] bg-clip-text text-transparent">
-                Cấu hình Trang Sản phẩm (Product Page)
+                Nội dung Trang Sản phẩm
               </h1>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db]">
                 Route: /products
@@ -338,15 +324,6 @@ export function AdminProductsView() {
 
         {/* Action CTAs */}
         <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-          <Link
-            href="/products"
-            target="_blank"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#1E1917] text-xs font-bold transition-all border border-[#f3e9db] cursor-pointer"
-          >
-            <ExternalLink className="w-4 h-4 text-stone-500" />
-            <span>Xem trang thực tế</span>
-          </Link>
-
           <button
             type="button"
             onClick={handleSave}
@@ -358,7 +335,7 @@ export function AdminProductsView() {
             ) : (
               <Save className="w-4 h-4" />
             )}
-            <span>{saving ? "Đang lưu..." : "Lưu cấu hình"}</span>
+            <span>{saving ? "Đang lưu..." : "Lưu thay đổi"}</span>
           </button>
         </div>
       </div>
@@ -368,20 +345,20 @@ export function AdminProductsView() {
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
-          className={`flex items-center gap-2 px-5 py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-5 py-3.5 text-sm font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === "hero"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
           }`}
         >
           <Layers className="w-4 h-4" />
-          <span>1. Nội dung &amp; Hero Section</span>
+          <span>Nội dung &amp; Hero Section</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab("products")}
-          className={`flex items-center gap-2 px-5 py-3.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-5 py-3.5 text-sm font-bold border-b-2 transition-all cursor-pointer ${
             activeTab === "products"
               ? "border-[#a21f1f] text-[#a21f1f] bg-[#f7f5f1]/60"
               : "border-transparent text-stone-600 hover:text-stone-900"
@@ -389,7 +366,7 @@ export function AdminProductsView() {
         >
           <SlidersHorizontal className="w-4 h-4" />
           <span>
-            2. Chọn Sản phẩm hiển thị ({displayedCount}/{totalCount})
+            Sản phẩm hiển thị ({displayedCount}/{totalCount})
           </span>
         </button>
       </div>
@@ -429,8 +406,8 @@ export function AdminProductsView() {
                     },
                   })
                 }
-                placeholder="VD: GIÁM TUYỂN ĐỘC QUYỀN"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                placeholder="Nhập nhãn giới thiệu"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -451,7 +428,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="VD: BẢO TỒN VÀ KHAI MỞ DI SẢN HỘI HOẠ PHƯƠNG ĐÔNG"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -472,7 +449,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="VD: DANH MỤC TÁC PHẨM & ỨNG DỤNG SƠN MÀI"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -493,7 +470,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="Nhập đoạn văn giới thiệu tinh thần chế tác, xưởng sơn mài Là Việt..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -555,7 +532,7 @@ export function AdminProductsView() {
                         handleMetricChange(idx, "value", e.target.value)
                       }
                       placeholder="100% hoặc ĐỘC BẢN"
-                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-bold text-[#a21f1f] focus:outline-none focus:border-[#a21f1f]"
+                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f] focus:outline-none focus:border-[#a21f1f]"
                     />
                   </div>
 
@@ -570,7 +547,7 @@ export function AdminProductsView() {
                         handleMetricChange(idx, "label", e.target.value)
                       }
                       placeholder="SƠN TA TỰ NHIÊN"
-                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-semibold text-stone-800 focus:outline-none focus:border-[#a21f1f]"
+                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-800 focus:outline-none focus:border-[#a21f1f]"
                     />
                   </div>
                 </div>
@@ -642,7 +619,7 @@ export function AdminProductsView() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm kiếm tác phẩm theo tên, danh mục, quy cách..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -800,15 +777,7 @@ export function AdminProductsView() {
         <div className="flex items-center gap-2 text-xs text-stone-600">
           <Sparkles className="w-4 h-4 text-[#d1a25b]" />
           <span>
-            Thay đổi sẽ được áp dụng ngay trên trang{" "}
-            <Link
-              href="/products"
-              target="_blank"
-              className="font-bold underline text-[#a21f1f]"
-            >
-              /products
-            </Link>{" "}
-            sau khi nhấn &ldquo;Lưu cấu hình&rdquo;.
+            Thay đổi sẽ được áp dụng sau khi nhấn &ldquo;Lưu thay đổi&rdquo;.
           </span>
         </div>
 
@@ -823,7 +792,7 @@ export function AdminProductsView() {
           ) : (
             <Save className="w-4 h-4" />
           )}
-          <span>{saving ? "Đang lưu..." : "Lưu cấu hình"}</span>
+          <span>{saving ? "Đang lưu..." : "Lưu thay đổi"}</span>
         </button>
       </div>
     </div>

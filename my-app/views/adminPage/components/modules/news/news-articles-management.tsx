@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 import type { NewsCategoryData } from "./news-categories-management";
+import { ImageUrlUploadField } from "../image-url-upload-field";
 
 export interface NewsItemData {
   id: number;
@@ -271,7 +272,7 @@ export function NewsArticlesManagement({
               fetchNewsList(e.target.value, selectedFilterCategory);
             }}
             placeholder="Tìm kiếm bài viết theo tiêu đề, mô tả..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -281,7 +282,7 @@ export function NewsArticlesManagement({
             setSelectedFilterCategory(e.target.value);
             fetchNewsList(searchKeyword, e.target.value);
           }}
-          className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+          className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
         >
           <option value="">Tất cả chuyên mục</option>
           {newsCategories.map((c) => (
@@ -413,7 +414,7 @@ export function NewsArticlesManagement({
                   placeholder="Ví dụ: Kỹ thuật dát vàng quỳ trên tranh sơn mài..."
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                 />
               </div>
 
@@ -427,7 +428,7 @@ export function NewsArticlesManagement({
                     onChange={(e) =>
                       setFormData({ ...formData, categoryId: Number(e.target.value) })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] bg-white focus:outline-none focus:border-[#9A1C1F]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] bg-white focus:outline-none focus:border-[#9A1C1F]"
                   >
                     {newsCategories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -472,15 +473,11 @@ export function NewsArticlesManagement({
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-[#1E1917]">URL Hình ảnh bài viết</label>
-                <input
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
-                />
-              </div>
+              <ImageUrlUploadField
+                label="Hình ảnh bài viết"
+                value={formData.image}
+                onChange={(image) => setFormData((current) => ({ ...current, image }))}
+              />
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#1E1917]">

@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { Award, Image as ImageIcon, Plus, Trash2 } from "lucide-react";
 import type { HomeSpotlightSectionType } from "@/views/homePage/types/pagehome.type";
+import { ImagePreview } from "../image-preview";
 
 interface HomeSpotlightTabProps {
   data: HomeSpotlightSectionType;
@@ -46,7 +46,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
 
@@ -85,6 +85,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
               placeholder="https://... hoặc chọn file từ máy tính"
               className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-mono bg-white focus:outline-none focus:border-[#a21f1f] truncate"
             />
+            <ImagePreview src={data.image} alt="Xem trước ảnh tiêu điểm" />
           </div>
         </div>
 
@@ -96,7 +97,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
             rows={2}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -169,12 +170,11 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
             </label>
             <div className="flex items-center gap-3">
               {data.seal.logo ? (
-                <Image
+                // URL đang nhập có thể thuộc máy chủ ảnh bất kỳ.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={data.seal.logo}
                   alt="Logo con dấu"
-                  width={40}
-                  height={40}
-                  unoptimized
                   className="w-10 h-10 object-contain bg-white border border-[#f3e9db]"
                 />
               ) : (
@@ -288,7 +288,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   onChange={(e) =>
                     handleInfoBoxChange(idx, "label", e.target.value)
                   }
-                  className="w-full px-2.5 py-1 rounded border border-[#f3e9db] text-[10px] font-bold text-[#a21f1f] uppercase bg-white"
+                  className="w-full px-2.5 py-1 rounded border border-[#f3e9db] text-[10px] font-normal text-[#a21f1f] uppercase bg-white"
                 />
                 <input
                   type="text"
@@ -298,7 +298,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   onChange={(e) =>
                     handleInfoBoxChange(idx, "value", e.target.value)
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-bold text-[#1E1917] bg-white"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
                 />
               </div>
             ))}

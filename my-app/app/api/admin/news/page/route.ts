@@ -29,24 +29,9 @@ export const PUT = withErrorHandler(async (request: NextRequest) => {
 
 /**
  * POST /api/admin/news/page
- * Lưu khởi tạo mới hoặc khôi phục về mặc định với { "action": "reset" }
+ * Lưu khởi tạo mới
  */
 export const POST = withErrorHandler(async (request: NextRequest) => {
-  let json: { action?: string } | null = null;
-  try {
-    json = await request.clone().json();
-  } catch {
-    // Không phải JSON hợp lệ thì tiếp tục validate theo schema bình thường
-  }
-
-  if (json?.action === "reset") {
-    const resetPage = await pageNewService.resetToDefault("news");
-    return sendSuccess(
-      resetPage,
-      "Khôi phục cấu trúc trang tin tức về mặc định thành công",
-    );
-  }
-
   const body = await validateBody(CreatePageNewRequestSchema, request);
   const result = await pageNewService.updatePageNewContent("news", body);
   return sendSuccess(

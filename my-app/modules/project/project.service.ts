@@ -1,6 +1,6 @@
 import { NotFoundException } from "@/shared/common/app-error";
 import { projectRepository, ProjectRepository } from "./project.repository";
-import { ProjectListDetailResponseType, ProjectPatchSchemaType, ProjectQuerySchemaType, ProjectRequestType, ProjectResponseType, ProjectsListResponseType } from "./project.type";
+import { ProjectListDetailResponseType, ProjectPatchSchemaType, ProjectQuerySchemaType, ProjectRequestType, ProjectResponseType } from "./project.type";
 
 export class ProjectService {
   constructor(private readonly projectRepository: ProjectRepository) {}
@@ -30,7 +30,7 @@ export class ProjectService {
   }
 
   async updatePatchProject(id: number, data: ProjectPatchSchemaType) {
-    await this.projectRepository.updatePatchProject(id, data);
+    return this.projectRepository.updatePatchProject(id, data);
   }
 
 }

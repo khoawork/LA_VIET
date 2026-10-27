@@ -42,7 +42,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         fontFamily: "Arial, Helvetica, sans-serif",
         "--admin-sidebar-width": sidebarCollapsed ? "5rem" : "18rem",
       } as CSSProperties}
-      className="fixed inset-0 z-50 flex overflow-hidden bg-[#f7f5f1] text-[#1E1917]"
+      className="admin-form-values fixed inset-0 z-50 flex overflow-hidden bg-[#f7f5f1] text-[#1E1917]"
     >
       {/* Sidebar cố định bên trái (màu #a21f1f) - Không bị tải lại khi chọn nav con */}
       <AdminSidebar

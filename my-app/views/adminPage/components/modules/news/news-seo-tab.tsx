@@ -37,7 +37,7 @@ export function NewsSeoTab({ data, onChange }: NewsSeoTabProps) {
                 metaTitle: e.target.value,
               })
             }
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917]"
           />
         </div>
 

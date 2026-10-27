@@ -1,7 +1,4 @@
-import {
-  type MenuItemType,
-  DEFAULT_MENU_ITEMS,
-} from "@/shared/schema/menu.schema";
+import type { MenuItemType } from "@/shared/schema/menu.schema";
 import {
   PageMenuRepository,
   pageMenuRepository,
@@ -13,16 +10,16 @@ export class PageMenuService {
   async getMenu(): Promise<MenuItemType[]> {
     const page = await this.repository.getMenu();
     if (!page || !page.props) {
-      return DEFAULT_MENU_ITEMS;
+      return [];
     }
 
     const props = page.props as { items?: MenuItemType[] };
-    if (Array.isArray(props.items) && props.items.length > 0) {
+    if (Array.isArray(props.items)) {
       // Sort items by order if order is present
       return [...props.items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
     }
 
-    return DEFAULT_MENU_ITEMS;
+    return [];
   }
 
   async updateMenu(items: MenuItemType[]) {

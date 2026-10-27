@@ -145,7 +145,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
                 setCategoryId(e.target.value);
                 setPage(1);
               }}
-              className="px-3 py-2 rounded-xl border border-[#f3e9db] text-xs font-semibold text-[#1E1917] bg-white"
+              className="px-3 py-2 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
             >
               <option value="">Tất cả danh mục</option>
               {categories.map((category) => (
@@ -272,7 +272,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
           <div className="space-y-1.5">
@@ -283,7 +283,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
               type="text"
               value={data.title}
               onChange={(e) => onChange({ ...data, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
         </div>

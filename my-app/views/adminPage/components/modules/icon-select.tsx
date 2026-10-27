@@ -45,7 +45,7 @@ export function IconSelect({ label, value, onChange }: Props) {
       ref={rootRef}
       className="relative min-w-0 text-xs font-semibold text-[#1E1917]"
     >
-      <span className="block">{label}</span>
+      <span className="admin-field-label block">{label}</span>
       <button
         type="button"
         aria-label={`${label}: ${value || "Chưa chọn"}`}

@@ -27,7 +27,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
           />
         </div>
 
@@ -243,7 +243,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
                   newStats[idx] = { ...newStats[idx], label: e.target.value };
                   onChange({ ...data, highlightStats: newStats });
                 }}
-                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-semibold bg-white"
+                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal bg-white"
               />
               <label className="text-[11px] font-bold text-[#695D56] block">
                 Giá trị kết quả
@@ -256,7 +256,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
                   newStats[idx] = { ...newStats[idx], value: e.target.value };
                   onChange({ ...data, highlightStats: newStats });
                 }}
-                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-bold text-[#9A1C1F] bg-white"
+                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal text-[#9A1C1F] bg-white"
               />
             </div>
           ))}

@@ -60,7 +60,7 @@ export function NewsEditCategoryModal({
               required
               value={category.name}
               onChange={(e) => onChangeName(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-semibold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               autoFocus
             />
           </div>

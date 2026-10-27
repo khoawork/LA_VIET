@@ -7,7 +7,6 @@ import {
 } from "@/shared/schema/pages/pagenew.schema";
 import {
   PageNewPropsType,
-  DEFAULT_PAGE_NEW_PROPS,
   UpdatePageNewType,
 } from "../types/pagenew.type";
 import { NotFoundException } from "@/shared/common/app-error";
@@ -175,23 +174,6 @@ export class PageNewService {
       name: updated.name,
       slug: updated.slug,
       props: validatedProps,
-    };
-  }
-
-  /**
-   * Đưa toàn bộ cấu trúc trang về mặc định ban đầu
-   */
-  async resetToDefault(slug: string = this.defaultSlug) {
-    const updated = await this.repo.upsert(slug, {
-      name: this.defaultPageName,
-      props: DEFAULT_PAGE_NEW_PROPS,
-    });
-
-    return {
-      id: updated.id,
-      name: updated.name,
-      slug: updated.slug,
-      props: DEFAULT_PAGE_NEW_PROPS,
     };
   }
 

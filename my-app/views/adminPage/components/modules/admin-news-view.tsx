@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import type { PageNewPropsType } from "@/views/newPages/types/pagenew.type";
-import { DEFAULT_PAGE_NEW_PROPS } from "@/views/newPages/types/pagenew.type";
 import {
   NewsMainTab,
   NewsHeaderActions,
@@ -15,7 +14,6 @@ import {
   NewsStatsTab,
   NewsCtaTab,
   NewsSeoTab,
-  NewsSectionPreview,
   NewsArticlesManagement,
   NewsCategoriesManagement,
 } from "./news";
@@ -29,7 +27,7 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
 
   // States dành cho Tab "Nội dung Website (CMS)"
   const [activeSectionTab, setActiveSectionTab] = useState<SectionTab>("header");
-  const [formData, setFormData] = useState<PageNewPropsType>(DEFAULT_PAGE_NEW_PROPS);
+  const [formData, setFormData] = useState<PageNewPropsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
@@ -61,8 +59,10 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
         setLoading(true);
         const res = await fetch("/api/admin/news/page");
         const json = await res.json();
-        if (json.success && json.data?.props) {
+        if (res.ok && json.success && json.data?.props) {
           setFormData(json.data.props);
+        } else {
+          setFormData(null);
         }
       } catch (err) {
         console.error("Lỗi khi tải cấu trúc trang tin tức:", err);
@@ -84,6 +84,7 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
 
   // 2. Lưu thay đổi cấu trúc trang qua API PUT
   const handleSave = async () => {
+    if (!formData) return;
     try {
       setSaving(true);
       const res = await fetch("/api/admin/news/page", {
@@ -117,44 +118,8 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
     }
   };
 
-  // 3. Khôi phục về mặc định qua API POST reset
-  const handleReset = async () => {
-    if (
-      !confirm(
-        "Bạn có chắc chắn muốn khôi phục toàn bộ nội dung trang Tin tức về mặc định ban đầu?",
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setSaving(true);
-      const res = await fetch("/api/admin/news/page", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reset" }),
-      });
-      const json = await res.json();
-
-      if (json.success && json.data?.props) {
-        setFormData(json.data.props);
-        setAlertInfo({
-          type: "success",
-          message: "Đã khôi phục cấu trúc trang Tin tức về mặc định thành công!",
-        });
-      }
-    } catch {
-      setAlertInfo({
-        type: "error",
-        message: "Lỗi khi khôi phục dữ liệu mặc định.",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="admin-content-editor space-y-6">
       {/* NỘI DUNG WEBSITE (PAGE CMS 6 SECTIONS) */}
       {activeMainTab === "content" && (
         <div className="space-y-6">
@@ -177,84 +142,70 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
           )}
 
           {/* Header & Top Bar Actions */}
-          <NewsHeaderActions
-            saving={saving}
-            onSave={handleSave}
-            onReset={handleReset}
-          />
+          {formData && <NewsHeaderActions saving={saving} onSave={handleSave} />}
 
           {/* Navigation Tabs giữa 6 Section CMS */}
-          <NewsTabNav
+          {formData && <NewsTabNav
             activeTab={activeSectionTab}
             onSelectTab={setActiveSectionTab}
-          />
+          />}
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-[#EAE2D5]">
-              <Loader2 className="w-8 h-8 text-[#9A1C1F] animate-spin mb-3" />
-              <p className="text-xs font-semibold text-[#695D56]">
-                Đang tải cấu trúc nội dung trang Tin tức...
-              </p>
+            <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+              <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+              <span>Đang tải trang Tin tức...</span>
             </div>
+          ) : !formData ? (
+            <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+              Chưa có dữ liệu trang Tin tức hoặc không thể tải dữ liệu.
+            </p>
           ) : (
-            /* 2-Column Layout: Editor (Left) & Live Preview (Right) */
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              {/* Cột trái: Form chỉnh sửa Section đang chọn */}
-              <div className="lg:col-span-7 space-y-6">
-                {activeSectionTab === "header" && (
-                  <NewsHeaderTab
-                    data={formData.header}
-                    onChange={(header) => setFormData({ ...formData, header })}
-                  />
-                )}
-
-                {activeSectionTab === "featured" && (
-                  <NewsFeaturedTab
-                    data={formData.featured}
-                    onChange={(featured) =>
-                      setFormData({ ...formData, featured })
-                    }
-                  />
-                )}
-
-                {activeSectionTab === "articles" && (
-                  <NewsArticlesTab
-                    data={formData.articlesSection}
-                    onChange={(articlesSection) =>
-                      setFormData({ ...formData, articlesSection })
-                    }
-                  />
-                )}
-
-                {activeSectionTab === "stats" && (
-                  <NewsStatsTab
-                    data={formData.stats}
-                    onChange={(stats) => setFormData({ ...formData, stats })}
-                  />
-                )}
-
-                {activeSectionTab === "cta" && (
-                  <NewsCtaTab
-                    data={formData.cta}
-                    onChange={(cta) => setFormData({ ...formData, cta })}
-                  />
-                )}
-
-                {activeSectionTab === "seo" && (
-                  <NewsSeoTab
-                    data={formData.seo}
-                    onChange={(seo) => setFormData({ ...formData, seo })}
-                  />
-                )}
-              </div>
-
-              {/* Cột phải: Live Preview trực quan kế bên editor */}
-              <div className="lg:col-span-5">
-                <NewsSectionPreview
-                  activeTab={activeSectionTab}
-                  data={formData}
+            <div className="mx-auto w-full max-w-6xl space-y-6">
+              {activeSectionTab === "header" && (
+                <NewsHeaderTab
+                  data={formData.header}
+                  onChange={(header) => setFormData({ ...formData, header })}
                 />
-              </div>
+              )}
+
+              {activeSectionTab === "featured" && (
+                <NewsFeaturedTab
+                  data={formData.featured}
+                  onChange={(featured) =>
+                    setFormData({ ...formData, featured })
+                  }
+                />
+              )}
+
+              {activeSectionTab === "articles" && (
+                <NewsArticlesTab
+                  data={formData.articlesSection}
+                  onChange={(articlesSection) =>
+                    setFormData({ ...formData, articlesSection })
+                  }
+                />
+              )}
+
+              {activeSectionTab === "stats" && (
+                <NewsStatsTab
+                  data={formData.stats}
+                  onChange={(stats) => setFormData({ ...formData, stats })}
+                />
+              )}
+
+              {activeSectionTab === "cta" && (
+                <NewsCtaTab
+                  data={formData.cta}
+                  onChange={(cta) => setFormData({ ...formData, cta })}
+                />
+              )}
+
+              {activeSectionTab === "seo" && (
+                <NewsSeoTab
+                  data={formData.seo}
+                  onChange={(seo) => setFormData({ ...formData, seo })}
+                />
+              )}
             </div>
           )}
         </div>

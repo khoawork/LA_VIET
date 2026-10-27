@@ -34,7 +34,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
             type="text"
             value={data.tagline}
             onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-medium text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -46,7 +46,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
             rows={2}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -81,7 +81,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-semibold bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -118,7 +118,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-semibold bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
             />
             <input
               type="text"

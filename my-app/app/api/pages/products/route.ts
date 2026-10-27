@@ -1,8 +1,5 @@
 import { NextRequest } from "next/server";
-import {
-  pageProductService,
-  DEFAULT_PRODUCTS_PAGE_CONFIG,
-} from "@/modules/pages/page-product";
+import { pageProductService } from "@/modules/pages/page-product";
 import {
   HttpStatus,
   sendSuccess,
@@ -13,8 +10,6 @@ import {
   ProductsPageRequestSchema,
   ProductsPageResponseSchema,
 } from "@/shared/schema/pages/page-product.schema";
-
-export { DEFAULT_PRODUCTS_PAGE_CONFIG };
 
 export const GET = withErrorHandler(async (request: NextRequest) => {
   if (request.nextUrl.searchParams.get("summary") === "true") {

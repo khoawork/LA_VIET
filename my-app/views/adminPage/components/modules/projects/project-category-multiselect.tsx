@@ -1,4 +1,4 @@
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { ProjectCategory } from "../../../types/projects/project-data.type";
 
@@ -22,7 +22,7 @@ export function ProjectCategoryMultiselect({
     .map((category) => category.name);
   const summary =
     selectedIds.length === 0
-      ? "Tất cả"
+      ? "Tất cả danh mục"
       : selectedNames.length > 0
         ? selectedNames.join(", ")
         : `${selectedIds.length} danh mục đã chọn`;
@@ -47,15 +47,15 @@ export function ProjectCategoryMultiselect({
   }, [open]);
 
   return (
-    <div ref={rootRef} className="relative min-w-0 text-xs font-semibold text-[#1E1917]">
-      <span className="block">Danh mục áp dụng</span>
+    <div ref={rootRef} className="relative min-w-0 text-[#1E1917]">
+      <span className="admin-field-label block text-sm font-semibold leading-5">Danh mục áp dụng</span>
       <button
         type="button"
         aria-label={`Danh mục áp dụng cho nhóm lọc ${index + 1}`}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="mt-1.5 flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 text-left font-normal text-[#1E1917] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
+        className="mt-1.5 flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 text-left text-base font-normal leading-6 text-[#1E1917] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
       >
         <span className="min-w-0 truncate">{summary}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-[#695D56] transition-transform ${open ? "rotate-180" : ""}`} />
@@ -65,20 +65,12 @@ export function ProjectCategoryMultiselect({
         <div
           role="dialog"
           aria-label={`Chọn danh mục áp dụng cho nhóm lọc ${index + 1}`}
-          className="absolute left-0 top-full z-40 mt-2 max-h-56 w-full overflow-y-auto rounded-xl border border-[#EAE2D5] bg-white p-2 shadow-lg"
+          className="absolute inset-x-0 top-full z-40 mt-1 max-h-56 overflow-y-auto rounded-xl border border-[#EAE2D5] bg-white p-2 text-base font-normal leading-6 shadow-lg"
         >
-          <button
-            type="button"
-            onClick={() => onChange([])}
-            className="flex w-full cursor-pointer items-center justify-between rounded-lg px-2.5 py-2 text-left font-normal transition-colors hover:bg-[#FAF1EC]"
-          >
-            <span>Tất cả</span>
-            {selectedIds.length === 0 && <Check className="h-4 w-4 text-[#9A1C1F]" />}
-          </button>
           {categories.map((category) => (
             <label
               key={category.id}
-              className="flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 font-normal hover:bg-[#FAF8F5]"
+              className="project-category-option flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2 font-normal hover:bg-[#FAF8F5]"
             >
               <input
                 type="checkbox"

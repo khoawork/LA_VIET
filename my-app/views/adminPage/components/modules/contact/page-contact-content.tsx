@@ -17,7 +17,6 @@ import { ContactInfoTab } from "./contact-info-tab";
 import { ContactMapTab } from "./contact-map-tab";
 import { ContactCtaTab } from "./contact-cta-tab";
 import { ContactExperienceTab } from "./contact-experience-tab";
-import { ContactSectionPreview } from "./contact-section-preview";
 
 function oneContactPerChannel(props: PageContactProps): PageContactProps {
   return {
@@ -89,7 +88,8 @@ export function PageContactContent() {
   if (loading)
     return (
       <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
-        <Loader2 className="h-5 w-5 animate-spin" /> Đang tải trang Liên hệ...
+        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+        <span>Đang tải trang Liên hệ...</span>
       </div>
     );
   if (!page || !draft)
@@ -103,7 +103,7 @@ export function PageContactContent() {
     );
 
   return (
-    <section className="space-y-6">
+    <section className="admin-content-editor space-y-6">
       {error && (
         <p
           role="alert"
@@ -145,7 +145,7 @@ export function PageContactContent() {
           ) : (
             <Save className="h-4 w-4" />
           )}{" "}
-          {saving ? "Đang lưu..." : "Lưu section đang chọn"}
+          {saving ? "Đang lưu..." : "Lưu thay đổi"}
         </button>
       </div>
       <ContactTabNav
@@ -156,58 +156,53 @@ export function PageContactContent() {
           setSuccess("");
         }}
       />
-      <div className="grid items-start gap-6 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          {activeTab === "header" && (
-            <ContactHeaderTab
-              data={draft.header}
-              onChange={(header) =>
-                setDraft((current) =>
-                  current ? { ...current, header } : current,
-                )
-              }
-            />
-          )}
-          {activeTab === "contactInfo" && (
-            <ContactInfoTab
-              data={draft.contactInfo}
-              onChange={(contactInfo) =>
-                setDraft((current) =>
-                  current ? { ...current, contactInfo } : current,
-                )
-              }
-            />
-          )}
-          {activeTab === "map" && (
-            <ContactMapTab
-              data={draft.map}
-              onChange={(map) =>
-                setDraft((current) => (current ? { ...current, map } : current))
-              }
-            />
-          )}
-          {activeTab === "cta" && (
-            <ContactCtaTab
-              data={draft.cta}
-              onChange={(cta) =>
-                setDraft((current) => (current ? { ...current, cta } : current))
-              }
-            />
-          )}
-          {activeTab === "experience" && (
-            <ContactExperienceTab
-              data={draft.experience}
-              onChange={(experience) =>
-                setDraft((current) =>
-                  current ? { ...current, experience } : current,
-                )
-              }
-            />
-          )}
-        </div>
-        <div className="lg:col-span-5">
-          <ContactSectionPreview activeTab={activeTab} data={draft} />
-        </div>
+      <div className="mx-auto w-full max-w-6xl space-y-6">
+        {activeTab === "header" && (
+          <ContactHeaderTab
+            data={draft.header}
+            onChange={(header) =>
+              setDraft((current) =>
+                current ? { ...current, header } : current,
+              )
+            }
+          />
+        )}
+        {activeTab === "contactInfo" && (
+          <ContactInfoTab
+            data={draft.contactInfo}
+            onChange={(contactInfo) =>
+              setDraft((current) =>
+                current ? { ...current, contactInfo } : current,
+              )
+            }
+          />
+        )}
+        {activeTab === "map" && (
+          <ContactMapTab
+            data={draft.map}
+            onChange={(map) =>
+              setDraft((current) => (current ? { ...current, map } : current))
+            }
+          />
+        )}
+        {activeTab === "cta" && (
+          <ContactCtaTab
+            data={draft.cta}
+            onChange={(cta) =>
+              setDraft((current) => (current ? { ...current, cta } : current))
+            }
+          />
+        )}
+        {activeTab === "experience" && (
+          <ContactExperienceTab
+            data={draft.experience}
+            onChange={(experience) =>
+              setDraft((current) =>
+                current ? { ...current, experience } : current,
+              )
+            }
+          />
+        )}
       </div>
     </section>
   );

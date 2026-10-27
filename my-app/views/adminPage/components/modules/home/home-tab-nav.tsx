@@ -31,35 +31,34 @@ export function HomeTabNav({ activeTab, onSelectTab }: HomeTabNavProps) {
     { id: "spotlight" as HomeSectionTab, label: "Tiêu điểm dự án", icon: Award },
     { id: "news" as HomeSectionTab, label: "Tin tức nổi bật", icon: Newspaper },
     { id: "partners" as HomeSectionTab, label: "Đối tác & Đánh giá", icon: Handshake },
-    { id: "cta" as HomeSectionTab, label: "Kêu gọi (CTA)", icon: Megaphone },
+    { id: "cta" as HomeSectionTab, label: "CTA", icon: Megaphone },
     { id: "seo" as HomeSectionTab, label: "Cấu hình SEO", icon: Globe },
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-2 border border-[#f3e9db] shadow-xs overflow-x-auto">
-      <div className="flex items-center gap-1.5 min-w-max">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+    <nav aria-label="Các phần nội dung Trang chủ" className="flex gap-2 overflow-x-auto border-b border-[#EAE2D5] pb-1">
+      {tabs.map((tab) => {
+        const Icon = tab.icon;
+        const isActive = activeTab === tab.id;
 
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => onSelectTab(tab.id)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isActive
-                  ? "bg-[#a21f1f] hover:bg-[#851619] text-white shadow-xs"
-                  : "text-stone-700 hover:bg-[#FAF8F5] hover:text-[#a21f1f]"
-              }`}
-            >
-              <Icon className="w-4 h-4 shrink-0" />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </div>
+        return (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => onSelectTab(tab.id)}
+            aria-current={isActive ? "page" : undefined}
+            className={`inline-flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-t-xl border-b-2 px-4 py-3 text-sm font-bold transition-colors ${
+              isActive
+                ? "border-[#9A1C1F] bg-white text-[#9A1C1F] hover:bg-[#FAF1EC]"
+                : "border-transparent text-[#695D56] hover:bg-white hover:text-[#9A1C1F]"
+            }`}
+          >
+            <Icon className="w-4 h-4 shrink-0" />
+            <span>{tab.label}</span>
+          </button>
+        );
+      })}
+    </nav>
   );
 }
 

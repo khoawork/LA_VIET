@@ -1,8 +1,5 @@
 import { NextRequest } from "next/server";
-import {
-  pageAboutService,
-  DEFAULT_ABOUT_PAGE_CONFIG,
-} from "@/modules/pages/page-about";
+import { pageAboutService } from "@/modules/pages/page-about";
 import {
   HttpStatus,
   sendSuccess,
@@ -13,8 +10,6 @@ import {
   AboutPageRequestSchema,
   AboutPageResponseSchema,
 } from "@/shared/schema/pages/about-product.schema";
-
-export { DEFAULT_ABOUT_PAGE_CONFIG };
 
 export const GET = withErrorHandler(async () => {
   const data = await pageAboutService.getAboutPageData();

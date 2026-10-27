@@ -15,7 +15,7 @@ export const ProductsPagePropsSchema = z.object({
     .max(1000, { message: "Description must be less than 1000 characters" })
     .default(""),
   herosection: z.object({
-    badge: z.string().default("GIÁM TUYỂN ĐỘC QUYỀN"),
+    badge: z.string().default(""),
     heading: z.string().min(1, { message: "Heading is required" }),
     subHeading: z.string().optional(),
     description: z.string().min(1, { message: "Hero description is required" }),
@@ -26,11 +26,7 @@ export const ProductsPagePropsSchema = z.object({
           label: z.string(),
         }),
       )
-      .default([
-        { value: "100%", label: "SƠN TA TỰ NHIÊN" },
-        { value: "06+", label: "THÁNG CHẾ TÁC" },
-        { value: "ĐỘC BẢN", label: "KHÔNG BẢN SAO" },
-      ]),
+      .default([]),
     image: z.string().optional().default(""),
   }),
   seo: z

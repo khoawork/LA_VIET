@@ -8,7 +8,6 @@ import { BrandingFooterTab } from "./branding-footer-tab";
 import { BrandingHeader } from "./branding-header";
 import { BrandingIdentityTab } from "./branding-identity-tab";
 import { BrandingPoliciesTab } from "./branding-policies-tab";
-import { BrandingPreview } from "./branding-preview";
 import { BrandingTabNav } from "./branding-tab-nav";
 import { useBrandingEditor } from "./use-branding-editor";
 
@@ -38,25 +37,19 @@ export function BrandingContent() {
   };
 
   return (
-    <section className="space-y-6">
+    <section className="admin-content-editor space-y-6">
       {editor.error && <p role="alert" className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-xs text-rose-700">{editor.error}</p>}
       {editor.success && <p role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs text-emerald-700">{editor.success}</p>}
       <BrandingHeader
-        hasSettings={editor.hasSettings}
         saving={editor.saving}
         onSave={() => editor.save(activeTab)}
       />
       <BrandingTabNav activeTab={activeTab} onSelect={setActiveTab} />
-      <div className="grid items-start gap-6 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          {activeTab === "brand" && <BrandingIdentityTab data={editor.draft} onChange={editor.setDraft} />}
-          {activeTab === "footer" && <BrandingFooterTab {...footerProps} />}
-          {activeTab === "details" && <BrandingDetailsTab {...footerProps} />}
-          {activeTab === "policies" && <BrandingPoliciesTab {...footerProps} />}
-        </div>
-        <div className="lg:col-span-5">
-          <BrandingPreview activeTab={activeTab} data={editor.draft} />
-        </div>
+      <div className="mx-auto w-full max-w-6xl space-y-6">
+        {activeTab === "brand" && <BrandingIdentityTab data={editor.draft} onChange={editor.setDraft} />}
+        {activeTab === "footer" && <BrandingFooterTab {...footerProps} />}
+        {activeTab === "details" && <BrandingDetailsTab {...footerProps} />}
+        {activeTab === "policies" && <BrandingPoliciesTab {...footerProps} />}
       </div>
     </section>
   );

@@ -44,7 +44,7 @@ export async function savePageProjectSection(
 }
 
 export async function getProjectCategories(): Promise<ProjectCategory[]> {
-  const response = await fetch("/api/project-categories");
+  const response = await fetch("/api/project-categories", { cache: "no-store" });
   if (!response.ok) throw new Error(await readError(response));
   return response.json();
 }
@@ -78,13 +78,14 @@ export async function createProject(data: ProjectFormData) {
   if (!response.ok) throw new Error(await readError(response));
 }
 
-export async function updateProject(id: number, data: ProjectFormData) {
+export async function updateProject(id: number, data: ProjectFormData): Promise<ProjectDetail> {
   const response = await fetch(`/api/projects/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!response.ok) throw new Error(await readError(response));
+  return response.json();
 }
 
 export async function deleteProject(id: number) {

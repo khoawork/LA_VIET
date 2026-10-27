@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import type { PageHomePropsType } from "@/views/homePage/types/pagehome.type";
-import { DEFAULT_PAGE_HOME_PROPS } from "@/views/homePage/types/pagehome.type";
 import {
   HomeHeaderActions,
   HomeTabNav,
@@ -16,12 +15,11 @@ import {
   HomePartnersTab,
   HomeCtaTab,
   HomeSeoTab,
-  HomeSectionPreview,
 } from "./home";
 
 export function AdminHomeView() {
   const [activeTab, setActiveTab] = useState<HomeSectionTab>("hero");
-  const [formData, setFormData] = useState<PageHomePropsType>(DEFAULT_PAGE_HOME_PROPS);
+  const [formData, setFormData] = useState<PageHomePropsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
@@ -36,8 +34,10 @@ export function AdminHomeView() {
         setLoading(true);
         const res = await fetch("/api/admin/home/page");
         const json = await res.json();
-        if (json.success && json.data?.props) {
+        if (res.ok && json.success && json.data?.props) {
           setFormData(json.data.props);
+        } else {
+          setFormData(null);
         }
       } catch (err) {
         console.error("Lỗi khi tải cấu trúc Trang chủ:", err);
@@ -59,6 +59,7 @@ export function AdminHomeView() {
 
   // 2. Lưu thay đổi qua API PUT
   const handleSave = async () => {
+    if (!formData) return;
     try {
       setSaving(true);
       const res = await fetch("/api/admin/home/page", {
@@ -92,55 +93,25 @@ export function AdminHomeView() {
     }
   };
 
-  // 3. Khôi phục về mặc định qua API POST reset
-  const handleReset = async () => {
-    if (
-      !confirm(
-        "Bạn có chắc chắn muốn khôi phục toàn bộ nội dung Trang chủ về mặc định ban đầu?",
-      )
-    ) {
-      return;
-    }
-
-    try {
-      setSaving(true);
-      const res = await fetch("/api/admin/home/page", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "reset" }),
-      });
-      const json = await res.json();
-
-      if (json.success && json.data?.props) {
-        setFormData(json.data.props);
-        setAlertInfo({
-          type: "success",
-          message: "Đã khôi phục cấu trúc Trang chủ về mặc định thành công!",
-        });
-      }
-    } catch {
-      setAlertInfo({
-        type: "error",
-        message: "Lỗi khi khôi phục dữ liệu mặc định.",
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-[#f3e9db]">
-        <Loader2 className="w-8 h-8 text-[#9A1C1F] animate-spin mb-3" />
-        <p className="text-xs font-semibold text-[#695D56]">
-          Đang tải cấu trúc nội dung Trang chủ...
-        </p>
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
+        <span>Đang tải Trang chủ...</span>
       </div>
     );
   }
 
+  if (!formData) {
+    return (
+      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+        Chưa có dữ liệu Trang chủ hoặc không thể tải dữ liệu.
+      </p>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="admin-content-editor space-y-6">
       {/* Alert Banner */}
       {alertInfo && (
         <div
@@ -163,87 +134,79 @@ export function AdminHomeView() {
       <HomeHeaderActions
         saving={saving}
         onSave={handleSave}
-        onReset={handleReset}
       />
 
       {/* Navigation Tabs giữa 7 Section Trang chủ */}
       <HomeTabNav activeTab={activeTab} onSelectTab={setActiveTab} />
 
-      {/* 2-Column Layout: Form Editor (Left 7 Cols) & Live Preview (Right 5 Cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Cột trái: Form chỉnh sửa Section đang chọn */}
-        <div className="lg:col-span-7 space-y-6">
-          {activeTab === "hero" && (
-            <HomeHeroTab
-              data={formData.hero}
-              onChange={(hero) => setFormData({ ...formData, hero })}
-            />
-          )}
+      <div className="mx-auto w-full max-w-6xl space-y-6">
+        {activeTab === "hero" && (
+          <HomeHeroTab
+            data={formData.hero}
+            onChange={(hero) => setFormData({ ...formData, hero })}
+          />
+        )}
 
-          {activeTab === "statistics" && (
-            <HomeStatisticsTab
-              data={formData.statistics}
-              onChange={(statistics) =>
-                setFormData({ ...formData, statistics })
-              }
-            />
-          )}
+        {activeTab === "statistics" && (
+          <HomeStatisticsTab
+            data={formData.statistics}
+            onChange={(statistics) =>
+              setFormData({ ...formData, statistics })
+            }
+          />
+        )}
 
-          {activeTab === "spotlight" && (
-            <HomeSpotlightTab
-              data={formData.spotlight}
-              onChange={(spotlight) =>
-                setFormData({ ...formData, spotlight })
-              }
-            />
-          )}
+        {activeTab === "spotlight" && (
+          <HomeSpotlightTab
+            data={formData.spotlight}
+            onChange={(spotlight) =>
+              setFormData({ ...formData, spotlight })
+            }
+          />
+        )}
 
-          {activeTab === "news" && (
-            <HomeNewsTab
-              data={formData.newsSection}
-              onChange={(newsSection) =>
-                setFormData((current) => ({ ...current, newsSection }))
-              }
-            />
-          )}
+        {activeTab === "news" && (
+          <HomeNewsTab
+            data={formData.newsSection}
+            onChange={(newsSection) =>
+              setFormData((current) => current ? { ...current, newsSection } : current)
+            }
+          />
+        )}
 
-          {activeTab === "partners" && (
-            <HomePartnersTab
-              data={formData.partners}
-              onChange={(partners) =>
-                setFormData({ ...formData, partners })
-              }
-            />
-          )}
+        {activeTab === "partners" && (
+          <HomePartnersTab
+            data={formData.partners}
+            onChange={(partners) =>
+              setFormData({ ...formData, partners })
+            }
+          />
+        )}
 
-          {activeTab === "cta" && (
-            <HomeCtaTab
-              data={formData.cta}
-              onChange={(cta) => setFormData({ ...formData, cta })}
-            />
-          )}
+        {activeTab === "cta" && (
+          <HomeCtaTab
+            data={formData.cta}
+            onChange={(cta) => setFormData({ ...formData, cta })}
+          />
+        )}
 
-          {activeTab === "seo" && (
-            <HomeSeoTab
-              data={formData.seo}
-              onChange={(seo) => setFormData({ ...formData, seo })}
-            />
-          )}
-        </div>
-
-        {/* Cột phải: Live Preview trực quan kế bên editor */}
-        <div className="lg:col-span-5">
-          <HomeSectionPreview activeTab={activeTab} data={formData} />
-        </div>
+        {activeTab === "seo" && (
+          <HomeSeoTab
+            data={formData.seo}
+            onChange={(seo) => setFormData({ ...formData, seo })}
+          />
+        )}
       </div>
 
       {activeTab === "news" && (
-        <HomeNewsArticlesCard
-          data={formData.newsSection}
-          onChange={(newsSection) =>
-            setFormData((current) => ({ ...current, newsSection }))
-          }
-        />
+        <div className="mx-auto w-full max-w-6xl">
+          <HomeNewsArticlesCard
+            data={formData.newsSection}
+            onChange={(newsSection) =>
+              setFormData((current) => current ? { ...current, newsSection } : current)
+            }
+          />
+        </div>
       )}
     </div>
   );

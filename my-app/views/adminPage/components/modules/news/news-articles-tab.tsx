@@ -58,7 +58,7 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
             type="text"
             value={data.eyebrow}
             onChange={(e) => onChange({ ...data, eyebrow: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-bold"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-normal"
           />
         </div>
 
@@ -70,7 +70,7 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-bold text-[#1E1917]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917]"
           />
         </div>
 

@@ -9,7 +9,6 @@ import {
   ArrowDown,
   Plus,
   Trash2,
-  RotateCcw,
   Eye,
   EyeOff,
   CheckCircle2,
@@ -20,13 +19,10 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import {
-  type MenuItemType,
-  DEFAULT_MENU_ITEMS,
-} from "@/shared/schema/menu.schema";
+import type { MenuItemType } from "@/shared/schema/menu.schema";
 
 export function AdminMenuView() {
-  const [items, setItems] = useState<MenuItemType[]>(DEFAULT_MENU_ITEMS);
+  const [items, setItems] = useState<MenuItemType[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [alert, setAlert] = useState<{
@@ -58,13 +54,15 @@ export function AdminMenuView() {
       setLoading(true);
       const res = await fetch("/api/menu");
       const json = await res.json();
-      if (json?.success && Array.isArray(json?.data) && json.data.length > 0) {
+      if (res.ok && json?.success && Array.isArray(json?.data)) {
         setItems(json.data);
       } else {
-        setItems(DEFAULT_MENU_ITEMS);
+        setItems([]);
+        setAlert({ type: "error", message: "Không thể tải danh sách menu." });
       }
     } catch {
-      setItems(DEFAULT_MENU_ITEMS);
+      setItems([]);
+      setAlert({ type: "error", message: "Không thể tải danh sách menu." });
     } finally {
       setLoading(false);
     }
@@ -203,18 +201,6 @@ export function AdminMenuView() {
     showAlert("success", `Đã thêm mục điều hướng "${newItem.label}"`);
   };
 
-  // Reset to default
-  const handleResetToDefault = () => {
-    if (
-      window.confirm(
-        "Bạn có chắc muốn khôi phục thứ tự và danh sách menu về mặc định chuẩn Là Việt không?"
-      )
-    ) {
-      setItems(DEFAULT_MENU_ITEMS);
-      showAlert("success", "Đã khôi phục danh sách menu về mặc định!");
-    }
-  };
-
   // Save Menu Order to Server
   const handleSaveMenu = async () => {
     try {
@@ -283,16 +269,6 @@ export function AdminMenuView() {
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             type="button"
-            onClick={handleResetToDefault}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-stone-200 hover:bg-stone-50 text-stone-600 text-xs font-semibold transition-all cursor-pointer"
-            title="Khôi phục về danh sách mặc định ban đầu"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-stone-500" />
-            <span>Mặc định</span>
-          </button>
-
-          <button
-            type="button"
             onClick={() => setIsAdding(!isAdding)}
             className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-[#a21f1f]/30 bg-[#a21f1f]/5 hover:bg-[#a21f1f]/10 text-[#a21f1f] text-xs font-bold transition-all cursor-pointer"
           >
@@ -314,7 +290,7 @@ export function AdminMenuView() {
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                <span>Lưu thứ tự</span>
+                <span>Lưu thay đổi</span>
               </>
             )}
           </button>
@@ -348,7 +324,7 @@ export function AdminMenuView() {
                 placeholder="VD: KHUYẾN MÃI, BÁO GIÁ..."
                 value={newLabel}
                 onChange={(e) => setNewLabel(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] bg-white text-xs font-bold uppercase focus:border-[#a21f1f] focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] bg-white text-xs font-normal uppercase focus:border-[#a21f1f] focus:outline-none"
               />
             </div>
             <div>
@@ -398,7 +374,7 @@ export function AdminMenuView() {
           </div>
         ) : items.length === 0 ? (
           <div className="py-12 text-center text-stone-400 text-xs">
-            Chưa có mục điều hướng nào. Nhấn &quot;Thêm mục&quot; hoặc &quot;Mặc định&quot; để tạo.
+            Chưa có mục điều hướng nào. Nhấn &quot;Thêm mục&quot; để tạo.
           </div>
         ) : (
           items.map((item, index) => {
@@ -443,7 +419,7 @@ export function AdminMenuView() {
                         value={editLabel}
                         onChange={(e) => setEditLabel(e.target.value)}
                         placeholder="Tên điều hướng..."
-                        className="px-2.5 py-1 text-xs font-bold uppercase rounded border border-[#a21f1f] bg-white w-36"
+                        className="px-2.5 py-1 text-xs font-normal uppercase rounded border border-[#a21f1f] bg-white w-36"
                       />
                       <input
                         type="text"

@@ -7,7 +7,6 @@ export * from "./news-articles-tab";
 export * from "./news-stats-tab";
 export * from "./news-cta-tab";
 export * from "./news-seo-tab";
-export * from "./news-section-preview";
 export * from "./news-articles-management";
 export * from "./news-categories-management";
 
