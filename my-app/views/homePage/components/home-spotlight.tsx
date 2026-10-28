@@ -10,7 +10,7 @@ export function HomeSpotlight({ data }: HomeSpotlightProps) {
   const infoBoxes = data.infoBoxes;
 
   return (
-    <section className="w-full bg-white pt-6 pb-4 lg:pt-8 lg:pb-6 px-4 sm:px-6 lg:px-8 xl:px-12">
+    <section className="w-full bg-white pt-6 pb-4 lg:pt-8 lg:pb-6 px-4 sm:px-10 lg:px-12 xl:px-24">
       <div className="w-full bg-white border border-[#E8E2D5] shadow-sm p-6 sm:p-8 overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left: Artisan Image */}
