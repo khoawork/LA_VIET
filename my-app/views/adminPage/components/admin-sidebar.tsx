@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutGrid,
@@ -27,6 +27,17 @@ interface AdminSidebarProps {
   onToggleCollapse?: () => void;
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
+}
+
+function AdminNavPendingIndicator() {
+  const { pending } = useLinkStatus();
+
+  return (
+    <span
+      aria-hidden="true"
+      className={`pointer-events-none absolute inset-y-1 left-0 w-0.5 rounded-full bg-[#d1a25b] transition-opacity ${pending ? "opacity-100" : "opacity-0"}`}
+    />
+  );
 }
 
 export function AdminSidebar({
@@ -118,7 +129,7 @@ export function AdminSidebar({
       >
         {/* Header / Logo */}
         <div className="h-20 flex items-center justify-between px-5 border-b border-[#851619] shrink-0 bg-[#8f1a1a]">
-          <Link href="/admin/dashboard" className="flex items-center gap-3 overflow-hidden">
+          <Link href="/admin/dashboard" onClick={onCloseMobile} className="flex items-center gap-3 overflow-hidden">
             {/* Lacquer Brand Seal Icon using #d1a25b */}
             <div className="w-10 h-10 rounded-full bg-[#d1a25b] text-[#a21f1f] flex items-center justify-center text-sm shrink-0 shadow-md border-2 border-white/20">
               LV
@@ -179,8 +190,9 @@ export function AdminSidebar({
                     <Link
                       key={item.id}
                       href={item.href}
+                      onClick={onCloseMobile}
                       title={collapsed ? item.label : undefined}
-                      className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
+                      className={`relative flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold tracking-wide transition-all ${
                         isActive
                           ? "bg-black/25 text-white shadow-sm font-bold border-l-4 border-[#d1a25b]"
                           : "text-white/90 hover:bg-black/15 hover:text-white"
@@ -202,6 +214,7 @@ export function AdminSidebar({
                           {item.badge}
                         </span>
                       )}
+                      <AdminNavPendingIndicator />
                     </Link>
                   );
                 })}

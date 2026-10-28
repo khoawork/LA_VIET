@@ -231,7 +231,7 @@ export function ContactCtaTab({
   return (
     <ContactPanel title="Thiết kế Biểu mẫu Liên hệ (Form Builder)">
       {/* 1. Cấu hình tiêu đề & nhãn chung của CTA Form */}
-      <div className="grid gap-4 sm:grid-cols-2 bg-[#FAF8F5] p-4 rounded-xl border border-[#EAE2D5]">
+      <div className="grid gap-4 sm:grid-cols-2 bg-[#FAF8F5] p-4 rounded-xl border border-[#d9c7ae]">
         <ContactField
           label="Dòng tiêu đề phụ (Eyebrow)"
           value={data.eyebrow}
@@ -264,7 +264,7 @@ export function ContactCtaTab({
       </div>
 
       {/* 2. Điều hướng cấu hình Google Sheets & Biểu mẫu tập trung */}
-      <div className="p-4 rounded-xl border border-[#D5C2AA]/80 bg-[#FAF8F5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+      <div className="p-4 rounded-xl border border-[#c5ad8f]/80 bg-[#FAF8F5] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#0F9D58]/10 text-[#0F9D58] flex items-center justify-center font-bold">
             <FileSpreadsheet className="w-5 h-5" />
@@ -313,7 +313,7 @@ export function ContactCtaTab({
               key={idx}
               type="button"
               onClick={() => addPresetField(preset)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#EAE2D5] bg-white hover:border-[#9A1C1F] hover:bg-[#FAF1EC] text-xs font-medium text-[#1E1917] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#d9c7ae] bg-white hover:border-[#9A1C1F] hover:bg-[#FAF1EC] text-xs font-medium text-[#1E1917] transition-colors cursor-pointer"
             >
               <Plus className="w-3 h-3 text-[#9A1C1F]" />
               <span>{preset.title}</span>
@@ -324,7 +324,7 @@ export function ContactCtaTab({
 
       {/* 3. Danh sách các trường dữ liệu động của Form */}
       <div className="space-y-4 pt-3">
-        <div className="flex items-center justify-between border-b border-[#EAE2D5] pb-2">
+        <div className="flex items-center justify-between border-b border-[#d9c7ae] pb-2">
           <h3 className="text-xs font-bold uppercase text-[#1E1917] flex items-center gap-2">
             <ListPlus className="w-4 h-4 text-[#9A1C1F]" />
             Danh sách các trường biểu mẫu ({data.fields.length})
@@ -335,7 +335,7 @@ export function ContactCtaTab({
         </div>
 
         {data.fields.length === 0 ? (
-          <div className="text-center py-12 bg-[#FAF8F5] rounded-xl border border-dashed border-[#EAE2D5] text-xs text-stone-500 space-y-2">
+          <div className="text-center py-12 bg-[#FAF8F5] rounded-xl border border-dashed border-[#d9c7ae] text-xs text-stone-500 space-y-2">
             <p>Biểu mẫu chưa có trường nào.</p>
             <p className="text-[11px] text-[#9A1C1F] font-semibold">
               Nhấp vào các nút mẫu phía trên hoặc bấm &quot;Thêm trường tùy chỉnh&quot; để tạo.
@@ -349,10 +349,10 @@ export function ContactCtaTab({
             return (
               <div
                 key={index}
-                className="rounded-2xl border border-[#EAE2D5] bg-[#FAF8F5] p-5 space-y-4 shadow-2xs hover:border-[#9A1C1F]/40 transition-colors"
+                className="rounded-2xl border border-[#d9c7ae] bg-[#FAF8F5] p-5 space-y-4 shadow-2xs hover:border-[#9A1C1F]/40 transition-colors"
               >
                 {/* Header thanh điều khiển trường */}
-                <div className="flex items-center justify-between border-b border-[#EAE2D5]/70 pb-3">
+                <div className="flex items-center justify-between border-b border-[#d9c7ae]/70 pb-3">
                   <div className="flex items-center gap-2.5">
                     <span className="w-6 h-6 rounded-full bg-[#1E1917] text-white flex items-center justify-center text-[10px] font-bold font-mono">
                       {index + 1}
@@ -376,7 +376,7 @@ export function ContactCtaTab({
                       type="button"
                       disabled={index === 0}
                       onClick={() => moveField(index, index - 1)}
-                      className="p-1.5 rounded-lg border border-[#EAE2D5] bg-white text-stone-600 hover:text-[#9A1C1F] disabled:opacity-30 cursor-pointer"
+                      className="p-1.5 rounded-lg border border-[#d9c7ae] bg-white text-stone-600 hover:text-[#9A1C1F] disabled:opacity-30 cursor-pointer"
                       title="Di chuyển lên"
                     >
                       <ArrowUp className="w-3.5 h-3.5" />
@@ -387,7 +387,7 @@ export function ContactCtaTab({
                       type="button"
                       disabled={index === data.fields.length - 1}
                       onClick={() => moveField(index, index + 1)}
-                      className="p-1.5 rounded-lg border border-[#EAE2D5] bg-white text-stone-600 hover:text-[#9A1C1F] disabled:opacity-30 cursor-pointer"
+                      className="p-1.5 rounded-lg border border-[#d9c7ae] bg-white text-stone-600 hover:text-[#9A1C1F] disabled:opacity-30 cursor-pointer"
                       title="Di chuyển xuống"
                     >
                       <ArrowDown className="w-3.5 h-3.5" />
@@ -419,7 +419,7 @@ export function ContactCtaTab({
                         updateField(index, { label: newLabel });
                       }}
                       placeholder="Ví dụ: Họ và tên..."
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                     />
                   </div>
 
@@ -436,7 +436,7 @@ export function ContactCtaTab({
                         })
                       }
                       placeholder="fullname, phone, message..."
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-mono text-[#9A1C1F] focus:border-[#9A1C1F] focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-mono text-[#9A1C1F] focus:border-[#9A1C1F] focus:outline-none"
                     />
                   </div>
 
@@ -454,7 +454,7 @@ export function ContactCtaTab({
                             e.target.value === "textarea" ? "full" : field.width || "half",
                         })
                       }
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                     >
                       <option value="text">Văn bản ngắn (Text)</option>
                       <option value="tel">Số điện thoại (Tel)</option>
@@ -479,7 +479,7 @@ export function ContactCtaTab({
                         updateField(index, { placeholder: e.target.value })
                       }
                       placeholder="Gợi ý người dùng nhập..."
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                     />
                   </div>
 
@@ -494,7 +494,7 @@ export function ContactCtaTab({
                           width: e.target.value as "half" | "full",
                         })
                       }
-                      className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                     >
                       <option value="half">50% — Nửa dòng (Half)</option>
                       <option value="full">100% — Toàn dòng (Full)</option>
@@ -511,7 +511,7 @@ export function ContactCtaTab({
                       onChange={(e) =>
                         updateField(index, { required: e.target.checked })
                       }
-                      className="w-4 h-4 rounded text-[#9A1C1F] focus:ring-[#9A1C1F] border-[#EAE2D5] cursor-pointer"
+                      className="w-4 h-4 rounded text-[#9A1C1F] focus:ring-[#9A1C1F] border-[#d9c7ae] cursor-pointer"
                     />
                     <span>Bắt buộc người dùng phải điền trường này</span>
                   </label>
@@ -519,7 +519,7 @@ export function ContactCtaTab({
 
                 {/* Khối quản lý Options (nếu type là select hoặc radio) */}
                 {isSelectOrRadio && (
-                  <div className="p-3.5 rounded-xl border border-[#EAE2D5] bg-white space-y-2.5">
+                  <div className="p-3.5 rounded-xl border border-[#d9c7ae] bg-white space-y-2.5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-[#9A1C1F] uppercase tracking-wider">
                         Các tùy chọn cho menu ({field.options?.length || 0})
@@ -534,7 +534,7 @@ export function ContactCtaTab({
                       {(field.options || []).map((opt, optIdx) => (
                         <span
                           key={optIdx}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF1EC] border border-[#F2C2BB]/50 text-xs font-semibold text-[#9A1C1F]"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF1EC] border border-[#e7aea5]/50 text-xs font-semibold text-[#9A1C1F]"
                         >
                           <span>{opt}</span>
                           <button
@@ -571,7 +571,7 @@ export function ContactCtaTab({
                           }
                         }}
                         placeholder="Nhập tùy chọn mới (ví dụ: Tranh treo tường, Vách sảnh...)"
-                        className="flex-1 px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                        className="flex-1 px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                       />
                       <button
                         type="button"

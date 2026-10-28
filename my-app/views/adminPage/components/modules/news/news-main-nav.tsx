@@ -39,7 +39,7 @@ export function NewsMainNav({
   ];
 
   return (
-    <nav aria-label="Điều hướng quản lý tin tức" className="flex items-center gap-2 overflow-x-auto border-b border-[#EAE2D5]">
+    <nav aria-label="Điều hướng quản lý tin tức" className="flex items-center gap-2 overflow-x-auto border-b border-[#d9c7ae]">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;

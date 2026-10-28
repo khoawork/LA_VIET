@@ -19,7 +19,7 @@ export function NewsCategoryPills({
   onOpenCreateCategory,
 }: NewsCategoryPillsProps) {
   return (
-    <div className="bg-white p-3.5 rounded-2xl border border-[#f3e9db] shadow-xs">
+    <div className="bg-white p-3.5 rounded-2xl border border-[#e2d3bf] shadow-xs">
       <div className="flex items-center justify-between gap-3 overflow-x-auto pb-1 scrollbar-thin">
         <div className="flex items-center gap-2 min-w-max">
           <span className="text-xs font-bold text-stone-500 uppercase tracking-wider pl-1 pr-2">

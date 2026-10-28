@@ -21,7 +21,7 @@ interface ProjectFormModalProps {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
+  "w-full rounded-xl border border-[#d9c7ae] px-3.5 py-2.5 text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
 
 export function ProjectFormModal({
   categories,
@@ -72,7 +72,7 @@ export function ProjectFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
       <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-[#EAE2D5] p-5">
+        <div className="flex items-center justify-between border-b border-[#d9c7ae] p-5">
           <h2 className="text-xl font-bold text-[#1E1917]">
             {project ? "Chỉnh sửa dự án" : "Tạo dự án mới"}
           </h2>
@@ -125,6 +125,7 @@ export function ProjectFormModal({
                 emptyLabel="Chọn danh mục"
                 includeEmpty={false}
                 fullWidth
+                formField
               />
             </div>
             <label className="space-y-1.5 text-xs font-semibold">
@@ -193,11 +194,11 @@ export function ProjectFormModal({
               />
             </label>
           </div>
-          <div className="flex justify-end gap-3 border-t border-[#EAE2D5] pt-4">
+          <div className="flex justify-end gap-3 border-t border-[#d9c7ae] pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="cursor-pointer rounded-xl border border-[#EAE2D5] px-5 py-2.5 text-xs font-semibold transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5]"
+              className="cursor-pointer rounded-xl border border-[#d9c7ae] px-5 py-2.5 text-xs font-semibold transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5]"
             >
               Hủy
             </button>

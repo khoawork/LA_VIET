@@ -8,8 +8,8 @@ interface NewsFeaturedTabProps {
 
 export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
   return (
-    <div className="bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs space-y-6">
-      <div className="border-b border-[#EAE2D5] pb-4">
+    <div className="bg-white p-6 rounded-2xl border border-[#d9c7ae] shadow-xs space-y-6">
+      <div className="border-b border-[#d9c7ae] pb-4">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#9A1C1F]">
           Section 2: Bài viết Tiêu điểm Nghiên cứu (Spotlight)
         </h2>
@@ -27,7 +27,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
           />
         </div>
 
@@ -39,7 +39,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.specialBadge}
             onChange={(e) => onChange({ ...data, specialBadge: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -51,7 +51,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.issueNumber}
             onChange={(e) => onChange({ ...data, issueNumber: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -63,7 +63,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.verifiedBadge}
             onChange={(e) => onChange({ ...data, verifiedBadge: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -75,7 +75,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.author}
             onChange={(e) => onChange({ ...data, author: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -87,7 +87,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.publishedDate}
             onChange={(e) => onChange({ ...data, publishedDate: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -99,7 +99,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.readTime}
             onChange={(e) => onChange({ ...data, readTime: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -136,7 +136,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             onChange={(e) => onChange({ ...data, imageUrl: e.target.value })}
             placeholder="https://... hoặc chọn ảnh từ máy"
             aria-label="URL hình ảnh bìa bài viết tiêu điểm"
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
           {data.imageUrl.trim() && (
             // URL đang được nhập có thể chưa hoàn chỉnh; ảnh xem trước không cần bộ tối ưu Next.js.
@@ -144,7 +144,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             <img
               src={data.imageUrl.trim()}
               alt="Xem trước ảnh bìa bài viết tiêu điểm"
-              className="w-full max-w-xs aspect-video object-cover rounded-lg border border-[#EAE2D5]"
+              className="w-full max-w-xs aspect-video object-cover rounded-lg border border-[#d9c7ae]"
             />
           )}
         </div>
@@ -157,7 +157,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#5C544E] leading-relaxed"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#5C544E] leading-relaxed"
           />
         </div>
 
@@ -169,7 +169,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.slug}
             onChange={(e) => onChange({ ...data, slug: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
 
@@ -181,12 +181,12 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
             type="text"
             value={data.buttonText}
             onChange={(e) => onChange({ ...data, buttonText: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
           />
         </div>
       </div>
 
-      <div className="pt-4 border-t border-[#EAE2D5]">
+      <div className="pt-4 border-t border-[#d9c7ae]">
         <div className="flex items-center justify-between gap-3 mb-3">
           <h3 className="text-xs font-bold uppercase text-[#1E1917]">
             Ô chỉ số kỹ thuật ({data.highlightStats.length})
@@ -213,7 +213,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
           {data.highlightStats.map((stat, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] space-y-2"
+              className="p-4 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] space-y-2"
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[11px] font-bold text-[#9A1C1F]">
@@ -243,7 +243,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
                   newStats[idx] = { ...newStats[idx], label: e.target.value };
                   onChange({ ...data, highlightStats: newStats });
                 }}
-                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal bg-white"
+                className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs font-normal bg-white"
               />
               <label className="text-[11px] font-bold text-[#695D56] block">
                 Giá trị kết quả
@@ -256,7 +256,7 @@ export function NewsFeaturedTab({ data, onChange }: NewsFeaturedTabProps) {
                   newStats[idx] = { ...newStats[idx], value: e.target.value };
                   onChange({ ...data, highlightStats: newStats });
                 }}
-                className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal text-[#9A1C1F] bg-white"
+                className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs font-normal text-[#9A1C1F] bg-white"
               />
             </div>
           ))}

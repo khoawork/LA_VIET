@@ -264,7 +264,7 @@ export function ColorHighlightInput({
         style={{
           minHeight: multiline ? `${rows * 26}px` : "42px",
         }}
-        className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f] focus:bg-white transition-all overflow-y-auto empty:before:content-[attr(data-placeholder)] empty:before:text-stone-400 empty:before:font-normal ${className}`}
+        className={`w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs leading-relaxed font-bold text-[#1E1917] focus:outline-none focus:border-[#a21f1f] focus:bg-white transition-all overflow-y-auto empty:before:content-[attr(data-placeholder)] empty:before:text-stone-400 empty:before:font-normal ${className}`}
       />
 
       {/* Popup Định Dạng & Chọn Màu Nổi Bật khi Bôi Đen Chữ */}
@@ -278,12 +278,12 @@ export function ColorHighlightInput({
             transform: "translate(-50%, -100%)",
             zIndex: 9999,
           }}
-          className="bg-white rounded-2xl shadow-2xl border border-[#EAE2D5] p-2.5 flex flex-col gap-2 min-w-[320px] max-w-[360px] animate-in fade-in zoom-in-95 duration-150"
+          className="bg-white rounded-2xl shadow-2xl border border-[#d9c7ae] p-2.5 flex flex-col gap-2 min-w-[320px] max-w-[360px] animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Header & Quick Formatting Bar */}
-          <div className="flex items-center justify-between pb-1.5 border-b border-[#f3e9db] gap-2">
+          <div className="flex items-center justify-between pb-1.5 border-b border-[#e2d3bf] gap-2">
             {/* Bộ công cụ định dạng chữ: In đậm, In nghiêng, Gạch chân */}
-            <div className="flex items-center gap-0.5 bg-[#FAF8F5] p-0.5 rounded-lg border border-[#f3e9db]">
+            <div className="flex items-center gap-0.5 bg-[#FAF8F5] p-0.5 rounded-lg border border-[#e2d3bf]">
               <button
                 type="button"
                 title="In đậm (Bold)"
@@ -391,7 +391,7 @@ export function ColorHighlightInput({
           </div>
 
           {/* Nút Xóa Định Dạng Về Mặc Định */}
-          <div className="flex items-center justify-between pt-1 border-t border-[#f3e9db] text-[11px]">
+          <div className="flex items-center justify-between pt-1 border-t border-[#e2d3bf] text-[11px]">
             <button
               type="button"
               onMouseDown={(e) => e.preventDefault()}
@@ -409,7 +409,7 @@ export function ColorHighlightInput({
 
           {/* Mũi tên trỏ xuống dưới popup */}
           <div
-            className="w-2.5 h-2.5 bg-white border-r border-b border-[#EAE2D5] absolute -bottom-1.5 left-1/2 -translate-x-1/2 rotate-45"
+            className="w-2.5 h-2.5 bg-white border-r border-b border-[#d9c7ae] absolute -bottom-1.5 left-1/2 -translate-x-1/2 rotate-45"
           />
         </div>
       )}

@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPageLoading } from "../admin-page-loading";
 import { useEffect, useState, useRef } from "react";
 import {
   Menu,
@@ -225,6 +226,10 @@ export function AdminMenuView() {
     }
   };
 
+  if (loading) {
+    return <AdminPageLoading label="Đang tải danh sách menu..." />;
+  }
+
   return (
     <div style={{ fontFamily: "Arial, Helvetica, sans-serif" }} className="space-y-6">
       {/* Alert Banner */}
@@ -253,9 +258,9 @@ export function AdminMenuView() {
       )}
 
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#f3e9db]">
+          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#e2d3bf]">
             <Menu className="w-5 h-5" />
           </div>
           <div>
@@ -324,7 +329,7 @@ export function AdminMenuView() {
                 placeholder="VD: KHUYẾN MÃI, BÁO GIÁ..."
                 value={newLabel}
                 onChange={(e) => setNewLabel(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] bg-white text-xs font-normal uppercase focus:border-[#a21f1f] focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] bg-white text-xs font-normal uppercase focus:border-[#a21f1f] focus:outline-none"
               />
             </div>
             <div>
@@ -336,7 +341,7 @@ export function AdminMenuView() {
                 placeholder="VD: /khuyen-mai hoặc https://..."
                 value={newPath}
                 onChange={(e) => setNewPath(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] bg-white text-xs font-mono focus:border-[#a21f1f] focus:outline-none"
+                className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] bg-white text-xs font-mono focus:border-[#a21f1f] focus:outline-none"
               />
             </div>
           </div>
@@ -345,7 +350,7 @@ export function AdminMenuView() {
             <button
               type="button"
               onClick={() => setIsAdding(false)}
-              className="px-3.5 py-1.5 rounded-lg border border-stone-200 text-xs font-semibold text-stone-600 hover:bg-stone-100"
+              className="px-3.5 py-1.5 rounded-lg border border-stone-300 text-xs font-semibold text-stone-600 hover:bg-stone-100"
             >
               Hủy
             </button>
@@ -361,18 +366,13 @@ export function AdminMenuView() {
       )}
 
       {/* Reorderable Menu List */}
-      <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs p-6 space-y-3">
-        <div className="flex items-center justify-between pb-2 border-b border-[#f3e9db] text-xs font-bold text-stone-500 uppercase tracking-wider">
+      <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs p-6 space-y-3">
+        <div className="flex items-center justify-between pb-2 border-b border-[#e2d3bf] text-xs font-bold text-stone-500 uppercase tracking-wider">
           <span>Thứ tự &amp; Tên điều hướng</span>
           <span>Thao tác sắp xếp &amp; Trạng thái</span>
         </div>
 
-        {loading ? (
-          <div className="py-12 flex items-center justify-center gap-2 text-stone-500 text-xs font-medium">
-            <Loader2 className="w-5 h-5 animate-spin text-[#a21f1f]" />
-            <span>Đang tải danh sách menu...</span>
-          </div>
-        ) : items.length === 0 ? (
+        {items.length === 0 ? (
           <div className="py-12 text-center text-stone-400 text-xs">
             Chưa có mục điều hướng nào. Nhấn &quot;Thêm mục&quot; để tạo.
           </div>
@@ -395,7 +395,7 @@ export function AdminMenuView() {
                     ? "opacity-40 border-dashed border-[#a21f1f] bg-stone-50 scale-[0.99]"
                     : isDragOver
                     ? "border-2 border-[#a21f1f] bg-[#FAF8F5] shadow-md"
-                    : "bg-[#f7f5f1] border-[#f3e9db] hover:border-[#a21f1f]/40 hover:bg-white"
+                    : "bg-[#f7f5f1] border-[#e2d3bf] hover:border-[#a21f1f]/40 hover:bg-white"
                 }`}
               >
                 {/* Left: Drag Handle, Number Badge, Title, Path */}
@@ -408,7 +408,7 @@ export function AdminMenuView() {
                   </div>
 
                   {/* Position Badge */}
-                  <span className="w-7 h-7 shrink-0 rounded-full bg-white border border-[#f3e9db] flex items-center justify-center text-xs font-extrabold text-[#a21f1f] shadow-2xs">
+                  <span className="w-7 h-7 shrink-0 rounded-full bg-white border border-[#e2d3bf] flex items-center justify-center text-xs font-extrabold text-[#a21f1f] shadow-2xs">
                     {index + 1}
                   </span>
 
@@ -466,7 +466,7 @@ export function AdminMenuView() {
                     className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors cursor-pointer ${
                       item.status === "Hiển thị"
                         ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
-                        : "bg-stone-100 text-stone-500 border-stone-200 hover:bg-stone-200"
+                        : "bg-stone-100 text-stone-500 border-stone-300 hover:bg-stone-200"
                     }`}
                     title="Nhấp để chuyển trạng thái Ẩn / Hiển thị"
                   >
@@ -484,12 +484,12 @@ export function AdminMenuView() {
                   </button>
 
                   {/* Reorder Buttons (Up & Down) */}
-                  <div className="flex items-center rounded-lg border border-[#f3e9db] bg-white overflow-hidden shadow-2xs">
+                  <div className="flex items-center rounded-lg border border-[#e2d3bf] bg-white overflow-hidden shadow-2xs">
                     <button
                       type="button"
                       disabled={index === 0}
                       onClick={() => moveUp(index)}
-                      className="p-1.5 hover:bg-[#f7f5f1] active:bg-[#a21f1f]/10 text-stone-600 hover:text-[#a21f1f] disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-stone-400 cursor-pointer transition-colors border-r border-[#f3e9db]"
+                      className="p-1.5 hover:bg-[#f7f5f1] active:bg-[#a21f1f]/10 text-stone-600 hover:text-[#a21f1f] disabled:opacity-30 disabled:hover:bg-white disabled:hover:text-stone-400 cursor-pointer transition-colors border-r border-[#e2d3bf]"
                       title="Chuyển lên vị trí trước"
                     >
                       <ArrowUp className="w-3.5 h-3.5" />
@@ -510,7 +510,7 @@ export function AdminMenuView() {
                     <button
                       type="button"
                       onClick={() => startEdit(item)}
-                      className="p-1.5 rounded-lg border border-[#f3e9db] bg-white hover:bg-stone-50 text-stone-600 hover:text-[#a21f1f] transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg border border-[#e2d3bf] bg-white hover:bg-stone-50 text-stone-600 hover:text-[#a21f1f] transition-colors cursor-pointer"
                       title="Chỉnh sửa tên và đường dẫn"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
@@ -521,7 +521,7 @@ export function AdminMenuView() {
                   <button
                     type="button"
                     onClick={() => deleteItem(item.id)}
-                    className="p-1.5 rounded-lg border border-[#f3e9db] bg-white hover:bg-rose-50 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg border border-[#e2d3bf] bg-white hover:bg-rose-50 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer"
                     title="Xóa mục này khỏi menu"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -533,7 +533,7 @@ export function AdminMenuView() {
         )}
 
         {/* Tip / Guide Footer */}
-        <div className="pt-3 border-t border-[#f3e9db] flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-stone-500 gap-2">
+        <div className="pt-3 border-t border-[#e2d3bf] flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-stone-500 gap-2">
           <span>
             💡 <strong>Mẹo:</strong> Bạn có thể nhấn trực tiếp vào nút mũi tên Lên/Xuống hoặc giữ biểu tượng 6 chấm (Grip) để kéo thả đến vị trí mong muốn.
           </span>

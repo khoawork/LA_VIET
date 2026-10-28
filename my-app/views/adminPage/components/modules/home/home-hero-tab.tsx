@@ -24,8 +24,8 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
   };
 
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <Sparkles className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -52,7 +52,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             type="text"
             value={data.highlightWord}
             onChange={(e) => onChange({ ...data, highlightWord: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -65,7 +65,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             rows={3}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -78,13 +78,13 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
         {/* Nút hành động */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2">
+          <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2">
             <span className="text-xs font-bold text-[#a21f1f] block uppercase tracking-wider">
               Nút chính (Primary CTA)
             </span>
@@ -101,7 +101,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -116,11 +116,11 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-500 font-mono bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#e2d3bf] text-xs text-stone-500 font-mono bg-white"
             />
           </div>
 
-          <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2">
+          <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2">
             <span className="text-xs font-bold text-stone-700 block uppercase tracking-wider">
               Nút phụ (Secondary CTA)
             </span>
@@ -137,7 +137,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -152,13 +152,13 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-500 font-mono bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#e2d3bf] text-xs text-stone-500 font-mono bg-white"
             />
           </div>
         </div>
 
         {/* Hình ảnh Hero */}
-        <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-3">
+        <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-3">
           <div className="flex items-center gap-2">
             <ImageIcon className="w-4 h-4 text-[#a21f1f]" />
             <span className="text-xs font-bold text-[#1E1917]">
@@ -207,7 +207,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                 })
               }
               placeholder="https://... hoặc chọn file từ máy"
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-mono bg-white truncate"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-mono bg-white truncate"
             />
             <ImagePreview src={data.image?.src ?? ""} alt="Xem trước ảnh Hero" />
           </div>
@@ -246,7 +246,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
             {data.collections.map((col, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2"
+                className="p-3.5 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-[#a21f1f]">
@@ -280,7 +280,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                     onChange={(e) =>
                       handleCollectionChange(idx, "desc", e.target.value)
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-600 bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs text-stone-600 bg-white"
                   />
                 </label>
                 <label className="block space-y-1">
@@ -294,7 +294,7 @@ export function HomeHeroTab({ data, onChange }: HomeHeroTabProps) {
                     onChange={(e) =>
                       handleCollectionChange(idx, "title", e.target.value)
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
                   />
                 </label>
               </div>

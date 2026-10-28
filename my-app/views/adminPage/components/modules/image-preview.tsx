@@ -15,7 +15,7 @@ export function ImagePreview({ src, alt, fit = "cover" }: Props) {
   if (!imageUrl) return null;
 
   return (
-    <div className="flex h-36 w-full max-w-xs items-center justify-center overflow-hidden rounded-xl border border-[#EAE2D5] bg-[#FAF8F5]">
+    <div className="flex h-36 w-full max-w-xs items-center justify-center overflow-hidden rounded-xl border border-[#d9c7ae] bg-[#FAF8F5]">
       {failedSrc === imageUrl ? (
         <p className="px-4 text-center text-sm text-[#695D56]">
           Không thể xem trước ảnh từ đường dẫn này.

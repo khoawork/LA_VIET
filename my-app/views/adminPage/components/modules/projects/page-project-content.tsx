@@ -111,7 +111,7 @@ export function PageProjectContent() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#d9c7ae] bg-white p-12 text-sm text-[#695D56]">
         <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
         <span>Đang tải trang Dự án...</span>
       </div>
@@ -149,7 +149,6 @@ export function PageProjectContent() {
       )}
 
       <ProjectHeaderActions
-        slug={page.slug}
         saving={saving}
         onSave={saveSection}
       />

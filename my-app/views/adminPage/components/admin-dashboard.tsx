@@ -10,7 +10,7 @@ export function AdminDashboard() {
   return (
     <div style={{ fontFamily: "Arial, Helvetica, sans-serif" }} className="space-y-6 sm:space-y-8">
       {/* Greeting Banner with rectangular gradient block (Đen - Đỏ) as specified in Image 2 */}
-      <section className="rounded-2xl border border-[#f3e9db] p-6 sm:p-8 shadow-md relative overflow-hidden bg-gradient-to-r from-black via-[#380b0d] to-[#a21f1f] text-white">
+      <section className="rounded-2xl border border-[#e2d3bf] p-6 sm:p-8 shadow-md relative overflow-hidden bg-gradient-to-r from-black via-[#380b0d] to-[#a21f1f] text-white">
         {/* Subtle Ambient Glow */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#d1a25b]/10 rounded-full blur-3xl pointer-events-none" />
 

@@ -10,8 +10,8 @@ interface HomeCtaTabProps {
 
 export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <Megaphone className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -34,7 +34,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
             type="text"
             value={data.tagline}
             onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -46,7 +46,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
             rows={2}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -58,13 +58,13 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           {/* Nút chính */}
-          <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2">
+          <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2">
             <span className="text-xs font-bold text-[#a21f1f] block uppercase tracking-wider">
               Nút chính (Tư vấn)
             </span>
@@ -81,7 +81,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -96,12 +96,12 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-mono text-stone-500 bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-mono text-stone-500 bg-white"
             />
           </div>
 
           {/* Nút phụ */}
-          <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2">
+          <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2">
             <span className="text-xs font-bold text-stone-700 block uppercase tracking-wider">
               Nút phụ (Hồ sơ năng lực)
             </span>
@@ -118,7 +118,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
             />
             <input
               type="text"
@@ -133,7 +133,7 @@ export function HomeCtaTab({ data, onChange }: HomeCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-mono text-stone-500 bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-mono text-stone-500 bg-white"
             />
           </div>
         </div>

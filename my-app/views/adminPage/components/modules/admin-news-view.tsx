@@ -151,12 +151,12 @@ export function AdminNewsView({ initialMainTab = "content" }: AdminNewsViewProps
           />}
 
           {loading ? (
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+            <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#d9c7ae] bg-white p-12 text-sm text-[#695D56]">
               <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
               <span>Đang tải trang Tin tức...</span>
             </div>
           ) : !formData ? (
-            <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+            <p role="alert" className="rounded-2xl border border-[#d9c7ae] bg-white p-12 text-center text-sm text-[#695D56]">
               Chưa có dữ liệu trang Tin tức hoặc không thể tải dữ liệu.
             </p>
           ) : (

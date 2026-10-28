@@ -1,7 +1,8 @@
 "use client";
 
+import { AdminPageLoading } from "../admin-page-loading";
 import { useState, useEffect } from "react";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { CheckCircle2, AlertCircle } from "lucide-react";
 import type { PageHomePropsType } from "@/views/homePage/types/pagehome.type";
 import {
   HomeHeaderActions,
@@ -94,17 +95,12 @@ export function AdminHomeView() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
-        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
-        <span>Đang tải Trang chủ...</span>
-      </div>
-    );
+    return <AdminPageLoading label="Đang tải Trang chủ..." />;
   }
 
   if (!formData) {
     return (
-      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+      <p role="alert" className="rounded-2xl border border-[#d9c7ae] bg-white p-12 text-center text-sm text-[#695D56]">
         Chưa có dữ liệu Trang chủ hoặc không thể tải dữ liệu.
       </p>
     );

@@ -55,7 +55,7 @@ export function ProjectCategoryMultiselect({
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
-        className="mt-1.5 flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 text-left text-base font-normal leading-6 text-[#1E1917] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
+        className="mt-1.5 flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#d9c7ae] bg-white px-3.5 text-left text-base font-normal leading-6 text-[#1E1917] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
       >
         <span className="min-w-0 truncate">{summary}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 text-[#695D56] transition-transform ${open ? "rotate-180" : ""}`} />
@@ -65,7 +65,7 @@ export function ProjectCategoryMultiselect({
         <div
           role="dialog"
           aria-label={`Chọn danh mục áp dụng cho nhóm lọc ${index + 1}`}
-          className="absolute inset-x-0 top-full z-40 mt-1 max-h-56 overflow-y-auto rounded-xl border border-[#EAE2D5] bg-white p-2 text-base font-normal leading-6 shadow-lg"
+          className="absolute inset-x-0 top-full z-40 mt-1 max-h-56 overflow-y-auto rounded-xl border border-[#d9c7ae] bg-white p-2 text-base font-normal leading-6 shadow-lg"
         >
           {categories.map((category) => (
             <label

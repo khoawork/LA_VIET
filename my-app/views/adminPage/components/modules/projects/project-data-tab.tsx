@@ -189,7 +189,7 @@ export function ProjectDataTab({ active, categories, filterHost, createOpen, onC
               if (event.target.value.trim() !== debouncedSearch) setLoading(true);
             }}
             placeholder="Tìm dự án theo tên"
-            className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm focus:border-[#a21f1f] focus:outline-none sm:py-2.5"
+            className="w-full rounded-xl border border-[#e2d3bf] bg-white py-2 pl-10 pr-4 text-sm focus:border-[#a21f1f] focus:outline-none sm:py-2.5"
           />
         </div>
         <CategoryFilterSelect
@@ -205,7 +205,7 @@ export function ProjectDataTab({ active, categories, filterHost, createOpen, onC
         />
       </div>, filterHost)}
 
-      <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+      <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#e2d3bf] bg-white shadow-xs">
         {loading || searchPending ? (
           <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
             <Loader2 className="h-5 w-5 animate-spin" /> Đang tải dự án...
@@ -216,7 +216,7 @@ export function ProjectDataTab({ active, categories, filterHost, createOpen, onC
           </p>
         ) : (
           <table className="w-full min-w-[960px] table-fixed text-left text-sm">
-            <thead className="border-b border-[#f3e9db] bg-[#f7f5f1] text-stone-700">
+            <thead className="border-b border-[#e2d3bf] bg-[#f7f5f1] text-stone-700">
               <tr>
                 <th className="w-80 whitespace-nowrap px-5 py-2.5 sm:py-3">Dự án</th>
                 <th className="w-64 whitespace-nowrap px-4 py-2.5 sm:py-3">Danh mục</th>

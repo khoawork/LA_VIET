@@ -7,8 +7,8 @@ interface NewsCtaTabProps {
 
 export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
   return (
-    <div className="bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs space-y-6">
-      <div className="border-b border-[#EAE2D5] pb-4">
+    <div className="bg-white p-6 rounded-2xl border border-[#d9c7ae] shadow-xs space-y-6">
+      <div className="border-b border-[#d9c7ae] pb-4">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#9A1C1F]">
           Section 5: Khối Kêu gọi Hợp tác &amp; Đăng ký Chuyên san
         </h2>
@@ -26,7 +26,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
             type="text"
             value={data.badge}
             onChange={(e) => onChange({ ...data, badge: e.target.value })}
-            className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-normal"
+            className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#9A1C1F] font-normal"
           />
         </div>
 
@@ -38,7 +38,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917]"
           />
         </div>
 
@@ -50,12 +50,12 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#5C544E] leading-relaxed"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#5C544E] leading-relaxed"
           />
         </div>
 
         {/* Nút chính */}
-        <div className="p-4 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] space-y-2">
+        <div className="p-4 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] space-y-2">
           <span className="text-xs font-bold text-[#9A1C1F] block">
             Nút hành động chính (Primary Button)
           </span>
@@ -73,7 +73,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-normal"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs bg-white font-normal"
             />
           </div>
           <div className="space-y-1">
@@ -90,13 +90,13 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs bg-white"
             />
           </div>
         </div>
 
         {/* Nút phụ */}
-        <div className="p-4 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] space-y-2">
+        <div className="p-4 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] space-y-2">
           <span className="text-xs font-bold text-[#695D56] block">
             Nút hành động phụ (Secondary Button)
           </span>
@@ -114,7 +114,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white font-normal"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs bg-white font-normal"
             />
           </div>
           <div className="space-y-1">
@@ -131,7 +131,7 @@ export function NewsCtaTab({ data, onChange }: NewsCtaTabProps) {
                   },
                 })
               }
-              className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs bg-white"
+              className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs bg-white"
             />
           </div>
         </div>

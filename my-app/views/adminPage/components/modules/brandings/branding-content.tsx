@@ -1,7 +1,7 @@
 "use client";
 
+import { AdminPageLoading } from "../../admin-page-loading";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
 import type { BrandingTab, FooterDraft } from "../../../types/brandings/site-settings.type";
 import { BrandingDetailsTab } from "./branding-details-tab";
 import { BrandingFooterTab } from "./branding-footer-tab";
@@ -16,11 +16,7 @@ export function BrandingContent() {
   const editor = useBrandingEditor();
 
   if (editor.loading) {
-    return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
-        <Loader2 className="h-5 w-5 animate-spin" /> Đang tải cấu hình thương hiệu...
-      </div>
-    );
+    return <AdminPageLoading label="Đang tải cấu hình thương hiệu..." />;
   }
 
   if (editor.loadFailed) {

@@ -24,8 +24,8 @@ export function NewsCategoryManagerModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col max-h-[85vh]">
-        <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col max-h-[85vh]">
+        <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
           <div className="flex items-center gap-2.5">
             <Tag className="w-5 h-5 text-[#9A1C1F]" />
             <div>
@@ -61,10 +61,10 @@ export function NewsCategoryManagerModal({
             </button>
           </div>
 
-          <div className="border border-[#f3e9db] rounded-xl overflow-hidden">
+          <div className="border border-[#e2d3bf] rounded-xl overflow-hidden">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
+                <tr className="bg-[#f7f5f1] border-b border-[#e2d3bf] text-stone-700 font-bold uppercase tracking-wider">
                   <th className="py-3 px-4">Mã</th>
                   <th className="py-3 px-4">Tên chuyên mục</th>
                   <th className="py-3 px-4 text-center">Số bài viết</th>
@@ -108,7 +108,7 @@ export function NewsCategoryManagerModal({
           </div>
         </div>
 
-        <div className="p-4 border-t border-[#EAE2D5] bg-[#FAF8F5] flex justify-end">
+        <div className="p-4 border-t border-[#d9c7ae] bg-[#FAF8F5] flex justify-end">
           <button
             type="button"
             onClick={onClose}

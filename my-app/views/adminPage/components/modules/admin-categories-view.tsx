@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPageLoading } from "../admin-page-loading";
 import { useState, useEffect, useRef } from "react";
 import {
   Database,
@@ -116,6 +117,7 @@ export function AdminCategoriesView() {
 
   // State bài viết tin tức
   const [newsList, setNewsList] = useState<NewsItemData[]>([]);
+  const [initialNewsLoading, setInitialNewsLoading] = useState(true);
   const [newsLoading, setNewsLoading] = useState<boolean>(true);
   const [newsPage, setNewsPage] = useState(1);
   const [newsTotalPages, setNewsTotalPages] = useState(1);
@@ -394,7 +396,10 @@ export function AdminCategoriesView() {
         }
         setNewsListError(error instanceof Error ? error.message : "Không thể tải danh sách tin tức.");
       } finally {
-        if (!controller.signal.aborted) setNewsLoading(false);
+        if (!controller.signal.aborted) {
+          setNewsLoading(false);
+          setInitialNewsLoading(false);
+        }
       }
     }, 0);
     return () => {
@@ -607,6 +612,10 @@ export function AdminCategoriesView() {
     { id: "products", label: "Quản lý Sản phẩm", icon: Package },
   ];
 
+  if (initialNewsLoading) {
+    return <AdminPageLoading label="Đang tải danh mục dữ liệu..." />;
+  }
+
   return (
     <div className="flex h-full min-h-0 flex-col gap-2 overflow-hidden sm:gap-3 [&_button]:cursor-pointer [&_button:disabled]:cursor-not-allowed">
       {/* Toast thông báo */}
@@ -628,9 +637,9 @@ export function AdminCategoriesView() {
       )}
 
       {/* View Header */}
-      <div className="flex shrink-0 flex-col justify-between gap-3 rounded-2xl border border-[#f3e9db] bg-white p-3 shadow-xs sm:flex-row sm:items-center sm:gap-4 sm:p-6">
+      <div className="flex shrink-0 flex-col justify-between gap-3 rounded-2xl border border-[#e2d3bf] bg-white p-3 shadow-xs sm:flex-row sm:items-center sm:gap-4 sm:p-6">
         <div className="flex min-w-0 items-center gap-2.5 sm:gap-3.5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#f3e9db] bg-[#f7f5f1] text-[#a21f1f] sm:h-11 sm:w-11">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#e2d3bf] bg-[#f7f5f1] text-[#a21f1f] sm:h-11 sm:w-11">
             <Database className="w-5 h-5" />
           </div>
           <div className="min-w-0">
@@ -645,7 +654,7 @@ export function AdminCategoriesView() {
           <button
             type="button"
             onClick={openCategoryManager}
-            className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-[#f3e9db] bg-[#FAF1EC] px-2 py-2 text-[11px] font-bold uppercase tracking-wider text-[#a21f1f] shadow-sm transition-all hover:bg-[#F3E2D9] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+            className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-[#e2d3bf] bg-[#FAF1EC] px-2 py-2 text-[11px] font-bold uppercase tracking-wider text-[#a21f1f] shadow-sm transition-all hover:bg-[#F3E2D9] sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
           >
             <Database className="h-4 w-4" /> Danh mục
           </button>
@@ -671,7 +680,7 @@ export function AdminCategoriesView() {
       </div>
 
       {/* Ba tab quản lý và bộ lọc của tab đang chọn */}
-      <div className="flex min-w-0 shrink-0 flex-col gap-2 border-b border-[#f3e9db] pb-1 xl:flex-row xl:items-center xl:gap-3">
+      <div className="flex min-w-0 shrink-0 flex-col gap-2 border-b border-[#e2d3bf] pb-1 xl:flex-row xl:items-center xl:gap-3">
       <div className="flex w-full min-w-0 shrink-0 flex-nowrap items-center gap-1.5 overflow-x-auto overscroll-x-contain touch-pan-x sm:gap-3 xl:w-auto xl:max-w-[50%]">
         {navTabs.map((tab) => (
               <button
@@ -709,7 +718,7 @@ export function AdminCategoriesView() {
                   setNewsPage(1);
                 }}
                 placeholder="Tìm bài viết theo tiêu đề, mô tả, tác giả..."
-                className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f] sm:py-2.5"
+                className="w-full rounded-xl border border-[#e2d3bf] bg-white py-2 pl-10 pr-4 text-sm font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f] sm:py-2.5"
               />
             </div>
             <CategoryFilterSelect
@@ -760,7 +769,7 @@ export function AdminCategoriesView() {
             </p>
           )}
           {/* Bảng danh sách bài viết */}
-          <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+          <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#e2d3bf] bg-white shadow-xs">
             {newsLoading || searchPending ? (
               <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
                 <Loader2 className="h-5 w-5 animate-spin" /> Đang tải danh sách bài viết...
@@ -772,7 +781,7 @@ export function AdminCategoriesView() {
             ) : (
               <table className="w-full min-w-[1050px] table-fixed border-collapse text-left text-sm">
                 <thead>
-                  <tr className="border-b border-[#f3e9db] bg-[#f7f5f1] font-bold text-stone-700">
+                  <tr className="border-b border-[#e2d3bf] bg-[#f7f5f1] font-bold text-stone-700">
                     <th className="w-80 whitespace-nowrap px-5 py-2.5 sm:py-3.5">Bài viết</th>
                     <th className="w-48 whitespace-nowrap px-4 py-2.5 sm:py-3.5">Danh mục</th>
                     <th className="whitespace-nowrap px-4 py-2.5 sm:py-3.5">Mô tả</th>
@@ -792,7 +801,7 @@ export function AdminCategoriesView() {
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="h-9 w-10 shrink-0 rounded-lg border border-[#f3e9db] object-cover sm:h-10 sm:w-12"
+                            className="h-9 w-10 shrink-0 rounded-lg border border-[#e2d3bf] object-cover sm:h-10 sm:w-12"
                           />
                            <div className="min-w-0 flex-1">
                             <span className="font-bold text-[#1E1917] block truncate">
@@ -805,7 +814,7 @@ export function AdminCategoriesView() {
                         </div>
                       </td>
                       <td className="px-4 py-2 sm:py-3.5">
-                         <span className="block truncate rounded-full border border-[#F0DCD6] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]" title={item.category?.name}>
+                         <span className="block truncate rounded-full border border-[#e4c4b9] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]" title={item.category?.name}>
                           {item.category?.name || `Danh mục #${item.categoryId}`}
                         </span>
                       </td>
@@ -861,7 +870,7 @@ export function AdminCategoriesView() {
       {categoryManagerTab && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/50 p-4 lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
           <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-[#f7f5f1] shadow-2xl">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#EAE2D5] bg-white p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#d9c7ae] bg-white p-5">
               <h2 className="text-xl font-bold text-[#1E1917]">
                 Danh mục {categoryManagerTab === "categories" ? "Tin tức" : categoryTabs[categoryManagerTab].label}
               </h2>
@@ -889,13 +898,13 @@ export function AdminCategoriesView() {
       {categoryManagerTab === "categories" && (
         <div className="space-y-4">
           {/* Header Bar của Tab Danh mục */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#f3e9db] shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#e2d3bf] shadow-xs">
              <div className="text-sm font-semibold text-stone-600">
               Tổng cộng có <span className="font-bold text-[#9A1C1F]">{newsCategories.length}</span> danh mục bài viết
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs overflow-hidden">
             {categoriesLoading ? (
                <div className="py-16 text-center text-sm font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
                 <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
@@ -908,7 +917,7 @@ export function AdminCategoriesView() {
             ) : (
                <table className="w-full min-w-[760px] table-fixed border-collapse text-left text-sm">
                 <thead>
-                   <tr className="border-b border-[#f3e9db] bg-[#f7f5f1] font-bold text-stone-700">
+                   <tr className="border-b border-[#e2d3bf] bg-[#f7f5f1] font-bold text-stone-700">
                      <th className="w-20 px-5 py-3.5">ID</th>
                      <th className="w-64 px-5 py-3.5">Tên danh mục tin tức</th>
                      <th className="w-28 px-4 py-3.5 text-center">Số bài viết</th>
@@ -922,7 +931,7 @@ export function AdminCategoriesView() {
                       <td className="py-3.5 px-5 text-stone-500 font-mono">#{cat.id}</td>
                        <td className="py-3.5 px-5 font-bold text-[#1E1917]"><span className="block truncate" title={cat.name}>{cat.name}</span></td>
                       <td className="py-3.5 px-4 text-center">
-                         <span className="inline-block whitespace-nowrap rounded-full border border-[#F0DCD6] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]">
+                         <span className="inline-block whitespace-nowrap rounded-full border border-[#e4c4b9] bg-[#FAF1EC] px-2.5 py-0.5 text-xs font-bold text-[#9A1C1F]">
                           {cat._count?.news ?? 0} bài viết
                         </span>
                       </td>
@@ -966,10 +975,10 @@ export function AdminCategoriesView() {
 
       {(categoryManagerTab === "projectCategories" || categoryManagerTab === "productCategories") && (
         <div className="space-y-4">
-           <div className="rounded-2xl border border-[#f3e9db] bg-white p-4 text-sm font-semibold text-stone-600 shadow-xs">
+           <div className="rounded-2xl border border-[#e2d3bf] bg-white p-4 text-sm font-semibold text-stone-600 shadow-xs">
             Tổng cộng có <span className="font-bold text-[#9A1C1F]">{dataCategories[categoryManagerTab].length}</span> danh mục {categoryTabs[categoryManagerTab].label}
           </div>
-          <div className="overflow-x-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+          <div className="overflow-x-auto rounded-2xl border border-[#e2d3bf] bg-white shadow-xs">
             {dataCategoriesLoading[categoryManagerTab] ? (
                <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
                 <Loader2 className="h-5 w-5 animate-spin" /> Đang tải danh mục...
@@ -980,7 +989,7 @@ export function AdminCategoriesView() {
               </p>
             ) : (
                <table className="w-full min-w-[620px] table-fixed text-left text-sm">
-                <thead className="border-b border-[#f3e9db] bg-[#f7f5f1] text-stone-700">
+                <thead className="border-b border-[#e2d3bf] bg-[#f7f5f1] text-stone-700">
                   <tr>
                      <th className="w-20 px-5 py-3">ID</th>
                      <th className="px-5 py-3">Tên danh mục {categoryTabs[categoryManagerTab].label}</th>
@@ -1026,8 +1035,8 @@ export function AdminCategoriesView() {
 
       {dataCategoryModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
-          <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#EAE2D5] bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#EAE2D5] bg-[#FAF8F5] p-5">
+          <div className="w-full max-w-md overflow-hidden rounded-2xl border border-[#d9c7ae] bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-[#d9c7ae] bg-[#FAF8F5] p-5">
                 <h3 className="text-lg font-bold text-[#1E1917]">
                 {dataCategoryModal.item ? "Sửa" : "Tạo"} danh mục {categoryTabs[dataCategoryModal.tab].label}
               </h3>
@@ -1045,11 +1054,11 @@ export function AdminCategoriesView() {
                   autoFocus
                   value={dataCategoryName}
                   onChange={(event) => setDataCategoryName(event.target.value)}
-                  className="w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs focus:border-[#9A1C1F] focus:outline-none"
+                  className="w-full rounded-xl border border-[#d9c7ae] px-3.5 py-2.5 text-xs focus:border-[#9A1C1F] focus:outline-none"
                 />
               </label>
-              <div className="flex justify-end gap-3 border-t border-[#EAE2D5] pt-4">
-                <button type="button" onClick={() => setDataCategoryModal(null)} className="rounded-xl border border-[#EAE2D5] px-4 py-2 text-xs font-semibold">Hủy</button>
+              <div className="flex justify-end gap-3 border-t border-[#d9c7ae] pt-4">
+                <button type="button" onClick={() => setDataCategoryModal(null)} className="rounded-xl border border-[#d9c7ae] px-4 py-2 text-xs font-semibold">Hủy</button>
                 <button type="submit" disabled={dataCategorySubmitting} className="inline-flex items-center gap-2 rounded-xl bg-[#a21f1f] px-5 py-2 text-xs font-bold text-white disabled:opacity-50">
                   {dataCategorySubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
                   {dataCategoryModal.item ? "Lưu thay đổi" : "Tạo"}
@@ -1063,9 +1072,9 @@ export function AdminCategoriesView() {
       {/* MODAL TẠO VÀ SỬA BÀI VIẾT */}
       {isNewsModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
-          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col max-h-[90vh]">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Newspaper className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="text-lg font-bold text-[#1E1917] uppercase tracking-wide">
@@ -1106,7 +1115,7 @@ export function AdminCategoriesView() {
                   placeholder="Ví dụ: Kỹ thuật dát vàng quỳ trên tranh sơn mài..."
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                 />
               </div>
 
@@ -1134,7 +1143,7 @@ export function AdminCategoriesView() {
                     type="text"
                     value={formData.preside}
                     onChange={(e) => setFormData({ ...formData, preside: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
                   />
                 </div>
               </div>
@@ -1146,7 +1155,7 @@ export function AdminCategoriesView() {
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
                   />
                 </div>
 
@@ -1156,7 +1165,7 @@ export function AdminCategoriesView() {
                     type="text"
                     value={formData.reading}
                     onChange={(e) => setFormData({ ...formData, reading: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
                   />
                 </div>
               </div>
@@ -1178,7 +1187,7 @@ export function AdminCategoriesView() {
                     placeholder={editingNewsId === null ? "Tự tạo theo tiêu đề nếu để trống" : "Để trống để giữ đường dẫn hiện tại"}
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
                   />
                 </div>
                 <div className="space-y-1">
@@ -1188,7 +1197,7 @@ export function AdminCategoriesView() {
                     maxLength={100}
                     value={formData.button}
                     onChange={(e) => setFormData({ ...formData, button: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917]"
                   />
                 </div>
               </div>
@@ -1203,16 +1212,16 @@ export function AdminCategoriesView() {
                   placeholder="Nhập đoạn trích tóm tắt bài viết..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#5C544E] leading-relaxed"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#5C544E] leading-relaxed"
                 />
               </div>
 
               {/* Modal Footer Actions */}
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsNewsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50"
                 >
                   Hủy bỏ
                 </button>
@@ -1239,8 +1248,8 @@ export function AdminCategoriesView() {
       {/* MODAL TẠO DANH MỤC MỚI */}
       {isCreateCategoryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Database className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="text-lg font-bold text-[#1E1917] uppercase tracking-wide">
@@ -1274,7 +1283,7 @@ export function AdminCategoriesView() {
                   placeholder="Ví dụ: Nghiên cứu Vật liệu, Triển lãm Nghệ thuật..."
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   autoFocus
                 />
                 <p className="text-[11px] text-stone-500">
@@ -1282,11 +1291,11 @@ export function AdminCategoriesView() {
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsCreateCategoryModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>
@@ -1311,8 +1320,8 @@ export function AdminCategoriesView() {
       {/* MODAL CHỈNH SỬA DANH MỤC */}
       {isEditCategoryModalOpen && editingCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Edit className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="text-lg font-bold text-[#1E1917] uppercase tracking-wide">
@@ -1350,19 +1359,19 @@ export function AdminCategoriesView() {
                   onChange={(e) =>
                     setEditingCategory({ ...editingCategory, name: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   autoFocus
                 />
               </div>
 
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     setIsEditCategoryModalOpen(false);
                     setEditingCategory(null);
                   }}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>

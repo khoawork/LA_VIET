@@ -6,9 +6,9 @@ import { ADMIN_RECENT_LOGS } from "../../services/admin.services";
 export function AdminLogsView() {
   return (
     <div style={{ fontFamily: "Arial, Helvetica, sans-serif" }} className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#f3e9db]">
+          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#e2d3bf]">
             <History className="w-5 h-5" />
           </div>
           <div>
@@ -20,13 +20,13 @@ export function AdminLogsView() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs p-6 space-y-4">
+      <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs p-6 space-y-4">
         {ADMIN_RECENT_LOGS.map((log) => (
-          <div key={log.id} className="p-4 rounded-xl bg-[#f7f5f1] border border-[#f3e9db] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div key={log.id} className="p-4 rounded-xl bg-[#f7f5f1] border border-[#e2d3bf] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-[#a21f1f] text-xs">{log.author}</span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#f3e9db] text-stone-700 font-semibold">
+                <span className="text-[10px] px-2 py-0.5 rounded-md bg-white border border-[#e2d3bf] text-stone-700 font-semibold">
                   {log.target}
                 </span>
               </div>

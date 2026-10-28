@@ -39,8 +39,8 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs space-y-6">
-      <div className="border-b border-[#EAE2D5] pb-4">
+    <div className="bg-white p-6 rounded-2xl border border-[#d9c7ae] shadow-xs space-y-6">
+      <div className="border-b border-[#d9c7ae] pb-4">
         <h2 className="text-sm font-bold uppercase tracking-wider text-[#9A1C1F]">
           Section 3: Cấu hình Lưới Bài viết &amp; Bộ lọc
         </h2>
@@ -58,7 +58,7 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
             type="text"
             value={data.eyebrow}
             onChange={(e) => onChange({ ...data, eyebrow: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#9A1C1F] font-normal"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#9A1C1F] font-normal"
           />
         </div>
 
@@ -70,13 +70,13 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917]"
           />
         </div>
 
       </div>
 
-      <div className="space-y-4 border-t border-[#EAE2D5] pt-5">
+      <div className="space-y-4 border-t border-[#d9c7ae] pt-5">
         <div className="flex items-center justify-between gap-3">
           <h3 className="text-xs font-bold uppercase text-[#1E1917]">
             Nhóm lọc bài viết ({data.filterGroups.length})
@@ -87,7 +87,7 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
               ...data,
               filterGroups: [...data.filterGroups, { name: "", categories: [] }],
             })}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#EAE2D5] px-3 py-2 text-xs font-bold text-[#9A1C1F] transition-colors hover:bg-[#FAF1EC]"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#d9c7ae] px-3 py-2 text-xs font-bold text-[#9A1C1F] transition-colors hover:bg-[#FAF1EC]"
           >
             <Plus className="h-4 w-4" /> Thêm nhóm lọc
           </button>
@@ -104,7 +104,7 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
               : `${group.categories.length} danh mục đã chọn`;
 
           return (
-            <div key={index} className="rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] p-4">
+            <div key={index} className="rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] p-4">
               <div className="mb-3 flex items-center justify-between gap-2">
                 <span className="text-[11px] font-bold text-[#9A1C1F]">Vị trí #{index + 1}</span>
                 <button
@@ -127,17 +127,17 @@ export function NewsArticlesTab({ data, onChange }: NewsArticlesTabProps) {
                     value={group.name}
                     onChange={(event) => updateGroup(index, { name: event.target.value })}
                     placeholder="Ví dụ: Nghiên cứu & Kỹ thuật"
-                    className="w-full rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 font-normal focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full rounded-xl border border-[#d9c7ae] bg-white px-3.5 py-2.5 font-normal focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </label>
                 <div className="text-xs font-bold text-[#1E1917]">
                   <span>Danh mục áp dụng</span>
                   <details className="relative mt-1.5 group">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 font-normal hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5]">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-2 rounded-xl border border-[#d9c7ae] bg-white px-3.5 py-2.5 font-normal hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5]">
                       <span className="min-w-0 truncate">{summary}</span>
                       <ChevronDown className="h-4 w-4 shrink-0 text-[#695D56] transition-transform group-open:rotate-180" />
                     </summary>
-                    <div className="absolute left-0 top-full z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-xl border border-[#EAE2D5] bg-white p-2 shadow-lg">
+                    <div className="absolute left-0 top-full z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-xl border border-[#d9c7ae] bg-white p-2 shadow-lg">
                       <button
                         type="button"
                         onClick={() => updateGroup(index, { categories: [] })}

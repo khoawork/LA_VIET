@@ -15,7 +15,7 @@ interface Props {
 
 export function BrandingTabNav({ activeTab, onSelect }: Props) {
   return (
-    <nav aria-label="Các phần cấu hình" className="flex gap-2 overflow-x-auto border-b border-[#EAE2D5] pb-1">
+    <nav aria-label="Các phần cấu hình" className="flex gap-2 overflow-x-auto border-b border-[#d9c7ae] pb-1">
       {tabs.map(({ key, label, Icon }) => (
         <button
           key={key}

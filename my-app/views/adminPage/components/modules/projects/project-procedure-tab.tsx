@@ -13,8 +13,8 @@ export function ProjectProcedureTab({ data, onChange }: Props) {
   const steps = data.steps ?? [];
 
   return (
-    <div className="space-y-6 rounded-2xl border border-[#EAE2D5] bg-white p-6 shadow-xs">
-      <div className="border-b border-[#EAE2D5] pb-4">
+    <div className="space-y-6 rounded-2xl border border-[#d9c7ae] bg-white p-6 shadow-xs">
+      <div className="border-b border-[#d9c7ae] pb-4">
         <h2 className="text-sm font-bold uppercase text-[#9A1C1F]">
           Section 3: Quy trình hợp tác
         </h2>
@@ -43,7 +43,7 @@ export function ProjectProcedureTab({ data, onChange }: Props) {
       {steps.map((step, index) => (
         <div
           key={index}
-          className="relative rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] p-4 pt-12"
+          className="relative rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] p-4 pt-12"
         >
           <RemoveItemButton
             label={`Xóa bước ${index + 1}`}
@@ -133,7 +133,7 @@ export function ProjectProcedureTab({ data, onChange }: Props) {
             ],
           })
         }
-        className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#EAE2D5] px-4 py-2.5 text-xs font-bold text-[#9A1C1F] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF1EC]"
+        className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#d9c7ae] px-4 py-2.5 text-xs font-bold text-[#9A1C1F] transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF1EC]"
       >
         <Plus className="h-4 w-4" /> Thêm bước
       </button>

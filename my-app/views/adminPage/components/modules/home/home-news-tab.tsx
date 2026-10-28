@@ -107,8 +107,8 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
   const totalPages = shownLoading ? 1 : result.totalPages;
 
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <Newspaper className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -135,7 +135,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
                   setPage(1);
                 }}
                 placeholder="Tìm bài viết theo tiêu đề, mô tả hoặc tác giả..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl border border-[#f3e9db] text-xs bg-white"
+                className="w-full pl-9 pr-3 py-2 rounded-xl border border-[#e2d3bf] text-xs bg-white"
               />
             </div>
             <select
@@ -145,7 +145,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
                 setCategoryId(e.target.value);
                 setPage(1);
               }}
-              className="px-3 py-2 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
+              className="px-3 py-2 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] bg-white"
             >
               <option value="">Tất cả danh mục</option>
               {categories.map((category) => (
@@ -157,7 +157,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
           </div>
 
           {shownError && <p className="text-xs text-red-700">{shownError}</p>}
-          <div className="overflow-x-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+          <div className="overflow-x-auto rounded-2xl border border-[#e2d3bf] bg-white shadow-xs">
             {shownLoading ? (
               <div className="flex items-center justify-center gap-2 py-12 text-xs text-stone-500">
                 <Loader2 className="w-4 h-4 animate-spin" /> Đang tải bài viết...
@@ -169,7 +169,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
             ) : (
               <table className="w-full min-w-[850px] table-fixed border-collapse text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#f3e9db] bg-[#f7f5f1] font-bold text-stone-700">
+                  <tr className="border-b border-[#e2d3bf] bg-[#f7f5f1] font-bold text-stone-700">
                     <th className="w-64 px-4 py-3">Bài viết</th>
                     <th className="w-40 px-4 py-3">Danh mục</th>
                     <th className="px-4 py-3">Mô tả</th>
@@ -191,7 +191,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
                                 width={48}
                                 height={40}
                                 unoptimized
-                                className="h-10 w-12 shrink-0 rounded-lg border border-[#f3e9db] object-cover"
+                                className="h-10 w-12 shrink-0 rounded-lg border border-[#e2d3bf] object-cover"
                               />
                             )}
                             <div className="min-w-0 flex-1">
@@ -201,7 +201,7 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
                           </div>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="block truncate rounded-full border border-[#F0DCD6] bg-[#FAF1EC] px-2.5 py-0.5 font-bold text-[#9A1C1F]" title={article.category?.name}>
+                          <span className="block truncate rounded-full border border-[#e4c4b9] bg-[#FAF1EC] px-2.5 py-0.5 font-bold text-[#9A1C1F]" title={article.category?.name}>
                             {article.category?.name || "Chưa phân loại"}
                           </span>
                         </td>
@@ -249,8 +249,8 @@ export function HomeNewsArticlesCard({ data, onChange }: HomeNewsTabProps) {
 
 export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center gap-2.5 pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center gap-2.5 pb-4 border-b border-[#e2d3bf]">
         <Newspaper className="w-5 h-5 text-[#a21f1f]" />
         <div>
           <h2 className="text-base font-bold text-[#1E1917]">
@@ -272,7 +272,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
           <div className="space-y-1.5">
@@ -283,7 +283,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
               type="text"
               value={data.title}
               onChange={(e) => onChange({ ...data, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
         </div>
@@ -296,7 +296,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
             rows={2}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -312,7 +312,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
                 ...data,
                 link: { ...data.link, text: e.target.value },
               })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs"
             />
           </div>
           <div className="space-y-1">
@@ -326,7 +326,7 @@ export function HomeNewsTab({ data, onChange }: HomeNewsTabProps) {
                 ...data,
                 link: { ...data.link, href: e.target.value },
               })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-mono"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-mono"
             />
           </div>
         </div>

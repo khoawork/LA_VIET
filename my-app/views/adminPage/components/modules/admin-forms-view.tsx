@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPageLoading } from "../admin-page-loading";
 import { useEffect, useState } from "react";
 import {
   AlertCircle,
@@ -392,22 +393,15 @@ export function AdminFormsView() {
   }
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[360px] gap-3 bg-white p-12 rounded-2xl border border-[#f3e9db]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#9A1C1F]" />
-        <p className="text-xs font-semibold text-stone-600">
-          Đang tải cấu hình biểu mẫu hệ thống...
-        </p>
-      </div>
-    );
+    return <AdminPageLoading label="Đang tải cấu hình biểu mẫu hệ thống..." />;
   }
 
   return (
     <div style={{ fontFamily: "Arial, Helvetica, sans-serif" }} className="space-y-6">
       {/* 1. Tiêu đề trang & Thanh tác vụ chính */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#F2C2BB]/40">
+          <div className="w-12 h-12 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#e7aea5]/40">
             <FileSpreadsheet className="w-6 h-6" />
           </div>
           <div>
@@ -450,7 +444,7 @@ export function AdminFormsView() {
         </div>
       )}
       {saveError && (
-        <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-medium">
+        <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-medium">
           <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
           <span>{saveError}</span>
         </div>
@@ -464,7 +458,7 @@ export function AdminFormsView() {
           className={`p-4 rounded-xl border transition-all cursor-pointer ${
             selectedFormId === "contact"
               ? "bg-[#FAF8F5] border-[#9A1C1F] ring-1 ring-[#9A1C1F] shadow-xs"
-              : "bg-white border-[#f3e9db] hover:border-stone-300"
+              : "bg-white border-[#e2d3bf] hover:border-stone-300"
           }`}
         >
           <div className="flex items-center justify-between mb-2">
@@ -482,7 +476,7 @@ export function AdminFormsView() {
           <p className="text-xs text-stone-500 mt-1 line-clamp-2">
             Áp dụng trực tiếp trên trang Liên hệ (/contact), tiếp nhận nhu cầu và đồng bộ tức thời vào Google Sheet.
           </p>
-          <div className="mt-3 pt-2.5 border-t border-[#EAE2D5] flex items-center justify-between text-[11px]">
+          <div className="mt-3 pt-2.5 border-t border-[#d9c7ae] flex items-center justify-between text-[11px]">
             <span className="text-stone-500">Vị trí: <code>/contact</code></span>
             <span className="font-bold text-[#9A1C1F]">Đang chọn &rarr;</span>
           </div>
@@ -494,7 +488,7 @@ export function AdminFormsView() {
           className={`p-4 rounded-xl border transition-all cursor-pointer opacity-75 hover:opacity-100 ${
             selectedFormId === "profile"
               ? "bg-[#FAF8F5] border-[#9A1C1F] ring-1 ring-[#9A1C1F] shadow-xs"
-              : "bg-white border-[#f3e9db] hover:border-stone-300"
+              : "bg-white border-[#e2d3bf] hover:border-stone-300"
           }`}
         >
           <div className="flex items-center justify-between mb-2">
@@ -511,7 +505,7 @@ export function AdminFormsView() {
           <p className="text-xs text-stone-500 mt-1 line-clamp-2">
             Yêu cầu cung cấp họ tên, email doanh nghiệp trước khi tải Catalogue / Profile kiến trúc.
           </p>
-          <div className="mt-3 pt-2.5 border-t border-[#EAE2D5] flex items-center justify-between text-[11px]">
+          <div className="mt-3 pt-2.5 border-t border-[#d9c7ae] flex items-center justify-between text-[11px]">
             <span className="text-stone-500">Vị trí: <code>Popup / Modal</code></span>
             <span className="text-stone-400">Xem trước</span>
           </div>
@@ -523,7 +517,7 @@ export function AdminFormsView() {
           className={`p-4 rounded-xl border transition-all cursor-pointer opacity-75 hover:opacity-100 ${
             selectedFormId === "newsletter"
               ? "bg-[#FAF8F5] border-[#9A1C1F] ring-1 ring-[#9A1C1F] shadow-xs"
-              : "bg-white border-[#f3e9db] hover:border-stone-300"
+              : "bg-white border-[#e2d3bf] hover:border-stone-300"
           }`}
         >
           <div className="flex items-center justify-between mb-2">
@@ -540,7 +534,7 @@ export function AdminFormsView() {
           <p className="text-xs text-stone-500 mt-1 line-clamp-2">
             Thu thập email khách hàng quan tâm đến các sự kiện, triển lãm và ấn phẩm sơn mài định kỳ.
           </p>
-          <div className="mt-3 pt-2.5 border-t border-[#EAE2D5] flex items-center justify-between text-[11px]">
+          <div className="mt-3 pt-2.5 border-t border-[#d9c7ae] flex items-center justify-between text-[11px]">
             <span className="text-stone-500">Vị trí: <code>Chân trang (Footer)</code></span>
             <span className="text-stone-400">Xem trước</span>
           </div>
@@ -549,7 +543,7 @@ export function AdminFormsView() {
 
       {/* 3. Khu vực cấu hình chi tiết cho Form đang được chọn */}
       {selectedFormId !== "contact" ? (
-        <div className="p-8 rounded-2xl bg-white border border-[#f3e9db] text-center space-y-3">
+        <div className="p-8 rounded-2xl bg-white border border-[#e2d3bf] text-center space-y-3">
           <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-700 mx-auto flex items-center justify-center font-bold">
             <Sparkles className="w-6 h-6" />
           </div>
@@ -570,7 +564,7 @@ export function AdminFormsView() {
       ) : cta ? (
         <div className="space-y-5">
           {/* Tabs chuyển đổi các khía cạnh cấu hình của Form */}
-          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#f7f5f1] rounded-xl border border-[#f3e9db] max-w-fit">
+          <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-[#f7f5f1] rounded-xl border border-[#e2d3bf] max-w-fit">
             <button
               type="button"
               onClick={() => setActiveTab("sheet")}
@@ -626,8 +620,8 @@ export function AdminFormsView() {
 
           {/* TAB 1: TÍCH HỢP GOOGLE SHEETS */}
           {activeTab === "sheet" && (
-            <div className="p-6 rounded-2xl border border-[#D5C2AA]/60 bg-gradient-to-br from-[#FAF8F5] via-white to-[#FDF6F0] space-y-5 shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EAE2D5] pb-4">
+            <div className="p-6 rounded-2xl border border-[#c5ad8f]/60 bg-gradient-to-br from-[#FAF8F5] via-white to-[#FDF6F0] space-y-5 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#d9c7ae] pb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[#0F9D58]/10 text-[#0F9D58] flex items-center justify-center font-bold">
                     <FileSpreadsheet className="w-6 h-6" />
@@ -647,7 +641,7 @@ export function AdminFormsView() {
               </div>
 
               {/* Hướng dẫn cấp quyền cho Email Bot */}
-              <div className="p-4 rounded-xl bg-white border border-[#EAE2D5] space-y-3">
+              <div className="p-4 rounded-xl bg-white border border-[#d9c7ae] space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-stone-700 uppercase tracking-wider">
                     1. EMAIL BOT GOOGLE SERVICE ACCOUNT:
@@ -671,7 +665,7 @@ export function AdminFormsView() {
                   </button>
                 </div>
 
-                <div className="p-3 rounded-lg bg-[#FAF8F5] font-mono text-xs text-stone-800 break-all select-all border border-[#EAE2D5]/70">
+                <div className="p-3 rounded-lg bg-[#FAF8F5] font-mono text-xs text-stone-800 break-all select-all border border-[#d9c7ae]/70">
                   {botEmail}
                 </div>
 
@@ -707,7 +701,7 @@ export function AdminFormsView() {
                   value={cta.googleSheetId || ""}
                   onChange={(e) => setCta({ ...cta, googleSheetId: e.target.value })}
                   placeholder="Dán link hoặc ID Google Sheet (Ví dụ: https://docs.google.com/spreadsheets/d/1BxiMVs.../edit)"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] bg-white text-xs font-mono text-[#1E1917] focus:border-[#0F9D58] focus:ring-1 focus:ring-[#0F9D58] focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] bg-white text-xs font-mono text-[#1E1917] focus:border-[#0F9D58] focus:ring-1 focus:ring-[#0F9D58] focus:outline-none"
                 />
                 <p className="text-[11px] text-stone-500">
                   Hệ thống hỗ trợ cả định dạng đường link đầy đủ hoặc ID ngắn của Google Spreadsheet.
@@ -761,7 +755,7 @@ export function AdminFormsView() {
                   className={`flex items-start gap-2.5 p-3.5 rounded-xl text-xs font-medium ${
                     sheetFeedback.type === "success"
                       ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-                      : "bg-red-50 text-red-800 border border-red-200"
+                      : "bg-red-50 text-red-800 border border-red-300"
                   }`}
                 >
                   {sheetFeedback.type === "success" ? (
@@ -784,8 +778,8 @@ export function AdminFormsView() {
 
           {/* TAB 2: THIẾT KẾ BIỂU MẪU (FORM BUILDER) */}
           {activeTab === "builder" && (
-            <div className="space-y-5 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#f3e9db] pb-4">
+            <div className="space-y-5 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#e2d3bf] pb-4">
                 <div>
                   <h3 className="text-base font-bold text-[#1E1917] flex items-center gap-2">
                     <Layers className="w-5 h-5 text-[#9A1C1F]" />
@@ -818,7 +812,7 @@ export function AdminFormsView() {
                       key={idx}
                       type="button"
                       onClick={() => addPresetField(preset)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#EAE2D5] bg-[#FAF8F5] hover:bg-[#FAF1EC] hover:border-[#F2C2BB] text-xs font-semibold text-[#1E1917] transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#d9c7ae] bg-[#FAF8F5] hover:bg-[#FAF1EC] hover:border-[#e7aea5] text-xs font-semibold text-[#1E1917] transition-all cursor-pointer"
                     >
                       <Plus className="w-3 h-3 text-[#9A1C1F]" />
                       <span>{preset.title}</span>
@@ -830,7 +824,7 @@ export function AdminFormsView() {
               {/* Danh sách các trường đang có */}
               <div className="space-y-3 pt-2">
                 {cta.fields.length === 0 ? (
-                  <div className="p-8 text-center border-2 border-dashed border-[#EAE2D5] rounded-2xl bg-[#FAF8F5] text-stone-500 space-y-2">
+                  <div className="p-8 text-center border-2 border-dashed border-[#d9c7ae] rounded-2xl bg-[#FAF8F5] text-stone-500 space-y-2">
                     <p className="text-xs font-semibold">Chưa có trường nào trên biểu mẫu.</p>
                     <p className="text-[11px] text-stone-400">
                       Hãy bấm vào một trong các mẫu phổ biến bên trên để bắt đầu thêm trường.
@@ -844,10 +838,10 @@ export function AdminFormsView() {
                     return (
                       <div
                         key={index}
-                        className="p-4 rounded-2xl border border-[#EAE2D5] bg-[#FAF8F5] space-y-3 hover:border-[#D5C2AA] transition-colors"
+                        className="p-4 rounded-2xl border border-[#d9c7ae] bg-[#FAF8F5] space-y-3 hover:border-[#c5ad8f] transition-colors"
                       >
                         {/* Hàng điều khiển trên cùng */}
-                        <div className="flex items-center justify-between gap-2 border-b border-[#EAE2D5]/70 pb-2.5">
+                        <div className="flex items-center justify-between gap-2 border-b border-[#d9c7ae]/70 pb-2.5">
                           <div className="flex items-center gap-2">
                             <span className="w-6 h-6 rounded-md bg-[#9A1C1F] text-white flex items-center justify-center text-xs font-bold">
                               {index + 1}
@@ -855,11 +849,11 @@ export function AdminFormsView() {
                             <span className="text-xs font-bold text-[#1E1917]">
                               {field.label || `Trường #${index + 1}`}
                             </span>
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase bg-white border border-[#EAE2D5] text-stone-600">
+                            <span className="px-2 py-0.5 rounded-md text-[10px] font-mono uppercase bg-white border border-[#d9c7ae] text-stone-600">
                               {field.type}
                             </span>
                             {field.required && (
-                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-red-50 border border-red-200 text-red-700">
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-red-50 border border-red-300 text-red-700">
                                 Bắt buộc
                               </span>
                             )}
@@ -871,7 +865,7 @@ export function AdminFormsView() {
                               onClick={() => moveField(index, index - 1)}
                               disabled={index === 0}
                               title="Di chuyển lên"
-                              className="p-1.5 rounded-lg border border-[#EAE2D5] bg-white hover:bg-stone-50 text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                              className="p-1.5 rounded-lg border border-[#d9c7ae] bg-white hover:bg-stone-50 text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             >
                               <ArrowUp className="w-3.5 h-3.5" />
                             </button>
@@ -880,7 +874,7 @@ export function AdminFormsView() {
                               onClick={() => moveField(index, index + 1)}
                               disabled={index === cta.fields.length - 1}
                               title="Di chuyển xuống"
-                              className="p-1.5 rounded-lg border border-[#EAE2D5] bg-white hover:bg-stone-50 text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                              className="p-1.5 rounded-lg border border-[#d9c7ae] bg-white hover:bg-stone-50 text-stone-700 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                             >
                               <ArrowDown className="w-3.5 h-3.5" />
                             </button>
@@ -888,7 +882,7 @@ export function AdminFormsView() {
                               type="button"
                               onClick={() => removeField(index)}
                               title="Xóa trường này"
-                              className="p-1.5 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg border border-red-300 bg-red-50 hover:bg-red-100 text-red-600 transition-colors cursor-pointer"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -908,7 +902,7 @@ export function AdminFormsView() {
                                 updateField(index, { name: e.target.value })
                               }
                               placeholder="fullname, phone..."
-                              className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-mono text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                              className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-mono text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                             />
                           </div>
 
@@ -923,7 +917,7 @@ export function AdminFormsView() {
                                 updateField(index, { label: e.target.value })
                               }
                               placeholder="Họ và tên..."
-                              className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                              className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                             />
                           </div>
 
@@ -938,7 +932,7 @@ export function AdminFormsView() {
                                   type: e.target.value as Field["type"],
                                 })
                               }
-                              className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                              className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                             >
                               <option value="text">Văn bản ngắn (Text)</option>
                               <option value="tel">Số điện thoại (Tel)</option>
@@ -963,7 +957,7 @@ export function AdminFormsView() {
                                   width: e.target.value as "half" | "full",
                                 })
                               }
-                              className="w-full px-3 py-2 rounded-xl border border-[#EAE2D5] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
+                              className="w-full px-3 py-2 rounded-xl border border-[#d9c7ae] bg-white text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none cursor-pointer"
                             >
                               <option value="half">50% — Nửa dòng (Half)</option>
                               <option value="full">100% — Toàn dòng (Full)</option>
@@ -980,7 +974,7 @@ export function AdminFormsView() {
                                 updateField(index, { placeholder: e.target.value })
                               }
                               placeholder="Gợi ý người dùng nhập (placeholder)..."
-                              className="w-full px-3 py-1.5 rounded-xl border border-[#EAE2D5] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                              className="w-full px-3 py-1.5 rounded-xl border border-[#d9c7ae] bg-white text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                             />
                           </div>
 
@@ -991,7 +985,7 @@ export function AdminFormsView() {
                               onChange={(e) =>
                                 updateField(index, { required: e.target.checked })
                               }
-                              className="w-4 h-4 rounded text-[#9A1C1F] focus:ring-[#9A1C1F] border-[#EAE2D5] cursor-pointer"
+                              className="w-4 h-4 rounded text-[#9A1C1F] focus:ring-[#9A1C1F] border-[#d9c7ae] cursor-pointer"
                             />
                             <span>Bắt buộc điền</span>
                           </label>
@@ -999,7 +993,7 @@ export function AdminFormsView() {
 
                         {/* Options nếu là select hoặc radio */}
                         {isSelectOrRadio && (
-                          <div className="p-3.5 rounded-xl border border-[#EAE2D5] bg-white space-y-2.5">
+                          <div className="p-3.5 rounded-xl border border-[#d9c7ae] bg-white space-y-2.5">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-bold text-[#9A1C1F] uppercase tracking-wider">
                                 Các tùy chọn cho menu ({field.options?.length || 0})
@@ -1013,7 +1007,7 @@ export function AdminFormsView() {
                               {(field.options || []).map((opt, optIdx) => (
                                 <span
                                   key={optIdx}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF1EC] border border-[#F2C2BB]/50 text-xs font-semibold text-[#9A1C1F]"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FAF1EC] border border-[#e7aea5]/50 text-xs font-semibold text-[#9A1C1F]"
                                 >
                                   <span>{opt}</span>
                                   <button
@@ -1049,7 +1043,7 @@ export function AdminFormsView() {
                                   }
                                 }}
                                 placeholder="Nhập tùy chọn mới (ví dụ: Tranh treo tường, Vách sảnh...)"
-                                className="flex-1 px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                                className="flex-1 px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                               />
                               <button
                                 type="button"
@@ -1071,8 +1065,8 @@ export function AdminFormsView() {
 
           {/* TAB 3: THÔNG ĐIỆP & NÚT BẤM (SETTINGS) */}
           {activeTab === "settings" && (
-            <div className="bg-white p-6 rounded-2xl border border-[#f3e9db] space-y-4 shadow-xs">
-              <h3 className="text-base font-bold text-[#1E1917] flex items-center gap-2 border-b border-[#f3e9db] pb-3">
+            <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] space-y-4 shadow-xs">
+              <h3 className="text-base font-bold text-[#1E1917] flex items-center gap-2 border-b border-[#e2d3bf] pb-3">
                 <Settings className="w-5 h-5 text-[#9A1C1F]" />
                 Cấu hình Nhãn & Thông báo bảo mật
               </h3>
@@ -1086,7 +1080,7 @@ export function AdminFormsView() {
                     type="text"
                     value={cta.eyebrow}
                     onChange={(e) => setCta({ ...cta, eyebrow: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </div>
 
@@ -1098,7 +1092,7 @@ export function AdminFormsView() {
                     type="text"
                     value={cta.submitLabel}
                     onChange={(e) => setCta({ ...cta, submitLabel: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </div>
 
@@ -1110,7 +1104,7 @@ export function AdminFormsView() {
                     type="text"
                     value={cta.icon}
                     onChange={(e) => setCta({ ...cta, icon: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </div>
 
@@ -1122,7 +1116,7 @@ export function AdminFormsView() {
                     type="text"
                     value={cta.iconPrivacy}
                     onChange={(e) => setCta({ ...cta, iconPrivacy: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </div>
 
@@ -1134,7 +1128,7 @@ export function AdminFormsView() {
                     type="text"
                     value={cta.privacyNote}
                     onChange={(e) => setCta({ ...cta, privacyNote: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
                   />
                 </div>
               </div>
@@ -1153,7 +1147,7 @@ export function AdminFormsView() {
                 </span>
               </div>
 
-              <div className="p-6 md:p-8 rounded-3xl bg-[#FAF8F5] border border-[#EAE2D5] shadow-sm max-w-3xl mx-auto space-y-6">
+              <div className="p-6 md:p-8 rounded-3xl bg-[#FAF8F5] border border-[#d9c7ae] shadow-sm max-w-3xl mx-auto space-y-6">
                 <div>
                   <span className="text-xs font-bold tracking-widest text-[#9A1C1F] uppercase">
                     {cta.eyebrow}
@@ -1178,12 +1172,12 @@ export function AdminFormsView() {
                           rows={3}
                           disabled
                           placeholder={f.placeholder || "Nội dung..."}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] bg-white text-xs text-stone-500"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] bg-white text-xs text-stone-500"
                         />
                       ) : f.type === "select" ? (
                         <select
                           disabled
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] bg-white text-xs text-stone-500"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] bg-white text-xs text-stone-500"
                         >
                           <option>{f.placeholder || "-- Lựa chọn --"}</option>
                           {f.options?.map((opt, oIdx) => (
@@ -1209,14 +1203,14 @@ export function AdminFormsView() {
                           type={f.type}
                           disabled
                           placeholder={f.placeholder || ""}
-                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] bg-white text-xs text-stone-500"
+                          className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] bg-white text-xs text-stone-500"
                         />
                       )}
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#EAE2D5]">
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#d9c7ae]">
                   <div className="flex items-center gap-2 text-xs text-stone-500">
                     <ShieldCheck className="w-4 h-4 text-[#9A1C1F]" />
                     <span>{cta.privacyNote}</span>

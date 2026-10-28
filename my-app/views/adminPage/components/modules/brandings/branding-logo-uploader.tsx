@@ -73,7 +73,7 @@ export function BrandingLogoUploader({
   };
 
   return (
-    <div className="space-y-3 p-4 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5]/80">
+    <div className="space-y-3 p-4 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5]/80">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <label className="block text-xs font-bold text-[#1E1917] uppercase tracking-wide">
@@ -135,7 +135,7 @@ export function BrandingLogoUploader({
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
         {/* Preview Thumbnail */}
         <div className="sm:col-span-3">
-          <div className="w-full h-24 rounded-lg border border-[#EAE2D5] bg-white flex items-center justify-center p-2 relative overflow-hidden group shadow-2xs">
+          <div className="w-full h-24 rounded-lg border border-[#d9c7ae] bg-white flex items-center justify-center p-2 relative overflow-hidden group shadow-2xs">
             {value ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -162,7 +162,7 @@ export function BrandingLogoUploader({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="https://... hoặc /uploads/... hoặc tải từ máy tính"
-            className="w-full h-9 px-3 rounded-lg border border-[#EAE2D5] bg-white text-xs font-mono text-stone-700 focus:border-[#9A1C1F] focus:outline-none"
+            className="w-full h-9 px-3 rounded-lg border border-[#d9c7ae] bg-white text-xs font-mono text-stone-700 focus:border-[#9A1C1F] focus:outline-none"
           />
           {uploadSuccess && (
             <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold mt-1">

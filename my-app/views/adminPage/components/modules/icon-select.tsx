@@ -52,7 +52,7 @@ export function IconSelect({ label, value, onChange }: Props) {
         aria-expanded={open}
         aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
-        className="mt-1.5 flex h-10 w-full cursor-pointer items-center gap-2 rounded-xl border border-[#EAE2D5] bg-white px-3.5 text-left font-normal transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
+        className="mt-1.5 flex h-10 w-full cursor-pointer items-center gap-2 rounded-xl border border-[#d9c7ae] bg-white px-3.5 text-left font-normal transition-colors hover:border-[#9A1C1F]/40 hover:bg-[#FAF8F5] focus:border-[#9A1C1F] focus:outline-none"
       >
         {value && <IonIcon name={value} />}
         <span className="min-w-0 flex-1 truncate">
@@ -61,8 +61,8 @@ export function IconSelect({ label, value, onChange }: Props) {
         <ChevronDown className="h-4 w-4 shrink-0" aria-hidden="true" />
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-40 mt-2 w-full min-w-56 rounded-xl border border-[#EAE2D5] bg-white p-2 shadow-xl">
-          <label className="flex items-center gap-2 rounded-lg border border-[#EAE2D5] px-2.5 py-2">
+        <div className="absolute left-0 top-full z-40 mt-2 w-full min-w-56 rounded-xl border border-[#d9c7ae] bg-white p-2 shadow-xl">
+          <label className="flex items-center gap-2 rounded-lg border border-[#d9c7ae] px-2.5 py-2">
             <Search className="h-4 w-4 text-[#695D56]" aria-hidden="true" />
             <input
               ref={searchRef}

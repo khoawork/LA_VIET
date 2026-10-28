@@ -24,8 +24,8 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
   };
 
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <BarChart3 className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -49,7 +49,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
 
@@ -61,7 +61,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
               type="text"
               value={data.title}
               onChange={(e) => onChange({ ...data, title: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
         </div>
@@ -74,7 +74,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -110,7 +110,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
             {data.stats.map((stat, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-2.5"
+                className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-2.5"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-[#a21f1f]">
@@ -142,7 +142,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                       onChange={(e) =>
                         handleStatChange(idx, "num", e.target.value)
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-sm font-normal text-[#a21f1f] bg-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-sm font-normal text-[#a21f1f] bg-white"
                     />
                   </div>
 
@@ -156,7 +156,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                       onChange={(e) =>
                         handleStatChange(idx, "tag", e.target.value)
                       }
-                      className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal bg-white"
+                      className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-normal bg-white"
                     />
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                       onChange={(e) =>
                         handleStatChange(idx, "icon", e.target.value)
                       }
-                      className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs bg-white"
+                      className="flex-1 min-w-0 px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs bg-white"
                     >
                       {STAT_ICON_OPTIONS.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -180,7 +180,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                         </option>
                       ))}
                     </select>
-                    <span className="w-8 h-8 shrink-0 flex items-center justify-center border border-[#EEDCA9] bg-[#FFF8E8] text-[#B91C1C]">
+                    <span className="w-8 h-8 shrink-0 flex items-center justify-center border border-[#dfc88a] bg-[#FFF8E8] text-[#B91C1C]">
                       <StatIcon value={stat.icon} index={idx} className="w-4 h-4" />
                     </span>
                   </div>
@@ -196,7 +196,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                     onChange={(e) =>
                       handleStatChange(idx, "label", e.target.value)
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-normal text-[#1E1917] bg-white"
                   />
                 </div>
 
@@ -210,7 +210,7 @@ export function HomeStatisticsTab({ data, onChange }: HomeStatisticsTabProps) {
                     onChange={(e) =>
                       handleStatChange(idx, "desc", e.target.value)
                     }
-                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs text-stone-600 bg-white"
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs text-stone-600 bg-white"
                   />
                 </div>
               </div>

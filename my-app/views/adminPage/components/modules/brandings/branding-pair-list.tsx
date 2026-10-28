@@ -32,7 +32,7 @@ export function BrandingPairList({
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <div key={index} className="relative rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] p-4 pt-12">
+        <div key={index} className="relative rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] p-4 pt-12">
           <RemoveItemButton
             label={`Xóa ${itemLabel.toLowerCase()} ${index + 1}`}
             onClick={() => onChange(items.filter((_, i) => i !== index))}
@@ -50,7 +50,7 @@ export function BrandingPairList({
       <button
         type="button"
         onClick={() => onChange([...items, { first: "", second: "" }])}
-        className="inline-flex items-center gap-2 rounded-xl border border-[#EAE2D5] px-4 py-2.5 text-xs font-bold text-[#9A1C1F]"
+        className="inline-flex items-center gap-2 rounded-xl border border-[#d9c7ae] px-4 py-2.5 text-xs font-bold text-[#9A1C1F]"
       >
         <Plus className="h-4 w-4" /> Thêm {itemLabel.toLowerCase()}
       </button>

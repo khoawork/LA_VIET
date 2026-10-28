@@ -11,8 +11,8 @@ interface HomeSeoTabProps {
 
 export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <Globe className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -35,7 +35,7 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
             type="text"
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
           <span className="text-[10px] text-stone-400">
             Khuyến nghị từ 50-60 ký tự. Hiện tại: {data.title?.length || 0} ký tự.
@@ -50,7 +50,7 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
             rows={3}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
           <span className="text-[10px] text-stone-400">
             Khuyến nghị từ 150-160 ký tự. Hiện tại: {data.description?.length || 0} ký tự.
@@ -66,7 +66,7 @@ export function HomeSeoTab({ data, onChange }: HomeSeoTabProps) {
             placeholder="sơn mài, Là Việt, nghệ thuật..."
             value={data.keywords}
             onChange={(e) => onChange({ ...data, keywords: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 

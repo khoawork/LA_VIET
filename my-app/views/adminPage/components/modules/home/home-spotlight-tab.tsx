@@ -21,8 +21,8 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
   };
 
   return (
-    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#f3e9db] shadow-xs space-y-6">
-      <div className="flex items-center justify-between pb-4 border-b border-[#f3e9db]">
+    <div className="bg-white p-6 sm:p-7 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+      <div className="flex items-center justify-between pb-4 border-b border-[#e2d3bf]">
         <div className="flex items-center gap-2.5">
           <Award className="w-5 h-5 text-[#a21f1f]" />
           <div>
@@ -46,7 +46,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
               type="text"
               value={data.tagline}
               onChange={(e) => onChange({ ...data, tagline: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
             />
           </div>
 
@@ -83,7 +83,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
               value={data.image}
               onChange={(e) => onChange({ ...data, image: e.target.value })}
               placeholder="https://... hoặc chọn file từ máy tính"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-mono bg-white focus:outline-none focus:border-[#a21f1f] truncate"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-mono bg-white focus:outline-none focus:border-[#a21f1f] truncate"
             />
             <ImagePreview src={data.image} alt="Xem trước ảnh tiêu điểm" />
           </div>
@@ -97,7 +97,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
             rows={2}
             value={data.title}
             onChange={(e) => onChange({ ...data, title: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -109,12 +109,12 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
             rows={4}
             value={data.description}
             onChange={(e) => onChange({ ...data, description: e.target.value })}
-            className="w-full px-3.5 py-2.5 rounded-xl border border-[#f3e9db] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
+            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2d3bf] text-xs text-stone-600 leading-relaxed focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
         {/* Con dấu thương hiệu (Seal) */}
-        <div className="p-4 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-3">
+        <div className="p-4 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-3">
           <span className="text-xs font-bold text-[#a21f1f] block uppercase tracking-wider">
             Con dấu thương hiệu (Seal Stamp)
           </span>
@@ -165,7 +165,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   })
                 }
                 placeholder="https://... hoặc chọn logo từ máy"
-                className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-mono bg-white truncate"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-mono bg-white truncate"
               />
             </label>
             <div className="flex items-center gap-3">
@@ -175,7 +175,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                 <img
                   src={data.seal.logo}
                   alt="Logo con dấu"
-                  className="w-10 h-10 object-contain bg-white border border-[#f3e9db]"
+                  className="w-10 h-10 object-contain bg-white border border-[#e2d3bf]"
                 />
               ) : (
                 <span className="text-xs text-stone-500">Chưa chọn logo.</span>
@@ -208,7 +208,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                     seal: { ...data.seal, line1: e.target.value },
                   })
                 }
-                className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs bg-white"
               />
             </div>
             <div className="space-y-1">
@@ -224,7 +224,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                     seal: { ...data.seal, line2: e.target.value },
                   })
                 }
-                className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs bg-white"
               />
             </div>
           </div>
@@ -259,7 +259,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
             {data.infoBoxes.map((box, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl border border-[#f3e9db] bg-[#FAF8F5]/60 space-y-1.5"
+                className="p-3.5 rounded-xl border border-[#e2d3bf] bg-[#FAF8F5]/60 space-y-1.5"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-bold text-[#a21f1f]">
@@ -288,7 +288,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   onChange={(e) =>
                     handleInfoBoxChange(idx, "label", e.target.value)
                   }
-                  className="w-full px-2.5 py-1 rounded border border-[#f3e9db] text-[10px] font-normal text-[#a21f1f] uppercase bg-white"
+                  className="w-full px-2.5 py-1 rounded border border-[#e2d3bf] text-[10px] font-normal text-[#a21f1f] uppercase bg-white"
                 />
                 <input
                   type="text"
@@ -298,7 +298,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   onChange={(e) =>
                     handleInfoBoxChange(idx, "value", e.target.value)
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#f3e9db] text-xs font-normal text-[#1E1917] bg-white"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-[#e2d3bf] text-xs font-normal text-[#1E1917] bg-white"
                 />
               </div>
             ))}
@@ -320,7 +320,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   link: { ...data.link, text: e.target.value },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs bg-white"
             />
           </div>
           <div className="space-y-1">
@@ -336,7 +336,7 @@ export function HomeSpotlightTab({ data, onChange }: HomeSpotlightTabProps) {
                   link: { ...data.link, href: e.target.value },
                 })
               }
-              className="w-full px-3 py-2 rounded-lg border border-[#f3e9db] text-xs font-mono bg-white"
+              className="w-full px-3 py-2 rounded-lg border border-[#e2d3bf] text-xs font-mono bg-white"
             />
           </div>
         </div>

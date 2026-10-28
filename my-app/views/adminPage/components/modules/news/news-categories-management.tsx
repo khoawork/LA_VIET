@@ -191,9 +191,9 @@ export function NewsCategoriesManagement({
       )}
 
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#F0DCD6]">
+          <div className="w-10 h-10 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#e4c4b9]">
             <Database className="w-5 h-5" />
           </div>
           <div>
@@ -221,7 +221,7 @@ export function NewsCategoriesManagement({
       </div>
 
       {/* Table list */}
-      <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-16 text-center text-xs font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
             <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
@@ -235,7 +235,7 @@ export function NewsCategoriesManagement({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
+                <tr className="bg-[#f7f5f1] border-b border-[#e2d3bf] text-stone-700 font-bold uppercase tracking-wider">
                   <th className="py-3.5 px-5">Mã ID</th>
                   <th className="py-3.5 px-5">Tên chuyên mục tin tức</th>
                   <th className="py-3.5 px-4 text-center">Số bài viết</th>
@@ -249,7 +249,7 @@ export function NewsCategoriesManagement({
                     <td className="py-3.5 px-5 text-stone-500 font-mono">#{cat.id}</td>
                     <td className="py-3.5 px-5 font-bold text-[#1E1917]">{cat.name}</td>
                     <td className="py-3.5 px-4 text-center">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#F0DCD6]">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#e4c4b9]">
                         {cat._count?.news ?? 0} bài viết
                       </span>
                     </td>
@@ -293,8 +293,8 @@ export function NewsCategoriesManagement({
       {/* MODAL TẠO CHUYÊN MỤC MỚI */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Database className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="font-bold text-sm text-[#1E1917] uppercase tracking-wide">
@@ -328,7 +328,7 @@ export function NewsCategoriesManagement({
                   placeholder="Ví dụ: Nghiên cứu Vật liệu, Triển lãm Nghệ thuật..."
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   autoFocus
                 />
                 <p className="text-[11px] text-stone-500">
@@ -336,11 +336,11 @@ export function NewsCategoriesManagement({
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>
@@ -365,8 +365,8 @@ export function NewsCategoriesManagement({
       {/* MODAL CHỈNH SỬA CHUYÊN MỤC */}
       {isEditModalOpen && editingCategory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Edit className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="font-bold text-sm text-[#1E1917] uppercase tracking-wide">
@@ -404,19 +404,19 @@ export function NewsCategoriesManagement({
                   onChange={(e) =>
                     setEditingCategory({ ...editingCategory, name: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   autoFocus
                 />
               </div>
 
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => {
                     setIsEditModalOpen(false);
                     setEditingCategory(null);
                   }}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>

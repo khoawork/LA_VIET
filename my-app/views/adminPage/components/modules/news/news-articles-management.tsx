@@ -231,9 +231,9 @@ export function NewsArticlesManagement({
       )}
 
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#F0DCD6]">
+          <div className="w-10 h-10 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#e4c4b9]">
             <Newspaper className="w-5 h-5" />
           </div>
           <div>
@@ -272,7 +272,7 @@ export function NewsArticlesManagement({
               fetchNewsList(e.target.value, selectedFilterCategory);
             }}
             placeholder="Tìm kiếm bài viết theo tiêu đề, mô tả..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
           />
         </div>
 
@@ -282,7 +282,7 @@ export function NewsArticlesManagement({
             setSelectedFilterCategory(e.target.value);
             fetchNewsList(searchKeyword, e.target.value);
           }}
-          className="px-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+          className="px-4 py-2.5 rounded-xl bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
         >
           <option value="">Tất cả chuyên mục</option>
           {newsCategories.map((c) => (
@@ -294,7 +294,7 @@ export function NewsArticlesManagement({
       </div>
 
       {/* Table list */}
-      <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-16 text-center text-xs font-semibold text-stone-500 flex flex-col items-center justify-center gap-2">
             <Loader2 className="w-6 h-6 animate-spin text-[#a21f1f]" />
@@ -308,7 +308,7 @@ export function NewsArticlesManagement({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
+                <tr className="bg-[#f7f5f1] border-b border-[#e2d3bf] text-stone-700 font-bold uppercase tracking-wider">
                   <th className="py-3.5 px-5">Bài viết</th>
                   <th className="py-3.5 px-4">Chuyên mục</th>
                   <th className="py-3.5 px-4">Tác giả / Chủ trì</th>
@@ -324,7 +324,7 @@ export function NewsArticlesManagement({
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-12 h-10 object-cover rounded-lg border border-[#f3e9db] shrink-0"
+                          className="w-12 h-10 object-cover rounded-lg border border-[#e2d3bf] shrink-0"
                         />
                         <div className="min-w-0 max-w-md">
                           <span className="font-bold text-[#1E1917] block truncate">
@@ -337,7 +337,7 @@ export function NewsArticlesManagement({
                       </div>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#F0DCD6]">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAF1EC] text-[#9A1C1F] border border-[#e4c4b9]">
                         {item.category?.name || `Danh mục #${item.categoryId}`}
                       </span>
                     </td>
@@ -379,8 +379,8 @@ export function NewsArticlesManagement({
       {/* MODAL TẠO BÀI VIẾT MỚI */}
       {isCreateModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#EAE2D5] overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between p-5 border-b border-[#EAE2D5] bg-[#FAF8F5]">
+          <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-[#d9c7ae] overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between p-5 border-b border-[#d9c7ae] bg-[#FAF8F5]">
               <div className="flex items-center gap-2.5">
                 <Newspaper className="w-5 h-5 text-[#9A1C1F]" />
                 <h3 className="font-bold text-sm text-[#1E1917] uppercase tracking-wide">
@@ -414,7 +414,7 @@ export function NewsArticlesManagement({
                   placeholder="Ví dụ: Kỹ thuật dát vàng quỳ trên tranh sơn mài..."
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                 />
               </div>
 
@@ -428,7 +428,7 @@ export function NewsArticlesManagement({
                     onChange={(e) =>
                       setFormData({ ...formData, categoryId: Number(e.target.value) })
                     }
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs font-normal text-[#1E1917] bg-white focus:outline-none focus:border-[#9A1C1F]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs font-normal text-[#1E1917] bg-white focus:outline-none focus:border-[#9A1C1F]"
                   >
                     {newsCategories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -446,7 +446,7 @@ export function NewsArticlesManagement({
                     type="text"
                     value={formData.preside}
                     onChange={(e) => setFormData({ ...formData, preside: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   />
                 </div>
               </div>
@@ -458,7 +458,7 @@ export function NewsArticlesManagement({
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   />
                 </div>
 
@@ -468,7 +468,7 @@ export function NewsArticlesManagement({
                     type="text"
                     value={formData.reading}
                     onChange={(e) => setFormData({ ...formData, reading: e.target.value })}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#EAE2D5] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
+                    className="w-full px-3.5 py-2 rounded-xl border border-[#d9c7ae] text-xs text-[#1E1917] focus:outline-none focus:border-[#9A1C1F]"
                   />
                 </div>
               </div>
@@ -489,15 +489,15 @@ export function NewsArticlesManagement({
                   placeholder="Nhập đoạn trích tóm tắt bài viết..."
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EAE2D5] text-xs text-[#5C544E] leading-relaxed focus:outline-none focus:border-[#9A1C1F]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#d9c7ae] text-xs text-[#5C544E] leading-relaxed focus:outline-none focus:border-[#9A1C1F]"
                 />
               </div>
 
-              <div className="pt-4 border-t border-[#EAE2D5] flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#d9c7ae] flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-[#EAE2D5] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
+                  className="px-4 py-2 rounded-xl border border-[#d9c7ae] text-xs font-bold text-stone-600 hover:bg-stone-50 cursor-pointer"
                 >
                   Hủy bỏ
                 </button>

@@ -130,7 +130,7 @@ export function AdminLogin() {
         </div>
 
         {/* Login Card */}
-        <div className="bg-[#f7f5f1] rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#f3e9db]">
+        <div className="bg-[#f7f5f1] rounded-3xl p-8 sm:p-10 shadow-2xl border border-[#e2d3bf]">
           {/* Brand Seal Header */}
           <div className="text-center space-y-3 mb-6">
             <div className="w-16 h-16 mx-auto rounded-2xl bg-[#a21f1f] text-[#d1a25b] flex items-center justify-center font-black text-2xl shadow-lg border-2 border-[#d1a25b]/60">
@@ -148,7 +148,7 @@ export function AdminLogin() {
 
           {/* Error Alert */}
           {errorMessage && (
-            <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold animate-in fade-in">
+            <div className="mb-5 flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 border border-red-300 text-red-800 text-xs font-semibold animate-in fade-in">
               <AlertCircle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
               <div className="flex-1 leading-relaxed">{errorMessage}</div>
             </div>
@@ -182,7 +182,7 @@ export function AdminLogin() {
           {/* Dải phân cách */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#EAE2D5]" />
+              <div className="w-full border-t border-[#d9c7ae]" />
             </div>
             <div className="relative flex justify-center text-[10px]">
               <span className="bg-[#f7f5f1] px-3 font-bold uppercase tracking-wider text-stone-400">
@@ -212,7 +212,7 @@ export function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="admin@laviet.vn"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#e2d3bf] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
                 />
               </div>
             </div>
@@ -250,7 +250,7 @@ export function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#f3e9db] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-[#e2d3bf] bg-white text-sm text-[#1E1917] placeholder-stone-400 focus:outline-none focus:border-[#a21f1f] focus:ring-2 focus:ring-[#a21f1f]/20 transition-all font-normal"
                 />
                 <button
                   type="button"
@@ -287,7 +287,7 @@ export function AdminLogin() {
           </form>
 
           {/* Footer note */}
-          <div className="mt-6 pt-5 border-t border-[#f3e9db] text-center">
+          <div className="mt-6 pt-5 border-t border-[#e2d3bf] text-center">
             <p className="text-[11px] font-bold text-stone-500 uppercase tracking-widest flex items-center justify-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-[#a21f1f]" />
               Bảo mật định danh cấp Doanh nghiệp

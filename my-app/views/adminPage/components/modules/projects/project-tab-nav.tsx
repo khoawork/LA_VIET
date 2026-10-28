@@ -15,7 +15,7 @@ interface Props {
 
 export function ProjectTabNav({ activeTab, onSelect }: Props) {
   return (
-    <div className="flex gap-2 overflow-x-auto border-b border-[#EAE2D5] pb-1">
+    <div className="flex gap-2 overflow-x-auto border-b border-[#d9c7ae] pb-1">
       {tabs.map(({ key, label, Icon }) => (
         <button
           key={key}

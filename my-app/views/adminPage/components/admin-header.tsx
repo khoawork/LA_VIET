@@ -18,7 +18,7 @@ export function AdminHeader({
   return (
     <header
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="sticky top-0 z-30 flex h-14 w-full items-center justify-between gap-2 border-b border-[#f3e9db] bg-white/95 px-2 backdrop-blur-md sm:h-16 sm:px-8"
+      className="sticky top-0 z-30 flex h-14 w-full items-center justify-between gap-2 border-b border-[#e2d3bf] bg-white/95 px-2 backdrop-blur-md sm:h-16 sm:px-8"
     >
       {/* Left: Mobile Toggle & Breadcrumbs */}
       <div className="flex min-w-0 flex-1 items-center gap-1 sm:gap-3">
@@ -54,7 +54,7 @@ export function AdminHeader({
         <button
           type="button"
           onClick={() => setIsDark(!isDark)}
-          className="p-2 rounded-full border border-[#f3e9db] text-stone-700 hover:bg-[#f7f5f1] transition-colors cursor-pointer"
+          className="p-2 rounded-full border border-[#e2d3bf] text-stone-700 hover:bg-[#f7f5f1] transition-colors cursor-pointer"
           title={isDark ? "Chuyển sang giao diện sáng" : "Chuyển sang giao diện tối"}
         >
           {isDark ? (
@@ -69,7 +69,7 @@ export function AdminHeader({
           href="/"
           target="_blank"
           aria-label="Xem website"
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#f3e9db] bg-[#f7f5f1] px-2 py-1.5 text-xs font-bold uppercase tracking-wider text-stone-800 shadow-xs transition-all hover:border-[#a21f1f] hover:bg-[#a21f1f] hover:text-white sm:px-3.5"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#e2d3bf] bg-[#f7f5f1] px-2 py-1.5 text-xs font-bold uppercase tracking-wider text-stone-800 shadow-xs transition-all hover:border-[#a21f1f] hover:bg-[#a21f1f] hover:text-white sm:px-3.5"
         >
           <span className="hidden sm:inline">Xem website</span>
           <ExternalLink className="w-3.5 h-3.5" />

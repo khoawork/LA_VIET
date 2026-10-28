@@ -7,8 +7,8 @@ interface NewsStatsTabProps {
 
 export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
   return (
-    <div className="bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs space-y-6">
-      <div className="flex items-center justify-between border-b border-[#EAE2D5] pb-4">
+    <div className="bg-white p-6 rounded-2xl border border-[#d9c7ae] shadow-xs space-y-6">
+      <div className="flex items-center justify-between border-b border-[#d9c7ae] pb-4">
         <div>
           <h2 className="text-sm font-bold uppercase tracking-wider text-[#9A1C1F]">
             Section 4: {data.items.length} Khối Chỉ số Khảo cứu &amp; Kiểm nghiệm
@@ -23,7 +23,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
         {data.items.map((stat, idx) => (
           <div
             key={stat.id || idx}
-            className="p-4 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] space-y-3"
+            className="p-4 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] space-y-3"
           >
             <div className="flex items-center justify-between text-xs font-bold text-[#9A1C1F]">
               <span>Khối chỉ số #{idx + 1}</span>
@@ -43,7 +43,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
                     newItems[idx] = { ...newItems[idx], value: e.target.value };
                     onChange({ items: newItems });
                   }}
-                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-sm font-normal text-[#9A1C1F] bg-white"
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-sm font-normal text-[#9A1C1F] bg-white"
                 />
               </div>
 
@@ -59,7 +59,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
                     newItems[idx] = { ...newItems[idx], label: e.target.value };
                     onChange({ items: newItems });
                   }}
-                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs font-normal text-[#1E1917] bg-white"
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs font-normal text-[#1E1917] bg-white"
                 />
               </div>
 
@@ -78,7 +78,7 @@ export function NewsStatsTab({ data, onChange }: NewsStatsTabProps) {
                     };
                     onChange({ items: newItems });
                   }}
-                  className="w-full px-3 py-1.5 rounded-lg border border-[#EAE2D5] text-xs text-[#5C544E] bg-white"
+                  className="w-full px-3 py-1.5 rounded-lg border border-[#d9c7ae] text-xs text-[#5C544E] bg-white"
                 />
               </div>
             </div>

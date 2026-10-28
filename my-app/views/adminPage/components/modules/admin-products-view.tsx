@@ -13,7 +13,6 @@ import {
   Search,
   Filter,
   Layers,
-  Sparkles,
   Plus,
   Trash2,
   SlidersHorizontal,
@@ -252,7 +251,7 @@ export function AdminProductsView() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#d9c7ae] bg-white p-12 text-sm text-[#695D56]">
         <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
         <span>Đang tải trang Sản phẩm...</span>
       </div>
@@ -261,7 +260,7 @@ export function AdminProductsView() {
 
   if (!hasPageData) {
     return (
-      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+      <p role="alert" className="rounded-2xl border border-[#d9c7ae] bg-white p-12 text-center text-sm text-[#695D56]">
         Chưa có dữ liệu trang Sản phẩm hoặc không thể tải dữ liệu.
       </p>
     );
@@ -300,19 +299,16 @@ export function AdminProductsView() {
       )}
 
       {/* Main Header Card */}
-      <div className="bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5">
+      <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div className="flex items-start sm:items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#f3e9db] shrink-0 shadow-xs">
+          <div className="w-12 h-12 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#e2d3bf] shrink-0 shadow-xs">
             <Package className="w-6 h-6" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-black to-[#a21f1f] bg-clip-text text-transparent">
-                Nội dung Trang Sản phẩm
+                Nội dung trang Sản phẩm
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db]">
-                Route: /products
-              </span>
             </div>
             <p className="text-xs text-stone-600 mt-1 max-w-2xl">
               Tùy chỉnh nội dung khối giới thiệu (Hero Section), các chỉ số nghệ
@@ -341,7 +337,7 @@ export function AdminProductsView() {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex border-b border-[#f3e9db] bg-white rounded-2xl px-4 pt-2 shadow-xs">
+      <div className="flex border-b border-[#e2d3bf] bg-white rounded-2xl px-4 pt-2 shadow-xs">
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
@@ -373,8 +369,8 @@ export function AdminProductsView() {
 
       {/* Tab 1: Hero Section & Intro Content */}
       {activeTab === "hero" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-[#e2d3bf]">
             <div>
               <h2 className="text-base font-bold text-[#1E1917]">
                 Khối Giới Thiệu Đầu Trang (Hero Banner)
@@ -384,7 +380,7 @@ export function AdminProductsView() {
                 điệp tôn vinh chất liệu sơn ta
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db] text-[10px] font-bold uppercase tracking-wider">
+            <span className="px-2.5 py-1 rounded bg-[#f7f5f1] text-[#a21f1f] border border-[#e2d3bf] text-[10px] font-bold uppercase tracking-wider">
               Khối trên cùng
             </span>
           </div>
@@ -407,7 +403,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="Nhập nhãn giới thiệu"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -428,7 +424,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="VD: BẢO TỒN VÀ KHAI MỞ DI SẢN HỘI HOẠ PHƯƠNG ĐÔNG"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -449,7 +445,7 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="VD: DANH MỤC TÁC PHẨM & ỨNG DỤNG SƠN MÀI"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -470,14 +466,14 @@ export function AdminProductsView() {
                   })
                 }
                 placeholder="Nhập đoạn văn giới thiệu tinh thần chế tác, xưởng sơn mài Là Việt..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs leading-relaxed font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
           </div>
 
           {/* 3 Metrics Configuration */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
+          <div className="pt-4 border-t border-[#e2d3bf] space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-[#1E1917]">
@@ -492,7 +488,7 @@ export function AdminProductsView() {
               <button
                 type="button"
                 onClick={handleAddMetric}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Thêm chỉ số</span>
@@ -503,7 +499,7 @@ export function AdminProductsView() {
               {pageProps.herosection.metrics.map((metric, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] relative space-y-3"
+                  className="p-4 rounded-xl bg-[#f7f5f1]/50 border border-[#e2d3bf] relative space-y-3"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">
@@ -532,7 +528,7 @@ export function AdminProductsView() {
                         handleMetricChange(idx, "value", e.target.value)
                       }
                       placeholder="100% hoặc ĐỘC BẢN"
-                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f] focus:outline-none focus:border-[#a21f1f]"
+                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#a21f1f] focus:outline-none focus:border-[#a21f1f]"
                     />
                   </div>
 
@@ -547,7 +543,7 @@ export function AdminProductsView() {
                         handleMetricChange(idx, "label", e.target.value)
                       }
                       placeholder="SƠN TA TỰ NHIÊN"
-                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-800 focus:outline-none focus:border-[#a21f1f]"
+                      className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-stone-800 focus:outline-none focus:border-[#a21f1f]"
                     />
                   </div>
                 </div>
@@ -559,8 +555,8 @@ export function AdminProductsView() {
 
       {/* Tab 2: Product Display Selection */}
       {activeTab === "products" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#e2d3bf]">
             <div>
               <h2 className="text-base font-bold text-[#1E1917]">
                 Lựa chọn Sản phẩm hiển thị trên website
@@ -576,14 +572,14 @@ export function AdminProductsView() {
               <button
                 type="button"
                 onClick={handleShowAll}
-                className="px-3.5 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 Hiện tất cả ({totalCount})
               </button>
               <button
                 type="button"
                 onClick={handleHideAll}
-                className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-stone-50 text-stone-600 text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-white hover:bg-stone-50 text-stone-600 text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 Ẩn tất cả
               </button>
@@ -619,7 +615,7 @@ export function AdminProductsView() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Tìm kiếm tác phẩm theo tên, danh mục, quy cách..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -630,7 +626,7 @@ export function AdminProductsView() {
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   selectedCategory === "ALL"
                     ? "bg-[#a21f1f] text-white"
-                    : "bg-[#f7f5f1] text-stone-600 hover:bg-[#f3e9db] border border-[#f3e9db]"
+                    : "bg-[#f7f5f1] text-stone-600 hover:bg-[#f3e9db] border border-[#e2d3bf]"
                 }`}
               >
                 Tất cả ({allProducts.length})
@@ -643,7 +639,7 @@ export function AdminProductsView() {
                   className={`px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                     selectedCategory === cat
                       ? "bg-[#a21f1f] text-white"
-                      : "bg-[#f7f5f1] text-stone-600 hover:bg-[#f3e9db] border border-[#f3e9db]"
+                      : "bg-[#f7f5f1] text-stone-600 hover:bg-[#f3e9db] border border-[#e2d3bf]"
                   }`}
                 >
                   {cat}
@@ -653,11 +649,11 @@ export function AdminProductsView() {
           </div>
 
           {/* Products List Table */}
-          <div className="bg-white rounded-2xl border border-[#f3e9db] overflow-hidden">
+          <div className="bg-white rounded-2xl border border-[#e2d3bf] overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
+                  <tr className="bg-[#f7f5f1] border-b border-[#e2d3bf] text-stone-700 font-bold uppercase tracking-wider">
                     <th className="py-3.5 px-5">Tác phẩm</th>
                     <th className="py-3.5 px-4">Danh mục</th>
                     <th className="py-3.5 px-4">Quy cách / Chất liệu</th>
@@ -684,7 +680,7 @@ export function AdminProductsView() {
                       >
                         <td className="py-3.5 px-5">
                           <div className="flex items-center gap-3">
-                            <div className="relative w-12 h-12 rounded-lg bg-stone-100 overflow-hidden border border-[#f3e9db] shrink-0">
+                            <div className="relative w-12 h-12 rounded-lg bg-stone-100 overflow-hidden border border-[#e2d3bf] shrink-0">
                               <Image
                                 src={product.image}
                                 alt={product.name}
@@ -705,7 +701,7 @@ export function AdminProductsView() {
                         </td>
 
                         <td className="py-3.5 px-4">
-                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db]">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#f7f5f1] text-[#a21f1f] border border-[#e2d3bf]">
                             {product.category?.name || "Sơn mài"}
                           </span>
                         </td>
@@ -726,7 +722,7 @@ export function AdminProductsView() {
                               <span>Hiển thị</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-300">
                               <EyeOff className="w-3 h-3 text-stone-400" />
                               <span>Đã ẩn</span>
                             </span>
@@ -769,32 +765,6 @@ export function AdminProductsView() {
           </div>
         </div>
       )}
-
-
-
-      {/* Bottom Floating/Sticky Save Toolbar */}
-      <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-[#f3e9db] shadow-sm">
-        <div className="flex items-center gap-2 text-xs text-stone-600">
-          <Sparkles className="w-4 h-4 text-[#d1a25b]" />
-          <span>
-            Thay đổi sẽ được áp dụng sau khi nhấn &ldquo;Lưu thay đổi&rdquo;.
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || loading}
-          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer"
-        >
-          {saving ? (
-            <RefreshCw className="w-4 h-4 animate-spin" />
-          ) : (
-            <Save className="w-4 h-4" />
-          )}
-          <span>{saving ? "Đang lưu..." : "Lưu thay đổi"}</span>
-        </button>
-      </div>
     </div>
   );
 }

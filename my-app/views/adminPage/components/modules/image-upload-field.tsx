@@ -51,9 +51,9 @@ export function ImageUploadField({
             setPreview(null);
           }}
           placeholder="Nhập URL ảnh hoặc chọn ảnh từ máy"
-          className="min-w-0 flex-1 rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-sm font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none disabled:bg-stone-50 disabled:text-stone-500"
+          className="min-w-0 flex-1 rounded-xl border border-[#d9c7ae] px-3.5 py-2.5 text-sm font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none disabled:bg-stone-50 disabled:text-stone-500"
         />
-        <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] px-4 py-2.5 text-sm font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]">
+        <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] px-4 py-2.5 text-sm font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]">
           <ImagePlus className="h-4 w-4" /> Chọn ảnh
           <input
             type="file"

@@ -27,8 +27,8 @@ export function ProjectHeaderTab({ data, onChange }: Props) {
   }
 
   return (
-    <div className="space-y-6 rounded-2xl border border-[#EAE2D5] bg-white p-6 shadow-xs">
-      <div className="border-b border-[#EAE2D5] pb-4">
+    <div className="space-y-6 rounded-2xl border border-[#d9c7ae] bg-white p-6 shadow-xs">
+      <div className="border-b border-[#d9c7ae] pb-4">
         <h2 className="text-sm font-bold uppercase text-[#9A1C1F]">
           Section 1: Header &amp; Breadcrumb
         </h2>
@@ -81,7 +81,7 @@ export function ProjectHeaderTab({ data, onChange }: Props) {
       {stats.map((stat, index) => (
         <div
           key={index}
-          className="relative rounded-xl border border-[#EAE2D5] bg-[#FAF8F5] p-4 pt-12"
+          className="relative rounded-xl border border-[#d9c7ae] bg-[#FAF8F5] p-4 pt-12"
         >
           <RemoveItemButton
             label={`Xóa chỉ số ${index + 1}`}

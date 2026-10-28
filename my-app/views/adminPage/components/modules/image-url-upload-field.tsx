@@ -52,7 +52,7 @@ export function ImageUrlUploadField({ label, value, onChange, fit }: Props) {
     <div className="space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="admin-field-label text-sm font-semibold text-[#1E1917]">{label}</span>
-        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#EAE2D5] bg-[#FAF8F5] px-3 py-1.5 text-sm font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]">
+        <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#d9c7ae] bg-[#FAF8F5] px-3 py-1.5 text-sm font-semibold text-[#9A1C1F] hover:bg-[#FAF1EC]">
           {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
           {uploading ? "Đang tải ảnh..." : "Chọn ảnh từ máy"}
           <input
@@ -78,7 +78,7 @@ export function ImageUrlUploadField({ label, value, onChange, fit }: Props) {
           onChange(event.target.value);
         }}
         placeholder="Nhập URL ảnh hoặc chọn ảnh từ máy"
-        className="w-full rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 text-base font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+        className="w-full rounded-xl border border-[#d9c7ae] bg-white px-3.5 py-2.5 text-base font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
       />
       {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
       <ImagePreview src={localPreview || value} alt={`Xem trước ${label.toLowerCase()}`} fit={fit} />

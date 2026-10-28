@@ -7,7 +7,7 @@ interface Props {
 
 export function BrandingHeader({ saving, onSave }: Props) {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#EAE2D5] bg-white p-6 shadow-xs">
+    <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#d9c7ae] bg-white p-6 shadow-xs">
       <div className="flex items-center gap-3.5">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FAF1EC] text-[#9A1C1F]">
           <LayoutTemplate className="h-5 w-5" />

@@ -17,6 +17,7 @@ interface CategoryFilterSelectProps {
   emptyLabel?: string;
   includeEmpty?: boolean;
   fullWidth?: boolean;
+  formField?: boolean;
 }
 
 export function CategoryFilterSelect({
@@ -27,6 +28,7 @@ export function CategoryFilterSelect({
   emptyLabel = "Tất cả",
   includeEmpty = true,
   fullWidth = false,
+  formField = false,
 }: CategoryFilterSelectProps) {
   const listId = useId();
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -132,7 +134,7 @@ export function CategoryFilterSelect({
             showMenu();
           }
         }}
-        className="flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#f3e9db] bg-white px-4 py-2 text-left text-sm font-normal text-[#1E1917] transition-colors hover:border-[#d1a25b] hover:bg-[#FAF8F5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d1a25b]/50 disabled:cursor-not-allowed disabled:opacity-50 sm:py-2.5"
+        className={`flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 rounded-xl border border-[#e2d3bf] bg-white px-4 text-left text-sm font-normal text-[#1E1917] transition-colors hover:border-[#d1a25b] hover:bg-[#FAF8F5] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d1a25b]/50 disabled:cursor-not-allowed disabled:opacity-50 ${formField ? "h-[42px] py-0" : "py-2 sm:py-2.5"}`}
       >
         <span className="min-w-0 truncate">{selectedName}</span>
         <ChevronDown className="h-4 w-4 shrink-0" />
@@ -144,7 +146,7 @@ export function CategoryFilterSelect({
             id={listId}
             role="listbox"
             aria-label={label}
-            className="z-[100] overflow-y-auto rounded-xl border border-[#f3e9db] bg-white py-1 shadow-xl"
+            className="z-[100] overflow-y-auto rounded-xl border border-[#e2d3bf] bg-white py-1 shadow-xl"
             style={{ position: "fixed", ...position }}
           >
             {[

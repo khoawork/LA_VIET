@@ -126,7 +126,7 @@ async function responseError(response: Response): Promise<string> {
 }
 
 const inputClass =
-  "w-full rounded-xl border border-[#EAE2D5] px-3.5 py-2.5 text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
+  "w-full rounded-xl border border-[#d9c7ae] px-3.5 py-2.5 text-xs font-normal text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none";
 
 function ProductFormModal({
   product,
@@ -209,7 +209,7 @@ function ProductFormModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 lg:pl-[calc(var(--admin-sidebar-width)+1rem)] [&_label]:text-sm [&_input]:text-sm [&_input]:font-normal [&_textarea]:text-sm [&_textarea]:font-normal [&_button]:text-sm [&_p]:text-sm">
       <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        <div className="flex items-center justify-between border-b border-[#EAE2D5] p-5">
+        <div className="flex items-center justify-between border-b border-[#d9c7ae] p-5">
           <h2 className="text-xl font-bold text-[#1E1917]">
             {product ? "Sửa sản phẩm" : "Tạo sản phẩm mới"}
           </h2>
@@ -278,6 +278,7 @@ function ProductFormModal({
                 emptyLabel="Chọn danh mục"
                 includeEmpty={false}
                 fullWidth
+                formField
               />
             </div>
             <label className="space-y-1.5 text-xs font-semibold">
@@ -365,11 +366,11 @@ function ProductFormModal({
               />
             </label>
           </div>
-          <div className="flex justify-end gap-3 border-t border-[#EAE2D5] pt-4">
+          <div className="flex justify-end gap-3 border-t border-[#d9c7ae] pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-[#EAE2D5] px-4 py-2.5 text-xs font-semibold"
+              className="rounded-xl border border-[#d9c7ae] px-4 py-2.5 text-xs font-semibold"
             >
               Hủy
             </button>
@@ -602,7 +603,7 @@ export function AdminProductDataTab({
                   if (event.target.value.trim().toLowerCase() !== debouncedSearch) setLoading(true);
                 }}
                 placeholder="Tìm sản phẩm theo tên, tiêu đề, mô tả..."
-                className="w-full rounded-xl border border-[#f3e9db] bg-white py-2 pl-10 pr-4 text-sm focus:border-[#a21f1f] focus:outline-none sm:py-2.5"
+                className="w-full rounded-xl border border-[#e2d3bf] bg-white py-2 pl-10 pr-4 text-sm focus:border-[#a21f1f] focus:outline-none sm:py-2.5"
               />
             </div>
             <CategoryFilterSelect
@@ -619,7 +620,7 @@ export function AdminProductDataTab({
           </div>,
           filterHost,
         )}
-      <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#f3e9db] bg-white shadow-xs">
+      <div className="min-h-0 flex-1 overflow-auto rounded-2xl border border-[#e2d3bf] bg-white shadow-xs">
         {loading || searchPending ? (
           <div className="flex items-center justify-center gap-2 py-16 text-sm text-stone-500">
             <Loader2 className="h-5 w-5 animate-spin" /> Đang tải sản phẩm...
@@ -630,7 +631,7 @@ export function AdminProductDataTab({
           </p>
         ) : (
           <table className="w-full min-w-[960px] table-fixed text-left text-sm">
-            <thead className="border-b border-[#f3e9db] bg-[#f7f5f1] text-stone-700">
+            <thead className="border-b border-[#e2d3bf] bg-[#f7f5f1] text-stone-700">
               <tr>
                 <th className="w-80 whitespace-nowrap px-5 py-2.5 sm:py-3">
                   Sản phẩm

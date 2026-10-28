@@ -388,7 +388,7 @@ export function AdminUsersView() {
           className={`fixed top-5 right-5 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold animate-in fade-in slide-in-from-top-4 duration-300 ${
             toast.type === "success"
               ? "bg-emerald-50 border-emerald-200 text-emerald-800"
-              : "bg-red-50 border-red-200 text-red-800"
+              : "bg-red-50 border-red-300 text-red-800"
           }`}
         >
           {toast.type === "success" ? (
@@ -407,9 +407,9 @@ export function AdminUsersView() {
       )}
 
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#f3e9db]">
+          <div className="w-12 h-12 rounded-xl bg-[#f7f5f1] text-[#a21f1f] flex items-center justify-center border border-[#e2d3bf]">
             <Users className="w-6 h-6" />
           </div>
           <div>
@@ -432,7 +432,7 @@ export function AdminUsersView() {
             type="button"
             onClick={fetchData}
             title="Làm mới dữ liệu"
-            className="p-2.5 rounded-xl border border-[#f3e9db] bg-[#f7f5f1] hover:bg-[#eae4d6] text-stone-700 transition-colors cursor-pointer"
+            className="p-2.5 rounded-xl border border-[#e2d3bf] bg-[#f7f5f1] hover:bg-[#eae4d6] text-stone-700 transition-colors cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-[#a21f1f]" : ""}`} />
           </button>
@@ -449,7 +449,7 @@ export function AdminUsersView() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-xl border border-[#f3e9db] shadow-xs flex items-center justify-between">
+        <div className="bg-white p-4 rounded-xl border border-[#e2d3bf] shadow-xs flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
               Tổng số tài khoản
@@ -461,19 +461,19 @@ export function AdminUsersView() {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-[#f3e9db] shadow-xs flex items-center justify-between">
+        <div className="bg-white p-4 rounded-xl border border-[#e2d3bf] shadow-xs flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold text-[#a21f1f] uppercase tracking-wider">
               Quản trị viên (ADMIN)
             </p>
             <p className="text-2xl font-black text-[#a21f1f] mt-1">{stats.admins}</p>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-red-50 text-[#a21f1f] flex items-center justify-center border border-red-100">
+          <div className="w-10 h-10 rounded-lg bg-red-50 text-[#a21f1f] flex items-center justify-center border border-red-200">
             <ShieldCheck className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-[#f3e9db] shadow-xs flex items-center justify-between">
+        <div className="bg-white p-4 rounded-xl border border-[#e2d3bf] shadow-xs flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">
               Quản lý (MANAGER)
@@ -485,7 +485,7 @@ export function AdminUsersView() {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-xl border border-[#f3e9db] shadow-xs flex items-center justify-between">
+        <div className="bg-white p-4 rounded-xl border border-[#e2d3bf] shadow-xs flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">
               Đang hoạt động
@@ -504,7 +504,7 @@ export function AdminUsersView() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="bg-white p-4 rounded-xl border border-[#f3e9db] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="bg-white p-4 rounded-xl border border-[#e2d3bf] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
           <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
@@ -512,7 +512,7 @@ export function AdminUsersView() {
             placeholder="Tìm theo họ tên, email hoặc username..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-xs bg-[#f7f5f1] border border-[#f3e9db] rounded-lg focus:outline-none focus:border-[#a21f1f] text-[#1E1917]"
+            className="w-full pl-10 pr-4 py-2 text-xs bg-[#f7f5f1] border border-[#e2d3bf] rounded-lg focus:outline-none focus:border-[#a21f1f] text-[#1E1917]"
           />
           {searchQuery && (
             <button
@@ -526,7 +526,7 @@ export function AdminUsersView() {
 
         <div className="flex items-center gap-2 flex-wrap text-xs">
           {/* Lọc theo Vai trò */}
-          <div className="flex items-center gap-1.5 bg-[#f7f5f1] px-2.5 py-1.5 rounded-lg border border-[#f3e9db]">
+          <div className="flex items-center gap-1.5 bg-[#f7f5f1] px-2.5 py-1.5 rounded-lg border border-[#e2d3bf]">
             <span className="text-stone-500 font-semibold text-[11px]">Vai trò:</span>
             <select
               value={roleFilter}
@@ -541,7 +541,7 @@ export function AdminUsersView() {
           </div>
 
           {/* Lọc theo Trạng thái */}
-          <div className="flex items-center gap-1.5 bg-[#f7f5f1] px-2.5 py-1.5 rounded-lg border border-[#f3e9db]">
+          <div className="flex items-center gap-1.5 bg-[#f7f5f1] px-2.5 py-1.5 rounded-lg border border-[#e2d3bf]">
             <span className="text-stone-500 font-semibold text-[11px]">Trạng thái:</span>
             <select
               value={statusFilter}
@@ -557,7 +557,7 @@ export function AdminUsersView() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-white rounded-2xl border border-[#f3e9db] shadow-xs overflow-hidden">
+      <div className="bg-white rounded-2xl border border-[#e2d3bf] shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-16 flex flex-col items-center justify-center text-stone-500 gap-3">
             <RefreshCw className="w-6 h-6 animate-spin text-[#a21f1f]" />
@@ -575,7 +575,7 @@ export function AdminUsersView() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-[#f7f5f1] border-b border-[#f3e9db] text-stone-700 font-bold uppercase tracking-wider">
+                <tr className="bg-[#f7f5f1] border-b border-[#e2d3bf] text-stone-700 font-bold uppercase tracking-wider">
                   <th className="py-3.5 px-5">Tài khoản &amp; Họ tên</th>
                   <th className="py-3.5 px-4">Email đăng nhập</th>
                   <th className="py-3.5 px-4">Vai trò phân quyền</th>
@@ -598,7 +598,7 @@ export function AdminUsersView() {
                       {/* Name & Avatar */}
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-[#f3e9db] text-[#a21f1f] font-bold flex items-center justify-center border border-[#e5d8c3] shrink-0">
+                          <div className="w-9 h-9 rounded-full bg-[#f3e9db] text-[#a21f1f] font-bold flex items-center justify-center border border-[#d8c5a9] shrink-0">
                             {u.fullname.charAt(0).toUpperCase()}
                           </div>
                           <div>
@@ -630,7 +630,7 @@ export function AdminUsersView() {
                       {/* Role Badge */}
                       <td className="py-4 px-4">
                         {u.role === "ADMIN" ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-50 text-[#a21f1f] border border-red-200 font-bold text-[11px]">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-50 text-[#a21f1f] border border-red-300 font-bold text-[11px]">
                             <ShieldCheck className="w-3.5 h-3.5 text-[#a21f1f]" />
                             <span>Quản trị viên (ADMIN)</span>
                           </span>
@@ -640,7 +640,7 @@ export function AdminUsersView() {
                             <span>Quản lý (MANAGER)</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 border border-stone-200 font-bold text-[11px]">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-stone-100 text-stone-700 border border-stone-300 font-bold text-[11px]">
                             <Users className="w-3.5 h-3.5 text-stone-500" />
                             <span>Người dùng (USER)</span>
                           </span>
@@ -688,9 +688,9 @@ export function AdminUsersView() {
                             }
                             className={`p-1.5 rounded-lg border transition-colors ${
                               isCurrent
-                                ? "opacity-30 cursor-not-allowed bg-stone-100 border-stone-200 text-stone-400"
+                                ? "opacity-30 cursor-not-allowed bg-stone-100 border-stone-300 text-stone-400"
                                 : u.isActive
-                                ? "hover:bg-rose-50 border-stone-200 text-stone-600 hover:text-rose-600 hover:border-rose-200 cursor-pointer"
+                                ? "hover:bg-rose-50 border-stone-300 text-stone-600 hover:text-rose-600 hover:border-rose-200 cursor-pointer"
                                 : "hover:bg-emerald-50 border-rose-200 text-rose-600 hover:text-emerald-600 hover:border-emerald-200 cursor-pointer"
                             }`}
                           >
@@ -709,7 +709,7 @@ export function AdminUsersView() {
                               setPasswordForm({ newPassword: "", confirmPassword: "" });
                             }}
                             title="Đổi mật khẩu"
-                            className="p-1.5 rounded-lg border border-stone-200 text-stone-600 hover:text-amber-700 hover:bg-amber-50 hover:border-amber-200 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg border border-stone-300 text-stone-600 hover:text-amber-700 hover:bg-amber-50 hover:border-amber-200 transition-colors cursor-pointer"
                           >
                             <Key className="w-3.5 h-3.5" />
                           </button>
@@ -719,7 +719,7 @@ export function AdminUsersView() {
                             type="button"
                             onClick={() => openEditModal(u)}
                             title="Chỉnh sửa thông tin & phân quyền"
-                            className="p-1.5 rounded-lg border border-stone-200 text-stone-600 hover:text-[#a21f1f] hover:bg-red-50 hover:border-red-200 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg border border-stone-300 text-stone-600 hover:text-[#a21f1f] hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -736,8 +736,8 @@ export function AdminUsersView() {
                             }
                             className={`p-1.5 rounded-lg border transition-colors ${
                               isCurrent
-                                ? "opacity-30 cursor-not-allowed bg-stone-100 border-stone-200 text-stone-400"
-                                : "border-stone-200 text-stone-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200 cursor-pointer"
+                                ? "opacity-30 cursor-not-allowed bg-stone-100 border-stone-300 text-stone-400"
+                                : "border-stone-300 text-stone-600 hover:text-red-700 hover:bg-red-50 hover:border-red-300 cursor-pointer"
                             }`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -754,7 +754,7 @@ export function AdminUsersView() {
       </div>
 
       {/* Role explanation table box */}
-      <div className="bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs space-y-4">
+      <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-4">
         <div className="flex items-center gap-2">
           <ShieldAlert className="w-5 h-5 text-[#a21f1f]" />
           <h2 className="font-bold text-sm text-[#1E1917] uppercase tracking-wider">
@@ -764,7 +764,7 @@ export function AdminUsersView() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           {/* Card Admin */}
-          <div className="p-4 rounded-xl border border-red-200 bg-red-50/40 space-y-2.5">
+          <div className="p-4 rounded-xl border border-red-300 bg-red-50/40 space-y-2.5">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#a21f1f]" />
               <h3 className="font-bold text-[#a21f1f] text-sm">
@@ -810,9 +810,9 @@ export function AdminUsersView() {
       {/* ========================================================= */}
       {isCreateOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-lg rounded-2xl border border-[#f3e9db] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white w-full max-w-lg rounded-2xl border border-[#e2d3bf] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f3e9db] bg-[#f7f5f1]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#e2d3bf] bg-[#f7f5f1]">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-[#a21f1f]/10 text-[#a21f1f] flex items-center justify-center font-bold">
                   <Plus className="w-4 h-4" />
@@ -844,7 +844,7 @@ export function AdminUsersView() {
                   onChange={(e) =>
                     setCreateForm({ ...createForm, fullname: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                 />
               </div>
 
@@ -861,7 +861,7 @@ export function AdminUsersView() {
                   onChange={(e) =>
                     setCreateForm({ ...createForm, email: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                 />
               </div>
 
@@ -879,7 +879,7 @@ export function AdminUsersView() {
                     onChange={(e) =>
                       setCreateForm({ ...createForm, password: e.target.value })
                     }
-                    className="w-full pl-3.5 pr-10 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                    className="w-full pl-3.5 pr-10 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                   />
                   <button
                     type="button"
@@ -908,7 +908,7 @@ export function AdminUsersView() {
                     className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
                       createForm.role === "MANAGER"
                         ? "border-amber-400 bg-amber-50/50"
-                        : "border-[#f3e9db] bg-[#f7f5f1] hover:border-stone-300"
+                        : "border-[#e2d3bf] bg-[#f7f5f1] hover:border-stone-300"
                     }`}
                   >
                     <input
@@ -933,7 +933,7 @@ export function AdminUsersView() {
                     className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
                       createForm.role === "ADMIN"
                         ? "border-red-400 bg-red-50/50"
-                        : "border-[#f3e9db] bg-[#f7f5f1] hover:border-stone-300"
+                        : "border-[#e2d3bf] bg-[#f7f5f1] hover:border-stone-300"
                     }`}
                   >
                     <input
@@ -973,7 +973,7 @@ export function AdminUsersView() {
               </div>
 
               {/* Actions */}
-              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#f3e9db]">
+              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#e2d3bf]">
                 <button
                   type="button"
                   onClick={() => setIsCreateOpen(false)}
@@ -1000,9 +1000,9 @@ export function AdminUsersView() {
       {/* ========================================================= */}
       {editTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-lg rounded-2xl border border-[#f3e9db] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white w-full max-w-lg rounded-2xl border border-[#e2d3bf] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f3e9db] bg-[#f7f5f1]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#e2d3bf] bg-[#f7f5f1]">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-[#a21f1f]/10 text-[#a21f1f] flex items-center justify-center font-bold">
                   <Edit3 className="w-4 h-4" />
@@ -1038,7 +1038,7 @@ export function AdminUsersView() {
                   onChange={(e) =>
                     setEditForm({ ...editForm, fullname: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                 />
               </div>
 
@@ -1053,7 +1053,7 @@ export function AdminUsersView() {
                   onChange={(e) =>
                     setEditForm({ ...editForm, email: e.target.value })
                   }
-                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                 />
               </div>
 
@@ -1066,7 +1066,7 @@ export function AdminUsersView() {
                     className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
                       editForm.role === "MANAGER"
                         ? "border-amber-400 bg-amber-50/50"
-                        : "border-[#f3e9db] bg-[#f7f5f1] hover:border-stone-300"
+                        : "border-[#e2d3bf] bg-[#f7f5f1] hover:border-stone-300"
                     }`}
                   >
                     <input
@@ -1092,7 +1092,7 @@ export function AdminUsersView() {
                     className={`flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
                       editForm.role === "ADMIN"
                         ? "border-red-400 bg-red-50/50"
-                        : "border-[#f3e9db] bg-[#f7f5f1] hover:border-stone-300"
+                        : "border-[#e2d3bf] bg-[#f7f5f1] hover:border-stone-300"
                     }`}
                   >
                     <input
@@ -1143,7 +1143,7 @@ export function AdminUsersView() {
               </div>
 
               {/* Actions */}
-              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#f3e9db]">
+              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#e2d3bf]">
                 <button
                   type="button"
                   onClick={() => setEditTarget(null)}
@@ -1170,9 +1170,9 @@ export function AdminUsersView() {
       {/* ========================================================= */}
       {passwordTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-md rounded-2xl border border-[#f3e9db] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white w-full max-w-md rounded-2xl border border-[#e2d3bf] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f3e9db] bg-[#f7f5f1]">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#e2d3bf] bg-[#f7f5f1]">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
                   <Key className="w-4 h-4" />
@@ -1214,7 +1214,7 @@ export function AdminUsersView() {
                         newPassword: e.target.value,
                       })
                     }
-                    className="w-full pl-3.5 pr-10 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                    className="w-full pl-3.5 pr-10 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                   />
                   <button
                     type="button"
@@ -1245,7 +1245,7 @@ export function AdminUsersView() {
                       confirmPassword: e.target.value,
                     })
                   }
-                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#f3e9db] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                  className="w-full px-3.5 py-2.5 bg-[#f7f5f1] border border-[#e2d3bf] rounded-xl text-xs text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
                 />
               </div>
 
@@ -1258,7 +1258,7 @@ export function AdminUsersView() {
               </div>
 
               {/* Actions */}
-              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#f3e9db]">
+              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#e2d3bf]">
                 <button
                   type="button"
                   onClick={() => setPasswordTarget(null)}
@@ -1285,9 +1285,9 @@ export function AdminUsersView() {
       {/* ========================================================= */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-md rounded-2xl border border-red-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+          <div className="bg-white w-full max-w-md rounded-2xl border border-red-300 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-red-100 bg-red-50">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-red-200 bg-red-50">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-red-100 text-red-700 flex items-center justify-center font-bold">
                   <Trash2 className="w-4 h-4" />
@@ -1311,7 +1311,7 @@ export function AdminUsersView() {
                 Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản sau khỏi hệ thống quản trị LÀ VIỆT?
               </p>
 
-              <div className="p-3.5 rounded-xl bg-[#f7f5f1] border border-[#f3e9db] space-y-1">
+              <div className="p-3.5 rounded-xl bg-[#f7f5f1] border border-[#e2d3bf] space-y-1">
                 <p className="font-bold text-[#1E1917] text-sm">
                   {deleteTarget.fullname}
                 </p>
@@ -1319,13 +1319,13 @@ export function AdminUsersView() {
                   {deleteTarget.email}
                 </p>
                 <div className="pt-1">
-                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-[#f3e9db] text-stone-700">
+                  <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-[#e2d3bf] text-stone-700">
                     Vai trò: {deleteTarget.role}
                   </span>
                 </div>
               </div>
 
-              <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-red-800 text-[11px] leading-relaxed flex items-start gap-2">
+              <div className="p-3 bg-red-50 rounded-xl border border-red-300 text-red-800 text-[11px] leading-relaxed flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
                 <div>
                   <strong className="block font-bold">Cảnh báo:</strong>
@@ -1334,7 +1334,7 @@ export function AdminUsersView() {
               </div>
 
               {/* Actions */}
-              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#f3e9db]">
+              <div className="pt-4 flex items-center justify-end gap-2 border-t border-[#e2d3bf]">
                 <button
                   type="button"
                   onClick={() => setDeleteTarget(null)}

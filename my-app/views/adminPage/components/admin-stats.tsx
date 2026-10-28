@@ -103,11 +103,11 @@ export function AdminStats() {
           <CardWrapper
             key={stat.id}
             href={stat.href || "#"}
-            className="group p-5 bg-white rounded-2xl border border-[#f3e9db] shadow-xs hover:shadow-md hover:border-[#a21f1f]/50 transition-all flex flex-col justify-between min-h-[140px]"
+            className="group p-5 bg-white rounded-2xl border border-[#e2d3bf] shadow-xs hover:shadow-md hover:border-[#a21f1f]/50 transition-all flex flex-col justify-between min-h-[140px]"
           >
             {/* Top row: Icon & Arrow */}
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-xl bg-[#f7f5f1] border border-[#f3e9db] flex items-center justify-center group-hover:bg-[#f3e9db] transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-[#f7f5f1] border border-[#e2d3bf] flex items-center justify-center group-hover:bg-[#f3e9db] transition-colors">
                 {getIcon(stat.icon)}
               </div>
               <ArrowUpRight className="w-4 h-4 text-stone-400 group-hover:text-[#a21f1f] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />

@@ -39,8 +39,8 @@ export function ProjectQuantityColorPicker({
 
   return (
     <div className={`min-w-0 font-semibold text-[#1E1917] ${inline ? "text-sm" : "text-xs"}`}>
-      <span className="block">{label} (Mã Hex)</span>
-      <div className="flex min-w-0 items-center gap-2">
+      <span className="admin-field-label block">{label} (Mã Hex)</span>
+      <div className="mt-1.5 flex min-w-0 items-center gap-2">
         <input
           type="color"
           aria-label={`Chọn ${inputLabel.toLowerCase()}`}
@@ -49,7 +49,7 @@ export function ProjectQuantityColorPicker({
             setHexDraft(null);
             onChange(event.target.value.toUpperCase());
           }}
-          className="h-[42px] w-11 shrink-0 cursor-pointer rounded-lg border border-[#EAE2D5] bg-white p-0.5 transition-colors hover:border-[#9A1C1F]/60 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-md [&::-moz-color-swatch]:rounded-md"
+          className={`${inline ? "h-[42px]" : "h-10"} w-11 shrink-0 cursor-pointer rounded-lg border border-[#d9c7ae] bg-white p-0.5 transition-colors hover:border-[#9A1C1F]/60 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-md [&::-moz-color-swatch]:rounded-md`}
         />
         <input
           type="text"
@@ -71,7 +71,7 @@ export function ProjectQuantityColorPicker({
           maxLength={7}
           spellCheck={false}
           aria-invalid={hexDraft !== null && hexDraft !== "" && !HEX_COLOR_PATTERN.test(hexDraft.startsWith("#") ? hexDraft : `#${hexDraft}`)}
-          className="min-w-0 flex-1 rounded-xl border border-[#EAE2D5] bg-white px-3.5 py-2.5 text-sm font-normal uppercase text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none"
+          className={`${inline ? "h-[42px]" : "h-10"} min-w-0 flex-1 rounded-xl border border-[#d9c7ae] bg-white px-3.5 text-sm font-normal uppercase text-[#1E1917] focus:border-[#9A1C1F] focus:outline-none`}
         />
         {clearable && (
           <button
@@ -83,7 +83,7 @@ export function ProjectQuantityColorPicker({
             }}
             aria-label={`Đặt lại ${inputLabel.toLowerCase()}`}
             title={`Đặt lại ${inputLabel.toLowerCase()}`}
-            className={`inline-flex h-[42px] w-10 shrink-0 items-center justify-center rounded-lg text-stone-600 transition-colors hover:bg-[#EAE2D5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A1C1F] ${value ? "" : "invisible"}`}
+            className={`inline-flex ${inline ? "h-[42px]" : "h-10"} w-10 shrink-0 items-center justify-center rounded-lg text-stone-600 transition-colors hover:bg-[#EAE2D5] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#9A1C1F] ${value ? "" : "invisible"}`}
           >
             <RotateCcw className="h-4 w-4" />
           </button>

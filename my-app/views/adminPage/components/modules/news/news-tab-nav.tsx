@@ -38,7 +38,7 @@ interface NewsTabNavProps {
 
 export function NewsTabNav({ activeTab, onSelectTab }: NewsTabNavProps) {
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar border-b border-[#EAE2D5]">
+    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar border-b border-[#d9c7ae]">
       {NEWS_SECTION_TABS.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;

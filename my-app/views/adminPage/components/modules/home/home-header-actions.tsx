@@ -12,13 +12,13 @@ export function HomeHeaderActions({
   onSave,
 }: HomeHeaderActionsProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
       <div className="flex items-center gap-3.5">
-        <div className="w-12 h-12 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#F0DCD6] shadow-xs">
+        <div className="w-12 h-12 rounded-xl bg-[#FAF1EC] text-[#9A1C1F] flex items-center justify-center border border-[#e4c4b9] shadow-xs">
           <Home className="w-6 h-6" />
         </div>
         <div>
-          <h1 className="text-xl font-bold text-[#1E1917]">Quản trị Trang chủ</h1>
+          <h1 className="text-xl font-bold text-[#1E1917]">Nội dung Trang chủ</h1>
           <p className="text-xs text-stone-600 mt-0.5">
             Tùy biến toàn bộ 6 Sections giao diện Trang chủ: Hero, Thống kê, Tiêu điểm, Tin tức, Đối tác &amp; CTA
           </p>

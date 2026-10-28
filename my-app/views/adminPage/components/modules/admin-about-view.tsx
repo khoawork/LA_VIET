@@ -1,5 +1,6 @@
 "use client";
 
+import { AdminPageLoading } from "../admin-page-loading";
 import { useEffect, useState } from "react";
 import {
   Info,
@@ -363,17 +364,12 @@ export function AdminAboutView() {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
-        <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
-        <span>Đang tải trang Về chúng tôi...</span>
-      </div>
-    );
+    return <AdminPageLoading label="Đang tải trang Về chúng tôi..." />;
   }
 
   if (!hasPageData) {
     return (
-      <p role="alert" className="rounded-2xl border border-[#EAE2D5] bg-white p-12 text-center text-sm text-[#695D56]">
+      <p role="alert" className="rounded-2xl border border-[#d9c7ae] bg-white p-12 text-center text-sm text-[#695D56]">
         Chưa có dữ liệu trang Về chúng tôi hoặc không thể tải dữ liệu.
       </p>
     );
@@ -387,7 +383,7 @@ export function AdminAboutView() {
           className={`p-4 rounded-xl flex items-center justify-between text-xs font-medium transition-all ${
             alert.type === "success"
               ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
-              : "bg-red-50 text-red-800 border border-red-200"
+              : "bg-red-50 text-red-800 border border-red-300"
           }`}
         >
           <div className="flex items-center gap-2.5">
@@ -409,17 +405,14 @@ export function AdminAboutView() {
       )}
 
       {/* Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#f3e9db] shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db] flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-[#f7f5f1] text-[#a21f1f] border border-[#e2d3bf] flex items-center justify-center">
             <Info className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-bold text-[#1E1917]">Quản lý Về Chúng Tôi (About)</h1>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#f7f5f1] text-[#a21f1f] border border-[#f3e9db]">
-                pages / about
-              </span>
+              <h1 className="text-xl font-bold text-[#1E1917]">Nội dung trang Về chúng tôi</h1>
             </div>
             <p className="text-xs text-stone-500 mt-0.5">
               Chỉnh sửa nội dung thông điệp, công nghệ vật liệu, 4 trụ cột triết lý, ban lãnh đạo và đối tác chiến lược
@@ -441,7 +434,7 @@ export function AdminAboutView() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex border-b border-[#f3e9db] bg-white rounded-t-2xl px-4 pt-2 overflow-x-auto gap-2">
+      <div className="flex border-b border-[#e2d3bf] bg-white rounded-2xl px-4 pt-2 overflow-x-auto gap-2">
         <button
           type="button"
           onClick={() => setActiveTab("hero")}
@@ -523,8 +516,8 @@ export function AdminAboutView() {
 
       {/* Tab 1: Hero Section */}
       {activeTab === "hero" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="pb-3 border-b border-[#e2d3bf]">
             <h2 className="text-base font-bold text-[#1E1917]">Khối Giới Thiệu Đầu Trang (Hero Banner)</h2>
             <p className="text-xs text-stone-500 mt-0.5">
               Chỉnh sửa thông điệp tôn vinh di sản, huy hiệu và ấn triện Là Việt
@@ -545,7 +538,7 @@ export function AdminAboutView() {
                     herosection: { ...pageProps.herosection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -562,7 +555,7 @@ export function AdminAboutView() {
                     herosection: { ...pageProps.herosection, imageSubtitle: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917] focus:outline-none focus:border-[#a21f1f]"
               />
             </div>
 
@@ -604,8 +597,8 @@ export function AdminAboutView() {
 
       {/* Tab 2: Technology Section */}
       {activeTab === "technology" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="pb-3 border-b border-[#e2d3bf]">
             <h2 className="text-base font-bold text-[#1E1917]">Khái Lược Hội Họa Liên Ngành & Công Nghệ</h2>
             <p className="text-xs text-stone-500 mt-0.5">
               Chất liệu nhựa mủ sơn ta Phú Thọ và liên minh kỹ thuật Sơn Hoa Việt
@@ -626,7 +619,7 @@ export function AdminAboutView() {
                     technologySection: { ...pageProps.technologySection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
               />
             </div>
 
@@ -677,7 +670,7 @@ export function AdminAboutView() {
           </div>
 
           {/* Stats with Add/Remove */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
+          <div className="pt-4 border-t border-[#e2d3bf] space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-[#1E1917]">Danh sách Số liệu năng lực thực tế</h3>
@@ -687,7 +680,7 @@ export function AdminAboutView() {
               <button
                 type="button"
                 onClick={handleAddTechStat}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Thêm chỉ số năng lực</span>
@@ -696,7 +689,7 @@ export function AdminAboutView() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {pageProps.technologySection.stats.map((stat, idx) => (
-                <div key={stat.id || idx} className="p-4 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] space-y-2 relative">
+                <div key={stat.id || idx} className="p-4 rounded-xl bg-[#f7f5f1]/50 border border-[#e2d3bf] space-y-2 relative">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest block">
                       Chỉ số #{idx + 1}
@@ -726,7 +719,7 @@ export function AdminAboutView() {
                         });
                       }}
                       placeholder="Giá trị"
-                      className="w-2/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
+                      className="w-2/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#a21f1f]"
                     />
                     <input
                       type="text"
@@ -740,7 +733,7 @@ export function AdminAboutView() {
                         });
                       }}
                       placeholder="Đơn vị"
-                      className="w-1/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-600"
+                      className="w-1/3 px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-stone-600"
                     />
                   </div>
                   <input
@@ -755,7 +748,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tiêu đề chỉ số"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-800"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-stone-800"
                   />
                   <textarea
                     rows={2}
@@ -769,7 +762,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Mô tả chi tiết"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-[11px] text-stone-600"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-[11px] text-stone-600"
                   />
                 </div>
               ))}
@@ -777,7 +770,7 @@ export function AdminAboutView() {
           </div>
 
           {/* Workshop Block with Upload & Badge Input */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
+          <div className="pt-4 border-t border-[#e2d3bf] space-y-4">
             <h3 className="text-sm font-bold text-[#1E1917]">Khối Hình ảnh Xưởng Chế Tác</h3>
 
             {/* Image Uploader */}
@@ -814,7 +807,7 @@ export function AdminAboutView() {
                     })
                   }
                   placeholder="VD: XƯỞNG CHẾ TÁC HỘI HỌA"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
                 />
               </div>
 
@@ -835,7 +828,7 @@ export function AdminAboutView() {
                     })
                   }
                   placeholder="VD: Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#f3e9db] text-xs font-normal text-stone-800"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-[#e2d3bf] text-xs font-normal text-stone-800"
                 />
               </div>
             </div>
@@ -845,8 +838,8 @@ export function AdminAboutView() {
 
       {/* Tab 3: Values Section */}
       {activeTab === "values" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="flex items-center justify-between pb-3 border-b border-[#e2d3bf]">
             <div>
               <h2 className="text-base font-bold text-[#1E1917]">Tầm Nhìn & 4 Trụ Cột Giá Trị Cốt Lõi</h2>
               <p className="text-xs text-stone-500 mt-0.5">
@@ -857,7 +850,7 @@ export function AdminAboutView() {
             <button
               type="button"
               onClick={handleAddValueItem}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Thêm khối giá trị</span>
@@ -866,8 +859,8 @@ export function AdminAboutView() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {pageProps.valuesSection.items.map((item, idx) => (
-              <div key={item.id || idx} className="p-5 rounded-2xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-3 relative">
-                <div className="flex items-center justify-between pb-2 border-b border-[#f3e9db]">
+              <div key={item.id || idx} className="p-5 rounded-2xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-3 relative">
+                <div className="flex items-center justify-between pb-2 border-b border-[#e2d3bf]">
                   <span className="text-xs font-bold uppercase text-[#a21f1f]">
                     Khối #{idx + 1}: {item.category}
                   </span>
@@ -896,7 +889,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#a21f1f]"
                   />
                 </div>
 
@@ -913,7 +906,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
                   />
                 </div>
 
@@ -930,7 +923,7 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-700 leading-relaxed"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-700 leading-relaxed"
                   />
                 </div>
 
@@ -947,12 +940,12 @@ export function AdminAboutView() {
                         valuesSection: { ...pageProps.valuesSection, items: updated },
                       });
                     }}
-                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-stone-700"
+                    className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-stone-700"
                   />
                 </div>
 
                 {/* Pillars with Add/Remove */}
-                <div className="space-y-2 pt-2 border-t border-[#f3e9db]">
+                <div className="space-y-2 pt-2 border-t border-[#e2d3bf]">
                   <div className="flex items-center justify-between">
                     <label className="text-[11px] font-bold text-stone-700 uppercase">
                       Các trụ cột cam kết ({item.pillars?.length || 0})
@@ -983,7 +976,7 @@ export function AdminAboutView() {
                               valuesSection: { ...pageProps.valuesSection, items: updated },
                             });
                           }}
-                          className="flex-1 px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
+                          className="flex-1 px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-600"
                         />
                         <button
                           type="button"
@@ -1004,8 +997,8 @@ export function AdminAboutView() {
 
       {/* Tab 4: Organization Section */}
       {activeTab === "organization" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="pb-3 border-b border-[#e2d3bf]">
             <h2 className="text-base font-bold text-[#1E1917]">Sơ Đồ Bộ Máy Quản Trị & Sáng Tác</h2>
             <p className="text-xs text-stone-500 mt-0.5">
               Cho phép thêm mới nhân sự lãnh đạo, thêm khối chức năng hoặc xóa bỏ
@@ -1023,7 +1016,7 @@ export function AdminAboutView() {
               <button
                 type="button"
                 onClick={handleAddLeader}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Thêm nhân sự lãnh đạo</span>
@@ -1032,7 +1025,7 @@ export function AdminAboutView() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {pageProps.organizationSection.leaders.map((leader, idx) => (
-                <div key={leader.id || idx} className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-3 relative">
+                <div key={leader.id || idx} className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-3 relative">
                   {pageProps.organizationSection.leaders.length > 1 && (
                     <button
                       type="button"
@@ -1045,7 +1038,7 @@ export function AdminAboutView() {
                   )}
 
                   <div className="flex items-center gap-3 pr-6">
-                    <div className="w-14 h-14 rounded-xl overflow-hidden relative border border-[#f3e9db] shrink-0 bg-stone-100">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden relative border border-[#e2d3bf] shrink-0 bg-stone-100">
                       {leader.avatar ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={leader.avatar} alt={leader.name} className="h-full w-full object-cover" />
@@ -1064,7 +1057,7 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Họ và tên"
-                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                        className="w-full px-2.5 py-1 rounded bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
                       />
                       <input
                         type="text"
@@ -1078,7 +1071,7 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Chức danh"
-                        className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-xs text-[#a21f1f] font-normal"
+                        className="w-full px-2.5 py-1 rounded bg-white border border-[#e2d3bf] text-xs text-[#a21f1f] font-normal"
                       />
                     </div>
                   </div>
@@ -1110,7 +1103,7 @@ export function AdminAboutView() {
                           organizationSection: { ...pageProps.organizationSection, leaders: updated },
                         });
                       }}
-                      className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-700"
+                      className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-700"
                     />
                   </div>
                 </div>
@@ -1119,14 +1112,14 @@ export function AdminAboutView() {
           </div>
 
           {/* 4 Divisions with Add/Remove */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
+          <div className="pt-4 border-t border-[#e2d3bf] space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold text-[#1E1917]">Các Khối Chức Năng Sáng Tác & Thi Công</h3>
 
               <button
                 type="button"
                 onClick={handleAddDivision}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Thêm khối phòng ban</span>
@@ -1135,7 +1128,7 @@ export function AdminAboutView() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {pageProps.organizationSection.divisions.map((div, idx) => (
-                <div key={div.code || idx} className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-2 relative">
+                <div key={div.code || idx} className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-2 relative">
                   <div className="flex items-center justify-between pb-1">
                     <input
                       type="text"
@@ -1148,7 +1141,7 @@ export function AdminAboutView() {
                           organizationSection: { ...pageProps.organizationSection, divisions: updated },
                         });
                       }}
-                      className="px-2 py-0.5 rounded bg-white border border-[#f3e9db] text-[10px] font-normal text-[#a21f1f] uppercase w-24"
+                      className="px-2 py-0.5 rounded bg-white border border-[#e2d3bf] text-[10px] font-normal text-[#a21f1f] uppercase w-24"
                     />
 
                     <div className="flex items-center gap-2">
@@ -1164,7 +1157,7 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Tên tiếng Anh"
-                        className="px-2 py-0.5 rounded bg-white border border-[#f3e9db] text-[11px] text-stone-500"
+                        className="px-2 py-0.5 rounded bg-white border border-[#e2d3bf] text-[11px] text-stone-500"
                       />
 
                       {pageProps.organizationSection.divisions.length > 1 && (
@@ -1192,7 +1185,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tên khối chức năng"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
                   />
 
                   <textarea
@@ -1207,7 +1200,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Mô tả chức năng nhiệm vụ"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-700"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-700"
                   />
 
                   <input
@@ -1222,7 +1215,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Trọng tâm thực thi (Focus)"
-                    className="w-full px-2.5 py-1 rounded bg-white border border-[#f3e9db] text-[11px] text-stone-500 font-mono"
+                    className="w-full px-2.5 py-1 rounded bg-white border border-[#e2d3bf] text-[11px] text-stone-500 font-mono"
                   />
                 </div>
               ))}
@@ -1233,8 +1226,8 @@ export function AdminAboutView() {
 
       {/* Tab 5: Partners & Testimonial */}
       {activeTab === "partners" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="pb-3 border-b border-[#e2d3bf]">
             <h2 className="text-base font-bold text-[#1E1917]">Đối Tác Chiến Lược & Khách Hàng Doanh Nghiệp</h2>
             <p className="text-xs text-stone-500 mt-0.5">
               Cho phép thêm/xóa đối tác và chỉnh sửa đánh giá bảo chứng
@@ -1249,7 +1242,7 @@ export function AdminAboutView() {
               <button
                 type="button"
                 onClick={handleAddPartner}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#f3e9db] cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#f7f5f1] hover:bg-[#f3e9db] text-[#a21f1f] text-xs font-bold border border-[#e2d3bf] cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Thêm đối tác</span>
@@ -1258,7 +1251,7 @@ export function AdminAboutView() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {pageProps.partnersSection.items.map((partner, idx) => (
-                <div key={idx} className="p-3.5 rounded-xl bg-[#f7f5f1]/50 border border-[#f3e9db] space-y-2 relative">
+                <div key={idx} className="p-3.5 rounded-xl bg-[#f7f5f1]/50 border border-[#e2d3bf] space-y-2 relative">
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-bold text-stone-500 uppercase">Đối tác #{idx + 1}</span>
                     {pageProps.partnersSection.items.length > 1 && (
@@ -1284,7 +1277,7 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Tên đối tác (VD: SƠN HOA VIỆT)"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
                   />
                   <input
                     type="text"
@@ -1298,11 +1291,11 @@ export function AdminAboutView() {
                       });
                     }}
                     placeholder="Vai trò hợp tác (VD: ĐỐI TÁC R&D KỸ THUẬT)"
-                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
+                    className="w-full px-2.5 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-600"
                   />
 
                   {/* Logo Upload Box */}
-                  <div className="pt-2 border-t border-[#f3e9db] flex items-center gap-2.5">
+                  <div className="pt-2 border-t border-[#e2d3bf] flex items-center gap-2.5">
                     <input
                       type="file"
                       id={`partner-logo-upload-${idx}`}
@@ -1317,7 +1310,7 @@ export function AdminAboutView() {
 
                     <label
                       htmlFor={`partner-logo-upload-${idx}`}
-                      className="w-12 h-12 rounded-lg border border-[#f3e9db] bg-white flex items-center justify-center shrink-0 cursor-pointer overflow-hidden group hover:border-[#9A1C1F] transition-colors relative shadow-2xs"
+                      className="w-12 h-12 rounded-lg border border-[#e2d3bf] bg-white flex items-center justify-center shrink-0 cursor-pointer overflow-hidden group hover:border-[#9A1C1F] transition-colors relative shadow-2xs"
                       title="Bấm để tải ảnh logo đối tác từ máy"
                     >
                       {uploadingPartnerIdx === idx ? (
@@ -1369,7 +1362,7 @@ export function AdminAboutView() {
                           });
                         }}
                         placeholder="Dán URL hoặc bấm ô để tải ảnh"
-                        className="w-full px-2 py-1 rounded-lg bg-white border border-[#f3e9db] text-[11px] text-stone-700"
+                        className="w-full px-2 py-1 rounded-lg bg-white border border-[#e2d3bf] text-[11px] text-stone-700"
                       />
                     </div>
                   </div>
@@ -1379,13 +1372,13 @@ export function AdminAboutView() {
           </div>
 
           {/* Testimonial */}
-          <div className="pt-4 border-t border-[#f3e9db] space-y-4">
+          <div className="pt-4 border-t border-[#e2d3bf] space-y-4">
             <h3 className="text-sm font-bold text-[#1E1917] flex items-center gap-2">
               <Quote className="w-4 h-4 text-[#a21f1f]" />
               Đánh Giá Bảo Chứng Chuyên Môn
             </h3>
 
-            <div className="p-5 rounded-2xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-3">
+            <div className="p-5 rounded-2xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-3">
               <div className="space-y-1">
                 <label className="text-[11px] font-bold text-stone-700 uppercase">Lời trích dẫn (Quote)</label>
                 <textarea
@@ -1400,7 +1393,7 @@ export function AdminAboutView() {
                       },
                     })
                   }
-                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs italic text-stone-800 leading-relaxed"
+                  className="w-full px-3 py-2 rounded-lg bg-white border border-[#e2d3bf] text-xs italic text-stone-800 leading-relaxed"
                 />
               </div>
 
@@ -1419,7 +1412,7 @@ export function AdminAboutView() {
                         },
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#a21f1f]"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#a21f1f]"
                   />
                 </div>
 
@@ -1437,7 +1430,7 @@ export function AdminAboutView() {
                         },
                       })
                     }
-                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#f3e9db] text-xs text-stone-600"
+                    className="w-full px-3 py-2 rounded-lg bg-white border border-[#e2d3bf] text-xs text-stone-600"
                   />
                 </div>
               </div>
@@ -1448,8 +1441,8 @@ export function AdminAboutView() {
 
       {/* Tab 6: CTA Section */}
       {activeTab === "cta" && (
-        <div className="bg-white p-6 rounded-b-2xl rounded-tr-none border border-[#f3e9db] shadow-xs space-y-6">
-          <div className="pb-3 border-b border-[#f3e9db]">
+        <div className="bg-white p-6 rounded-2xl border border-[#e2d3bf] shadow-xs space-y-6">
+          <div className="pb-3 border-b border-[#e2d3bf]">
             <h2 className="text-base font-bold text-[#1E1917]">Khối Kêu Gọi Hành Động (CTA Cuối Trang)</h2>
             <p className="text-xs text-stone-500 mt-0.5">
               Nút liên hệ tư vấn chuyên gia và liên kết xem catalogue tác phẩm
@@ -1470,7 +1463,7 @@ export function AdminAboutView() {
                     ctaSection: { ...pageProps.ctaSection, badge: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
               />
             </div>
 
@@ -1502,12 +1495,12 @@ export function AdminAboutView() {
                     ctaSection: { ...pageProps.ctaSection, description: e.target.value },
                   })
                 }
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] text-xs leading-relaxed font-normal text-[#1E1917]"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] text-xs leading-relaxed font-normal text-[#1E1917]"
               />
             </div>
 
             {/* Primary Button */}
-            <div className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-2">
+            <div className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-2">
               <span className="text-[10px] font-bold text-[#a21f1f] uppercase tracking-wider block">
                 Nút chính (Primary CTA)
               </span>
@@ -1524,7 +1517,7 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Nhãn nút"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
               />
               <input
                 type="text"
@@ -1539,12 +1532,12 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Đường dẫn link (/contact)"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-mono text-stone-600"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-mono text-stone-600"
               />
             </div>
 
             {/* Secondary Button */}
-            <div className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#f3e9db] space-y-2">
+            <div className="p-4 rounded-xl bg-[#f7f5f1]/40 border border-[#e2d3bf] space-y-2">
               <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider block">
                 Nút phụ (Secondary CTA)
               </span>
@@ -1561,7 +1554,7 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Nhãn nút"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-normal text-[#1E1917]"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-normal text-[#1E1917]"
               />
               <input
                 type="text"
@@ -1576,7 +1569,7 @@ export function AdminAboutView() {
                   })
                 }
                 placeholder="Đường dẫn link (/products)"
-                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#f3e9db] text-xs font-mono text-stone-600"
+                className="w-full px-3 py-1.5 rounded-lg bg-white border border-[#e2d3bf] text-xs font-mono text-stone-600"
               />
             </div>
           </div>

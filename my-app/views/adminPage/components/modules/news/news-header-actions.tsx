@@ -14,7 +14,7 @@ export function NewsHeaderActions({
   onSave,
 }: NewsHeaderActionsProps) {
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#EAE2D5] shadow-xs">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#d9c7ae] shadow-xs">
       <div className="flex items-center gap-3.5">
         <div className="w-11 h-11 rounded-xl bg-[#FAF1EC] text-[#5A0B0E] flex items-center justify-center shrink-0">
           <Newspaper className="w-5 h-5" />
@@ -22,11 +22,8 @@ export function NewsHeaderActions({
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-bold text-[#1E1917]">
-              Nội dung Trang Tin Tức (CMS)
+              Nội dung trang Tin tức
             </h1>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FAF1EC] text-[#9A1C1F] border border-[#F0DCD6]">
-              SLUG: news
-            </span>
           </div>
           <p className="text-xs text-[#695D56] mt-0.5">
             Chỉnh sửa trực quan toàn bộ các khối nội dung, bài viết tiêu điểm, thống kê và cấu hình hiển thị

@@ -36,7 +36,7 @@ export function HomeTabNav({ activeTab, onSelectTab }: HomeTabNavProps) {
   ];
 
   return (
-    <nav aria-label="Các phần nội dung Trang chủ" className="flex gap-2 overflow-x-auto border-b border-[#EAE2D5] pb-1">
+    <nav aria-label="Các phần nội dung Trang chủ" className="flex gap-2 overflow-x-auto border-b border-[#d9c7ae] pb-1">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;

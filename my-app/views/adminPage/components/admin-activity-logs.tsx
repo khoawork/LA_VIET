@@ -6,11 +6,11 @@ export function AdminActivityLogs() {
   return (
     <div
       style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
-      className="bg-white rounded-2xl border border-[#f3e9db] p-6 shadow-xs flex flex-col justify-between"
+      className="bg-white rounded-2xl border border-[#e2d3bf] p-6 shadow-xs flex flex-col justify-between"
     >
       <div>
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f3e9db]">
+        <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#e2d3bf]">
           <div className="flex items-center gap-2">
             <History className="w-5 h-5 text-[#a21f1f]" />
             <h2 className="text-base font-bold text-[#1E1917]">
@@ -31,7 +31,7 @@ export function AdminActivityLogs() {
           {ADMIN_RECENT_LOGS.map((log) => (
             <div
               key={log.id}
-              className="p-3.5 rounded-xl bg-[#f7f5f1] border border-[#f3e9db] hover:bg-white hover:border-[#a21f1f]/40 transition-all space-y-1"
+              className="p-3.5 rounded-xl bg-[#f7f5f1] border border-[#e2d3bf] hover:bg-white hover:border-[#a21f1f]/40 transition-all space-y-1"
             >
               <div className="flex items-center justify-between text-xs">
                 <span className="font-bold text-[#a21f1f]">{log.author}</span>
@@ -45,7 +45,7 @@ export function AdminActivityLogs() {
               </p>
               {log.target && (
                 <div className="pt-1">
-                  <span className="inline-block text-[10px] font-bold text-[#a21f1f] bg-white px-2 py-0.5 rounded-md border border-[#f3e9db]">
+                  <span className="inline-block text-[10px] font-bold text-[#a21f1f] bg-white px-2 py-0.5 rounded-md border border-[#e2d3bf]">
                     {log.target}
                   </span>
                 </div>
@@ -56,7 +56,7 @@ export function AdminActivityLogs() {
       </div>
 
       {/* System Status Footer */}
-      <div className="mt-6 pt-4 border-t border-[#f3e9db] flex items-center justify-between text-xs text-stone-600">
+      <div className="mt-6 pt-4 border-t border-[#e2d3bf] flex items-center justify-between text-xs text-stone-600">
         <span className="inline-flex items-center gap-1.5 font-medium">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           Máy chủ hoạt động bình thường

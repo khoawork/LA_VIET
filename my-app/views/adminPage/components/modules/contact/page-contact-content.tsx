@@ -87,7 +87,7 @@ export function PageContactContent() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#EAE2D5] bg-white p-12 text-sm text-[#695D56]">
+      <div className="flex items-center justify-center gap-2 rounded-2xl border border-[#d9c7ae] bg-white p-12 text-sm text-[#695D56]">
         <Loader2 className="h-5 w-5 shrink-0 animate-spin" />
         <span>Đang tải trang Liên hệ...</span>
       </div>
@@ -120,7 +120,7 @@ export function PageContactContent() {
           {success}
         </p>
       )}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#EAE2D5] bg-white p-6 shadow-xs">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#d9c7ae] bg-white p-6 shadow-xs">
         <div className="flex items-center gap-3.5">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#FAF1EC] text-[#5A0B0E]">
             <Mail className="h-5 w-5" />
@@ -130,7 +130,7 @@ export function PageContactContent() {
               Nội dung trang Liên hệ
             </h1>
             <p className="text-xs text-[#695D56]">
-              SLUG: {page.slug} · Chỉnh từng section bằng biểu mẫu.
+              Chỉnh từng section bằng biểu mẫu.
             </p>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function PageContactContent() {
           type="button"
           disabled={saving}
           onClick={saveSection}
-          className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#5A0B0E] px-5 py-2.5 text-xs font-bold text-white transition-colors enabled:hover:bg-[#7A1518] disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#a21f1f] hover:bg-[#851619] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin" />

@@ -123,13 +123,13 @@ export function ContactExperienceTab({
               <img
                 src={space.imageUrl.trim()}
                 alt={`Xem trước ${space.title || `không gian ${index + 1}`}`}
-                className="mt-3 aspect-video w-full max-w-xs rounded-lg border border-[#EAE2D5] object-cover"
+                className="mt-3 aspect-video w-full max-w-xs rounded-lg border border-[#d9c7ae] object-cover"
               />
             )}
           </div>
         </ContactListItem>
       ))}
-      <div className="grid gap-4 border-t border-[#EAE2D5] pt-5 sm:grid-cols-2">
+      <div className="grid gap-4 border-t border-[#d9c7ae] pt-5 sm:grid-cols-2">
         <ContactField
           label="Ghi chú tham quan"
           value={data.visitNote}
