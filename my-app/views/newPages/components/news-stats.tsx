@@ -8,6 +8,10 @@ interface NewsStatsProps {
 export function NewsStats({ data }: NewsStatsProps = {}) {
   const stats = data?.items || DEFAULT_PAGE_NEW_PROPS.stats.items;
 
+  if (!stats || stats.length === 0) {
+    return null;
+  }
+
   return (
     <section className="mb-14 sm:mb-16">
       <div className="bg-[#FAF4EB] rounded-2xl sm:rounded-3xl p-8 sm:p-10 border border-[#EAE0D0] shadow-sm">

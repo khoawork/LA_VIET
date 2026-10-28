@@ -123,7 +123,7 @@ export function HomeNews({ data }: HomeNewsProps) {
                   alt={art.name}
                   fill
                   unoptimized
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
                 />
               )}
               {art.category?.name && (
@@ -133,7 +133,7 @@ export function HomeNews({ data }: HomeNewsProps) {
               )}
             </div>
 
-            <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between space-y-4">
+            <div className="px-6 pt-2 pb-4 flex-1 flex flex-col justify-between">
               <div className="space-y-2">
                 <span className="text-[11px] font-mono text-[#78716C]">
                   {new Date(art.date).toLocaleDateString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" })}

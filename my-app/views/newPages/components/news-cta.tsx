@@ -10,6 +10,10 @@ interface NewsCtaProps {
 export function NewsCta({ data }: NewsCtaProps = {}) {
   const cta = data || DEFAULT_PAGE_NEW_PROPS.cta;
 
+  if (!cta.title && !cta.description && !cta.badge) {
+    return null;
+  }
+
   return (
     <section className="mb-10">
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#690E12] via-[#851619] to-[#600C10] text-white p-8 sm:p-10 lg:p-12 shadow-2xl">

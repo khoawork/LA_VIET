@@ -25,7 +25,7 @@ const products = [
     description:
       "Tác phẩm gợi nhịp bồi đắp của châu thổ sông Hồng qua nhiều lớp sơn ta, vàng quỳ và kỹ thuật mài thủ công.",
     image:
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
     slug: "vu-dieu-phu-sa",
     categoryName: productCategories[0],
     props: {
@@ -200,7 +200,7 @@ const articles = [
     description:
       "Khảo sát các giải pháp hoàn thiện giúp bảo vệ bề mặt sơn mài trước độ ẩm, ánh sáng và điều kiện sử dụng trong công trình.",
     image:
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=80",
   },
   {
     name: "Đối thoại nghệ thuật: sơn mài trong không gian đương đại",
@@ -348,7 +348,7 @@ const contactPage = PageContactRequestSchema.parse({
           title: "Xưởng chế tác",
           description: "Nơi kỹ nghệ thủ công và chất liệu truyền thống gặp gỡ.",
           imageUrl:
-            "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
         },
       ],
       visitNote: "Vui lòng đặt lịch trước khi đến thăm xưởng.",
@@ -512,7 +512,7 @@ async function seedSiteSettings() {
 
   await prisma.siteSetting.create({
     data: {
-      logo: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=256&q=80",
+      logo: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=256&q=80",
       company: "LÀ VIỆT",
       tagline: "SƠN MÀI HỘI HỌA LIÊN NGÀNH",
       footer: toJson({

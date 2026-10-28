@@ -60,12 +60,12 @@ export async function POST(request: NextRequest) {
     response.cookies.set(
       ACCESS_TOKEN_COOKIE,
       accessToken,
-      getCookieOptions(ACCESS_TOKEN_MAX_AGE)
+      getCookieOptions(false)
     );
     response.cookies.set(
       REFRESH_TOKEN_COOKIE,
       refreshToken,
-      getCookieOptions(REFRESH_TOKEN_MAX_AGE)
+      getCookieOptions(true)
     );
 
     return response;

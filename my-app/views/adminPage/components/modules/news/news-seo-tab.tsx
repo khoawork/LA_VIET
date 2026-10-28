@@ -10,6 +10,7 @@ export function NewsSeoTab({ data, onChange }: NewsSeoTabProps) {
     metaTitle: "",
     metaDescription: "",
     keywords: "",
+    ogImage: "",
   };
 
   return (

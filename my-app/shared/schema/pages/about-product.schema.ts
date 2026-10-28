@@ -52,7 +52,7 @@ export const AboutWorkshopImageSchema = z.object({
   image: z
     .string()
     .default(
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
     ),
   badge: z.string().default("XƯỞNG CHẾ TÁC HỘI HỌA"),
   caption: z
@@ -120,7 +120,7 @@ export const AboutTechnologySectionSchema = z.object({
   ]),
   workshop: AboutWorkshopImageSchema.default({
     image:
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
     badge: "XƯỞNG CHẾ TÁC HỘI HỌA",
     caption: "Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống",
   }),
@@ -449,7 +449,7 @@ export const AboutPagePropsSchema = z.object({
     ],
     workshop: {
       image:
-        "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
       badge: "XƯỞNG CHẾ TÁC HỘI HỌA",
       caption: "Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống",
     },

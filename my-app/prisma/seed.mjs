@@ -30,7 +30,7 @@ const PRODUCTS = [
     description:
       "Tác phẩm trừu tượng biểu đạt trầm tích châu thổ sông Hồng, 12 lớp sơn hom truyền thống, dát vàng quỳ Kiêu Kỵ 9999, cẩn vỏ trứng vịt vôi và kỹ thuật mài lộ cơ hữu.",
     image:
-      "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
     slug: "vu-dieu-phu-sa",
     props: {
       dimension: "240 x 120 cm",
@@ -344,7 +344,7 @@ async function seed() {
         ],
         workshop: {
           image:
-            "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1000&q=80",
+            "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=80",
           badge: "XƯỞNG CHẾ TÁC HỘI HỌA",
           caption: "Bảo tồn kỹ thuật ủ ẩm mùn cưa và mài nước truyền thống",
         },

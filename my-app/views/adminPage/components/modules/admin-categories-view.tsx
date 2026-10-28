@@ -65,7 +65,7 @@ interface NewsCategoryData {
 
 const emptyNewsForm = (categoryId = 0, date = "") => ({
   name: "",
-  image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
+  image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800",
   categoryId,
   preside: "Ban Nghiên cứu Là Việt",
   presideIcon: "FlaskConical",

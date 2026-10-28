@@ -32,7 +32,7 @@ export function HomeHero({ data }: HomeHeroProps) {
         </div>
       )}
 
-      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 xl:px-24 pt-16 pb-10 lg:pt-20 lg:pb-12">
+      <div className="relative z-10 w-full px-6 sm:px-10 lg:px-16 xl:px-20 pt-8 pb-10 lg:pt-10 lg:pb-12">
         <div className="max-w-4xl lg:max-w-[62%] space-y-7">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-[#231F20] leading-[1.24]">
             {data.highlightWord && data.title.includes(data.highlightWord) ? (
@@ -74,7 +74,7 @@ export function HomeHero({ data }: HomeHeroProps) {
       </div>
 
       {collections.length > 0 && (
-        <div className="relative z-10 mx-6 sm:mx-10 lg:mx-16 xl:mx-24 border border-[#E8E2D5] bg-[#E8E2D5]">
+        <div className="relative z-10 mx-6 sm:mx-10 lg:mx-14 xl:mx-20 border border-[#E8E2D5] bg-[#E8E2D5]">
           <div
             className={`w-full grid grid-cols-1 ${collections.length > 1 ? "sm:grid-cols-2" : ""} ${ribbonColumns} gap-px`}
           >

@@ -28,7 +28,7 @@ export function AdminNewsCategoryView() {
   const [newsError, setNewsError] = useState<string | null>(null);
   const [newsFormData, setNewsFormData] = useState({
     name: "",
-    image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
+    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800",
     categoryId: 1,
     preside: "Ban Nghiên cứu Là Việt",
     presideIcon: "FlaskConical",
@@ -145,7 +145,7 @@ export function AdminNewsCategoryView() {
         setIsCreateNewsModalOpen(false);
         setNewsFormData({
           name: "",
-          image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800",
+          image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800",
           categoryId: categories[0]?.id || 1,
           preside: "Ban Nghiên cứu Là Việt",
           presideIcon: "FlaskConical",

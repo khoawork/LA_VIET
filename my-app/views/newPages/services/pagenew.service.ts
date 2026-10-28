@@ -68,7 +68,7 @@ export class PageNewService {
             : {}),
         };
 
-    safeProps.featured.imageUrl = safeProps.featured.imageUrl.trim();
+    safeProps.featured.imageUrl = safeProps.featured.imageUrl?.trim() || "";
 
     return {
       id: page.id,

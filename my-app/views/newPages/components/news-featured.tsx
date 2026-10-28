@@ -15,6 +15,10 @@ export function NewsFeatured({ data }: NewsFeaturedProps) {
   const item = data || FEATURED_NEWS;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  if (!item.title && !item.imageUrl && !item.description) {
+    return null;
+  }
+
   return (
     <section className="mb-14 sm:mb-16">
       <article className="bg-white rounded-2xl overflow-hidden border border-[#EAE2D5]/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] grid grid-cols-1 lg:grid-cols-12 transition-all hover:shadow-lg group">
