@@ -6,8 +6,19 @@ import {
   hashPassword,
 } from "./auth.service";
 
-const KEYCLOAK_URL =
-  process.env.KEYCLOAK_URL || "http://localhost:8888/realms/sso-platform";
+const getBaseRealmUrl = () => {
+  const raw = (
+    process.env.KEYCLOAK_URL ||
+    process.env.NEXT_PUBLIC_KEYCLOAK_URL ||
+    "http://localhost:8888"
+  ).trim().replace(/\/+$/, "");
+  if (!raw.includes("/realms/")) {
+    return `${raw}/realms/sso-platform`;
+  }
+  return raw;
+};
+
+const KEYCLOAK_URL = getBaseRealmUrl();
 const KEYCLOAK_TOKEN_URL =
   process.env.KEYCLOAK_TOKEN_URL ||
   `${KEYCLOAK_URL}/protocol/openid-connect/token`;
