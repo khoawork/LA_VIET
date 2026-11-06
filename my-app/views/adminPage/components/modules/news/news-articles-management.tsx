@@ -56,7 +56,7 @@ export function NewsArticlesManagement({
 
   const [formData, setFormData] = useState({
     name: "",
-    image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800",
+    image: "",
     categoryId: 1,
     preside: "Ban Nghiên cứu Là Việt",
     presideIcon: "FlaskConical",
@@ -166,7 +166,7 @@ export function NewsArticlesManagement({
         setIsCreateModalOpen(false);
         setFormData({
           name: "",
-          image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800",
+          image: "",
           categoryId: newsCategories[0]?.id || 1,
           preside: "Ban Nghiên cứu Là Việt",
           presideIcon: "FlaskConical",

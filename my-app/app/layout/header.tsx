@@ -31,6 +31,35 @@ interface HeaderNavLink {
   href: string;
 }
 
+const INITIAL_NAV_LINKS: HeaderNavLink[] = [
+  { label: "TRANG CHỦ", href: "/" },
+  { label: "VỀ CHÚNG TÔI", href: "/about" },
+  { label: "SẢN PHẨM", href: "/products" },
+  { label: "DỰ ÁN", href: "/project" },
+  { label: "TIN TỨC", href: "/news" },
+  { label: "LIÊN HỆ", href: "/contact" },
+];
+
+function normalizePath(rawPath: string): string {
+  const clean = rawPath.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+  if (clean === "/projects") return "/project";
+  if (clean === "/product") return "/products";
+  if (clean === "/home") return "/";
+  return clean;
+}
+
+function checkActive(currentPath: string | null, linkHref: string): boolean {
+  if (!currentPath) return false;
+  const current = normalizePath(currentPath);
+  const target = normalizePath(linkHref);
+
+  if (target === "/") {
+    return current === "/";
+  }
+
+  return current === target || current.startsWith(`${target}/`);
+}
+
 function HeaderNavLinks({
   links,
   pathname,
@@ -42,14 +71,27 @@ function HeaderNavLinks({
   mobile?: boolean;
   onNavigate?: () => void;
 }) {
-  const currentPath = pathname?.replace(/\/+$/, "") || "/";
-
   return links.map((link) => {
-    const linkPath = link.href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
-    const active = pathname !== null && (
-      currentPath === linkPath ||
-      (linkPath !== "/" && currentPath.startsWith(`${linkPath}/`))
-    );
+    const active = checkActive(pathname, link.href);
+
+    if (mobile) {
+      return (
+        <Link
+          key={`${link.href}-${link.label}`}
+          href={link.href}
+          onClick={onNavigate}
+          aria-current={active ? "page" : undefined}
+          className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm uppercase tracking-wider transition-all ${
+            active
+              ? "bg-[#B71C1C]/10 text-[#B71C1C] font-bold border-l-4 border-[#B71C1C]"
+              : "text-[#4A423D] hover:bg-[#EAE2D5]/40 hover:text-[#B71C1C] font-semibold"
+          }`}
+        >
+          <span>{link.label}</span>
+          {active && <span className="w-1.5 h-1.5 rounded-full bg-[#B71C1C]" />}
+        </Link>
+      );
+    }
 
     return (
       <Link
@@ -57,15 +99,16 @@ function HeaderNavLinks({
         href={link.href}
         onClick={onNavigate}
         aria-current={active ? "page" : undefined}
-        className={mobile
-          ? `border-b-2 py-1 transition-colors ${active
-              ? "border-[#B71C1C] font-bold text-[#B71C1C]"
-              : "border-[#EAE2D5]/50 hover:text-[#B71C1C]"}`
-          : `border-b-[3px] py-1.5 uppercase transition-colors ${active
-              ? "border-[#B71C1C] font-semibold text-[#B71C1C]"
-              : "border-transparent hover:text-[#B71C1C]"}`}
+        className={`relative py-2 uppercase tracking-wider text-[15px] 2xl:text-base transition-colors ${
+          active
+            ? "text-[#B71C1C] font-bold"
+            : "text-[#4A423D] hover:text-[#B71C1C] font-semibold"
+        }`}
       >
-        {link.label}
+        <span>{link.label}</span>
+        {active && (
+          <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-[#B71C1C] rounded-full shadow-xs" />
+        )}
       </Link>
     );
   });
@@ -79,7 +122,7 @@ function PathAwareNavLinks(props: Omit<Parameters<typeof HeaderNavLinks>[0], "pa
 export default function Header() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navLinks, setNavLinks] = useState<HeaderNavLink[]>([]);
+  const [navLinks, setNavLinks] = useState<HeaderNavLink[]>(INITIAL_NAV_LINKS);
   const [brand, setBrand] = useState<{ logo?: string; company?: string; tagline?: string }>({
     company: "LÀ VIỆT",
     tagline: "SƠN MÀI HỘI HOẠ LIÊN NGÀNH",

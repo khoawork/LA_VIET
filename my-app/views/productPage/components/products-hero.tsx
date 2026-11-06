@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Home, ChevronRight, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
+import { AppBreadcrumb } from "@/shared/components";
 import { ProductCategory } from "../types";
 
 export interface HeroSectionData {
@@ -14,8 +14,8 @@ export interface HeroSectionData {
 interface ProductsHeroProps {
   activeCategory: ProductCategory;
   onSelectCategory: (cat: ProductCategory) => void;
-  heroData: HeroSectionData;
-  categories: Array<{ id: string; label: string }>;
+  heroData?: HeroSectionData;
+  categories?: Array<{ id: string; label: string }>;
 }
 
 export function ProductsHero({
@@ -24,30 +24,32 @@ export function ProductsHero({
   heroData,
   categories,
 }: ProductsHeroProps) {
-  const { badge, heading, description, metrics = [] } = heroData;
+  const categoryList = categories ?? [];
+  const badge = heroData?.badge;
+  const heading = heroData?.heading;
+  const description =
+    heroData?.description;
+  const metrics =
+    heroData?.metrics && heroData.metrics.length > 0
+      ? heroData.metrics
+      : [
+          { value: "100%", label: "SƠN TA TỰ NHIÊN" },
+          { value: "06+", label: "THÁNG CHẾ TÁC" },
+          { value: "ĐỘC BẢN", label: "KHÔNG BẢN SAO" },
+        ];
   return (
-    <section className="w-full bg-[#F3E9DA] border-b border-[#E5DCD0] py-10">
-      <div className="w-full max-w-[1280px] mx-auto px-6 space-y-8">
+    <section className="w-full bg-[#F3E9DA] border-b border-[#E5DCD0] py-2">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 space-y-8">
         {/* Breadcrumb & Curator Badge */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[1.2px]">
-            <Link
-              href="/home"
-              className="flex items-center gap-1.5 text-[#78665E] hover:text-[#B71C1C] transition-colors"
-            >
-              <Home className="w-3.5 h-3.5" />
-              <span>TRANG CHỦ</span>
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-[#B71C1C]/40" />
-            <span className="text-[#B71C1C]">TUYỂN TẬP TÁC PHẨM</span>
-          </div>
+          <AppBreadcrumb currentLabel="TUYỂN TẬP TÁC PHẨM" />
 
           {/* Curator Tag */}
-          {badge && <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.6px] text-[#B71C1C]">
+          <div className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.6px] text-[#B71C1C]">
             <ShieldCheck className="w-4 h-4 text-[#B71C1C]" />
             <span>{badge}</span>
-          </div>}
+          </div>
         </div>
 
         {/* Title, Description & Dynamic Metrics */}
@@ -62,7 +64,7 @@ export function ProductsHero({
             </p>
 
             {/* Dynamic Metrics */}
-            {metrics.length > 0 && <div className="flex items-center gap-6 shrink-0 pt-2 lg:pt-0">
+            <div className="flex items-center gap-6 shrink-0 pt-2 lg:pt-0">
               {metrics.map((metric, idx) => (
                 <div key={idx} className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
@@ -78,13 +80,13 @@ export function ProductsHero({
                   )}
                 </div>
               ))}
-            </div>}
+            </div>
           </div>
         </div>
 
         {/* Filter Categories Tabs */}
         <div className="flex flex-wrap items-center gap-2.5 pt-2">
-          {categories.map((cat) => {
+          {categoryList.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
               <button

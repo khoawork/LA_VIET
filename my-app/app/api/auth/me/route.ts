@@ -32,12 +32,12 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   // 2. Nếu Access Token hết hạn, thử Refresh Token
   const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
   if (!refreshToken) {
-    return sendError("Chưa đăng nhập", HttpStatus.UNAUTHORIZED);
+    return sendSuccess({ user: null }, "Chưa đăng nhập");
   }
 
   const refreshPayload = await verifyRefreshToken(refreshToken);
   if (!refreshPayload) {
-    return sendError("Phiên làm việc đã hết hạn", HttpStatus.UNAUTHORIZED);
+    return sendSuccess({ user: null }, "Phiên làm việc đã hết hạn");
   }
 
   const user = await prisma.user.findUnique({
@@ -45,12 +45,12 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
   });
 
   if (!user || !user.isActive || !user.refreshToken) {
-    return sendError("Tài khoản không hợp lệ", HttpStatus.UNAUTHORIZED);
+    return sendSuccess({ user: null }, "Tài khoản không hợp lệ");
   }
 
   const isMatch = await comparePassword(refreshToken, user.refreshToken);
   if (!isMatch) {
-    return sendError("Phiên làm việc không hợp lệ", HttpStatus.UNAUTHORIZED);
+    return sendSuccess({ user: null }, "Phiên làm việc không hợp lệ");
   }
 
   // Cấp mới cặp token
