@@ -13,7 +13,7 @@ export function NewsHeader({ data }: NewsHeaderProps) {
       {/* Main Title */}
       <h1 className="font-black text-3xl sm:text-4xl md:text-5xl text-[#1E1917] tracking-tight uppercase leading-[1.15] max-w-4xl">
         {data.title}
-      </h1>
+      </h1>           
 
       {/* Subtitle / Description */}
       <p className="text-xs sm:text-sm text-[#5C544E] leading-relaxed max-w-3xl mt-4">
