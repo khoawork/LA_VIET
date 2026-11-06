@@ -11,21 +11,36 @@ function getDatabaseConfig() {
   let user = process.env.DATABASE_USER || process.env.DB_USER;
   let password = process.env.DATABASE_PASSWORD || process.env.DB_PASSWORD;
   let database = process.env.DATABASE_NAME || process.env.DB_NAME;
+  let ssl: any = undefined;
 
-  if ((!host || !user) && process.env.DATABASE_URL) {
+  if (process.env.DATABASE_URL) {
     try {
       const url = new URL(process.env.DATABASE_URL);
-      host = host || url.hostname;
-      port = port || (url.port ? Number(url.port) : 3306);
-      user = user || decodeURIComponent(url.username);
+      host = url.hostname || host;
+      port = url.port ? Number(url.port) : port || 3306;
+      user = decodeURIComponent(url.username) || user;
       password =
-        password !== undefined
-          ? password
-          : decodeURIComponent(url.password);
-      database = database || url.pathname.replace(/^\//, "");
+        url.password !== undefined
+          ? decodeURIComponent(url.password)
+          : password;
+      database = url.pathname.replace(/^\//, "") || database;
+
+      const sslMode = url.searchParams.get("ssl-mode") || url.searchParams.get("sslmode");
+      if (
+        sslMode ||
+        url.searchParams.get("ssl") === "true" ||
+        (host && host !== "localhost" && host !== "127.0.0.1")
+      ) {
+        ssl = { rejectUnauthorized: false };
+      }
     } catch {
       // Fallback
     }
+  }
+
+  // Mặc định bật SSL cho các máy chủ database từ xa (Cloud DB: Aiven, TiDB, PlanetScale, RDS, Railway)
+  if (!ssl && host && host !== "localhost" && host !== "127.0.0.1") {
+    ssl = { rejectUnauthorized: false };
   }
 
   return {
@@ -34,11 +49,13 @@ function getDatabaseConfig() {
     user: user || "root",
     password: password || "",
     database: database || "la_viet_db",
+    ssl,
   };
 }
 
 function createPrismaClient() {
   const config = getDatabaseConfig();
+  const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
 
   const adapter = new PrismaMariaDb({
     host: config.host,
@@ -46,18 +63,17 @@ function createPrismaClient() {
     user: config.user,
     password: config.password,
     database: config.database,
-    connectionLimit: 20,
-    acquireTimeout: 30_000,
+    // Trên Vercel / serverless: giới hạn 3 kết nối mỗi instance để không làm nghẽn pool cloud DB
+    connectionLimit: isServerless ? 3 : 20,
+    connectTimeout: 15_000,
+    acquireTimeout: 15_000,
     idleTimeout: 300,
     allowPublicKeyRetrieval: true,
+    ...(config.ssl ? { ssl: config.ssl } : {}),
   });
 
   return new PrismaClient({ adapter });
 }
 
 export const prisma =
-  globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+  globalForPrisma.prisma ?? (globalForPrisma.prisma = createPrismaClient());
